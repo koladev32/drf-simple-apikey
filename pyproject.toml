@@ -1,7 +1,7 @@
 # pyproject.toml
 
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel", "django>=3.0", "djangorestframework==3.13.1"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
