@@ -10,12 +10,7 @@ USER_SETTINGS = getattr(settings, "SIMPLE_API_KEY", None)
 
 DEFAULTS = {"FERNET_SECRET": "", "API_KEY_LIFETIME": timedelta(days=365)}
 
-REMOVED_SETTINGS = (
-    "AUTH_HEADER_TYPE",
-    "AUTH_TOKEN_CLASS",
-    "SECRET_KEY",
-    "TOKEN_BACKEND_CLASS",
-)
+REMOVED_SETTINGS = ()
 
 
 class APISettings(_APISettings):
