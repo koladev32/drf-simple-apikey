@@ -8,6 +8,7 @@ from datetime import timedelta
 
 from cryptography.fernet import Fernet
 from django.conf import settings
+
 from django.utils.timezone import now
 
 
@@ -16,12 +17,12 @@ class ApiKeyCrypto:
         """
         We first start by making some checks on the fernet secret to ensure the value is not empty.
         """
-        FERNET_KEY = getattr(settings, "SIMPLE_API_KEY", None)
+        fernet_key = settings.SIMPLE_API_KEY.get("FERNET_SECRET")
 
-        if FERNET_KEY is None or FERNET_KEY == "":
+        if fernet_key is None or fernet_key == "":
             raise KeyError("A fernet secret is not defined.")
 
-        self.fernet = Fernet(FERNET_KEY)
+        self.fernet = Fernet(settings.SIMPLE_API_KEY["FERNET_SECRET"])
         self.api_key_lifetime = settings.SIMPLE_API_KEY.get("API_KEY_LIFETIME")
 
     def encrypt(self, payload: str) -> str:
@@ -48,7 +49,7 @@ class ApiKeyCrypto:
         expires_at = now() + timedelta(days=self.api_key_lifetime)
         data = copy(payload)
 
-        data["_exp"] = expires_at.isoformat()
+        data['_exp'] = expires_at.isoformat()
 
         api_key = self.encrypt(json.dumps(data))
         return api_key
