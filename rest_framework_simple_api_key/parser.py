@@ -1,8 +1,8 @@
-from rest_framework_simple_api_key.settings import api_settings
+from rest_framework_simple_api_key.settings import package_settings
 
 
 class APIKeyParser:
-    keyword = api_settings.AUTHENTICATION_KEYWORD_HEADER
+    keyword = package_settings.AUTHENTICATION_KEYWORD_HEADER
     message = "No API KEY provided."
 
     def get(self):
