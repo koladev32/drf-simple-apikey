@@ -32,10 +32,11 @@ class APIKeyManager(models.Manager):
 
         return obj, key
 
-    def revoke_api_keys(self, entity_id: int | str, revoke_all=False):
-        if revoke_all:
-            self.filter(entity_id=entity_id, revoked=False).update(revoked=True)
-        self.filter(entity_id=entity_id, revoked=False).update(revoked=True)
+    def revoke_api_keys(self, pk: int | str):
+        api_key = self.get_key(pk)
+
+        api_key.revoked = True
+        api_key.save()
 
 
 class APIKey(models.Model):

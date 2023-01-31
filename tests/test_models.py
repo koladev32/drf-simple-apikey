@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 class TestApiKeyModel:
     pytestmark = pytest.mark.django_db
 
-    def test_api_keys_created(self, user):
+    def test_create_key(self, user):
         data = {
             "entity": user,
         }
@@ -24,7 +24,6 @@ class TestApiKeyModel:
         assert api_key.expiry_date
 
     def test_get_key(self, active_api_key):
-
         api_key, _ = active_api_key
 
         api_key_pk = api_key.pk
@@ -32,8 +31,11 @@ class TestApiKeyModel:
         obj = APIKey.objects.get_key(api_key_pk)
         assert obj
 
-    def test_create_key(self):
-        pass
+    def test_revoke_keys(self, active_api_key):
+        api_key, _ = active_api_key
 
-    def test_revoke_keys(self):
-        pass
+        APIKey.objects.revoke_api_keys(api_key.pk)
+
+        api_key.refresh_from_db()
+
+        assert api_key.revoked
