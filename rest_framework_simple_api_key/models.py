@@ -32,7 +32,7 @@ class APIKeyManager(models.Manager):
 
         return obj, key
 
-    def revoke_api_keys(self, pk: int | str):
+    def revoke_api_key(self, pk: int | str):
         api_key = self.get_key(pk)
 
         api_key.revoked = True

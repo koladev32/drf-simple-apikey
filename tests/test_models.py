@@ -34,7 +34,7 @@ class TestApiKeyModel:
     def test_revoke_keys(self, active_api_key):
         api_key, _ = active_api_key
 
-        APIKey.objects.revoke_api_keys(api_key.pk)
+        APIKey.objects.revoke_api_key(api_key.pk)
 
         api_key.refresh_from_db()
 
