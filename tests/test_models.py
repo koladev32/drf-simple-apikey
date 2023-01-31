@@ -1,9 +1,11 @@
-import json
-
 import pytest
 
+pytestmark = pytest.mark.django_dbs
 
+
+@pytest.mark.django_db
 class TestApiKeyModel:
+    pytestmark = pytest.mark.django_db
 
     def test_api_keys_created(self):
         pass

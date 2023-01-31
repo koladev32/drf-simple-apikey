@@ -1,5 +1,4 @@
 import json
-import pytest
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
 

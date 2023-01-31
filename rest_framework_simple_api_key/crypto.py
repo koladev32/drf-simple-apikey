@@ -49,7 +49,7 @@ class ApiKeyCrypto:
         expires_at = now() + timedelta(days=self.api_key_lifetime)
         data = copy(payload)
 
-        data['_exp'] = expires_at.isoformat()
+        data["_exp"] = expires_at.isoformat()
 
         api_key = self.encrypt(json.dumps(data))
         return api_key
