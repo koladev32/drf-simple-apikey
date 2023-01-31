@@ -16,12 +16,12 @@ class ApiKeyCrypto:
         """
         We first start by making some checks on the fernet secret to ensure the value is not empty.
         """
-        FERNET_KEY = settings.SIMPLE_API_KEY.get("FERNET_SECRET")
+        FERNET_KEY = getattr(settings, "SIMPLE_API_KEY", None)
 
         if FERNET_KEY is None or FERNET_KEY == "":
             raise KeyError("A fernet secret is not defined.")
 
-        self.fernet = Fernet(settings.SIMPLE_API_KEY["FERNET_SECRET"])
+        self.fernet = Fernet(FERNET_KEY)
         self.api_key_lifetime = settings.SIMPLE_API_KEY.get("API_KEY_LIFETIME")
 
     def encrypt(self, payload: str) -> str:
@@ -48,7 +48,7 @@ class ApiKeyCrypto:
         expires_at = now() + timedelta(days=self.api_key_lifetime)
         data = copy(payload)
 
-        data['_exp'] = expires_at.isoformat()
+        data["_exp"] = expires_at.isoformat()
 
         api_key = self.encrypt(json.dumps(data))
         return api_key

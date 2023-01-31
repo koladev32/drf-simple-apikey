@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 from django.db import models
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
-from rest_framework_simple_api_key.settings import api_settings
+from rest_framework_simple_api_key.settings import package_settings
 
 
 def _expiry_date():
@@ -28,8 +28,9 @@ class APIKeyManager(models.Manager):
 
 class APIKey(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
+
     entity = models.ForeignKey(
-        api_settings.AUTHENTICATION_MODEL,
+        package_settings.SIMPLE_API_KEY["AUTHENTICATION_MODEL"],
         on_delete=models.CASCADE,
         related_name="api_keys",
     )
