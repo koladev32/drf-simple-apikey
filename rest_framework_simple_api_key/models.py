@@ -5,7 +5,6 @@ from django.conf import settings
 from django.db import models
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
-from rest_framework_simple_api_key.settings import package_settings
 
 
 def _expiry_date():
