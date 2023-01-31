@@ -9,4 +9,6 @@ def active_api_key(user):
     data = {
         "entity": user,
     }
-    return APIKey.objects.create_key(**data)  # This will return api_key:object, key:string
+    return APIKey.objects.create_key(
+        **data
+    )  # This will return api_key:object, key:string
