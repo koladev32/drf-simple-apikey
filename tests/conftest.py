@@ -39,6 +39,7 @@ def pytest_configure():
         PASSWORD_HASHERS=("django.contrib.auth.hashers.MD5PasswordHasher",),
         SIMPLE_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
+            "API_KEY_LIFETIME": 365
         },
     )
 

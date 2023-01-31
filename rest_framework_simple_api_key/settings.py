@@ -8,7 +8,7 @@ from rest_framework.settings import APISettings as _APISettings
 
 USER_SETTINGS = getattr(settings, "SIMPLE_API_KEY", None)
 
-DEFAULTS = {"FERNET_SECRET": "", "API_KEY_LIFETIME": timedelta(days=365)}
+DEFAULTS = {"FERNET_SECRET": "", "API_KEY_LIFETIME": 365}
 
 REMOVED_SETTINGS = ()
 
