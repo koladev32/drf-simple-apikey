@@ -9,9 +9,7 @@ from rest_framework_simple_api_key.settings import package_settings
 
 
 def _expiry_date():
-    return datetime.now() + timedelta(
-        settings.SIMPLE_API_KEY["API_KEY_LIFETIME"]
-    )
+    return datetime.now() + timedelta(settings.SIMPLE_API_KEY["API_KEY_LIFETIME"])
 
 
 class APIKeyManager(models.Manager):

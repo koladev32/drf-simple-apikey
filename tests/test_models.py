@@ -14,9 +14,13 @@ class TestApiKeyModel:
         data = {
             "entity": user,
         }
-        _, key = APIKey.objects.create_key(**data)
+        api_key, key = APIKey.objects.create_key(**data)
 
-        print(key)
+        assert type(key) is str
+
+        assert api_key.entity.pk == user.pk
+        assert not api_key.revoked
+        assert api_key.expiry_date
 
     def test_get_key(self):
         pass
