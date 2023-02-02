@@ -10,6 +10,7 @@ DEFAULTS = {
     "FERNET_SECRET": "",
     "API_KEY_LIFETIME": 365,
     "AUTHENTICATION_MODEL": settings.AUTH_USER_MODEL,
+    "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
 }
 
 REMOVED_SETTINGS = ()
@@ -34,7 +35,7 @@ class PackageSettings(_APISettings):
         return user_settings
 
 
-package_settings = PackageSettings(DEFAULTS, USER_SETTINGS)
+package_settings = PackageSettings(USER_SETTINGS, DEFAULTS)
 
 
 def reload_api_settings(*args, **kwargs):
