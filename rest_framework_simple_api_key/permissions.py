@@ -9,6 +9,8 @@ class IsActiveEntity(BasePermission):
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
 
+        print(request.user)
+
         return request.user.is_active
 
     def has_object_permission(

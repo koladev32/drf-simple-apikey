@@ -4,7 +4,17 @@ import pytest
 from django.utils.timezone import now
 
 from rest_framework_simple_api_key.models import APIKey
-from .user import user
+from .user import user, inactive_user
+
+
+@pytest.fixture
+def inactive_entity_api_key(inactive_user):
+    data = {
+        "entity": inactive_user,
+    }
+    return APIKey.objects.create_key(
+        **data
+    )  # This will return api_key:object, key:string@pytest.fixture
 
 
 @pytest.fixture

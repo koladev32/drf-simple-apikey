@@ -64,7 +64,7 @@ class APIKeyAuthentication(BaseBackend):
         if api_key.revoked:
             raise exceptions.AuthenticationFailed("This API Key has been revoked.")
 
-        return api_key.entity
+        return api_key.entity, key
 
     def authenticate_header(self, request):
         """
