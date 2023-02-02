@@ -14,7 +14,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
     def get_readonly_fields(
         self, request: HttpRequest, obj: APIKey = None
     ) -> typing.Tuple[str, ...]:
-        fields = ()
+        fields = ("entity",)
 
         if obj and obj.revoked:
             fields += ("name", "revoked", "expires_at")
@@ -28,6 +28,10 @@ class ApiKeyAdmin(admin.ModelAdmin):
         form: typing.Any = None,
         change: bool = False,
     ) -> None:
+        """
+        If there is obj.pk, it means that the object is been created. We need then to display the
+        `api_key` value in the Django admin dashboard.
+        """
 
         if not obj.pk:
             obj.save()

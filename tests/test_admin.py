@@ -36,13 +36,14 @@ def test_admin_readonly_fields(rf: RequestFactory, user) -> None:
 
     admin = ApiKeyAdmin(APIKey, site)
 
-    assert admin.get_readonly_fields(request) == ()
+    assert admin.get_readonly_fields(request) == ("entity",)
 
     api_key = APIKey(name="test", entity=user)
-    assert admin.get_readonly_fields(request, obj=api_key) == ()
+    assert admin.get_readonly_fields(request, obj=api_key) == ("entity",)
 
     api_key = APIKey(name="test", entity=user, revoked=True)
     assert admin.get_readonly_fields(request, obj=api_key) == (
+        "entity",
         "name",
         "revoked",
         "expires_at",
