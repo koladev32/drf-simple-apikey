@@ -1,3 +1,5 @@
+import typing
+
 from django.http import HttpRequest
 from rest_framework.exceptions import NotAuthenticated, AuthenticationFailed
 
@@ -8,7 +10,7 @@ class APIKeyParser:
     keyword = package_settings.AUTHENTICATION_KEYWORD_HEADER
     message = "No API KEY provided."
 
-    def get(self, request: HttpRequest):
+    def get(self, request: HttpRequest) -> typing.Optional[str]:
         api_key_header = getattr(package_settings, "API_KEY_HEADER", None)
 
         if api_key_header is not None:
@@ -16,7 +18,7 @@ class APIKeyParser:
 
         return self.get_from_authorization(request)
 
-    def get_from_authorization(self, request: HttpRequest):
+    def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
         authorization = request.META.get("HTTP_AUTHORIZATION")
 
         if not authorization:
@@ -29,5 +31,5 @@ class APIKeyParser:
 
         return key
 
-    def get_from_header(self, request: HttpRequest, name: str):
+    def get_from_header(self, request: HttpRequest, name: str) -> typing.Optional[str]:
         return request.META.get(name) or None
