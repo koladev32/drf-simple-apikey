@@ -1,4 +1,10 @@
+import typing
+
 from django.contrib.auth.backends import BaseBackend
+from django.http import HttpRequest
+from django.utils.timezone import now
+
+from rest_framework import exceptions
 
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
@@ -11,18 +17,20 @@ class APIKeyAuthentication(BaseBackend):
     key_parser = APIKeyParser()
     key_crypto = ApiKeyCrypto()
 
-    def get_key(self):
-        pass
+    def get_key(self, request: HttpRequest) -> typing.Optional[str]:
+        return self.key_parser.get(request)
 
     def authenticate(self, request, **kwargs):
         """
         The `authenticate` method is called on every request regardless of
         whether the endpoint requires api key authentication.
         `authenticate` has two possible return values:
+
         1) `None` - We return `None` if we do not wish to authenticate. Usually
         this means we know authentication will fail. An example of
         this is when the request does not include an api key in the
         headers.
+
         2) `(entity)` - We return an entity object when
         authentication is successful.
         If neither case is met, that means there's an error
@@ -31,10 +39,38 @@ class APIKeyAuthentication(BaseBackend):
         exception and let Django REST Framework
         handle the rest.
         """
-        pass
+
+        key = self.get_key(request)
+
+        return self._authenticate_credentials(request, key)
 
     def _authenticate_credentials(self, request, key):
-        pass
+        key_crypto = self.key_crypto
+
+        try:
+            payload = key_crypto.decrypt(key)
+        except:
+            raise exceptions.AuthenticationFailed("Invalid API Key.")
+
+        if "pk" not in payload or "_exp" not in payload:
+            raise exceptions.AuthenticationFailed("Invalid API Key.")
+
+        if payload["_exp"] < now().timestamp():
+            raise exceptions.AuthenticationFailed("API Key has already expired. Please generate a new one.")
+
+        try:
+            api_key = self.model.objects.get(id=payload["pk"])
+        except APIKey.DoesNotExist:
+            raise exceptions.AuthenticationFailed(
+                "No entity matching this api key."
+            )
+
+        if api_key.revoked:
+            raise exceptions.AuthenticationFailed(
+                "This API Key has been revoked."
+            )
+
+        return api_key.entity
 
     def authenticate_header(self, request):
         """
