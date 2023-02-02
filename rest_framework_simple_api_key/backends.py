@@ -6,7 +6,6 @@ from django.utils.timezone import now
 
 from rest_framework import exceptions
 
-
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
 from rest_framework_simple_api_key.models import APIKey
 from rest_framework_simple_api_key.parser import APIKeyParser
@@ -33,9 +32,9 @@ class APIKeyAuthentication(BaseBackend):
 
         2) `(entity)` - We return an entity object when
         authentication is successful.
-        If neither case is met, that means there's an error
+        If neither case is met, that means there's an error,
         and we do not return anything.
-        We simple raise the `AuthenticationFailed`
+        We simply raise the `AuthenticationFailed`
         exception and let Django REST Framework
         handle the rest.
         """
@@ -52,23 +51,18 @@ class APIKeyAuthentication(BaseBackend):
         except:
             raise exceptions.AuthenticationFailed("Invalid API Key.")
 
-        if "pk" not in payload or "_exp" not in payload:
+        if "_pk" not in payload or "_exp" not in payload:
             raise exceptions.AuthenticationFailed("Invalid API Key.")
 
         if payload["_exp"] < now().timestamp():
-            raise exceptions.AuthenticationFailed("API Key has already expired. Please generate a new one.")
-
+            raise exceptions.AuthenticationFailed("API Key has already expired.")
         try:
-            api_key = self.model.objects.get(id=payload["pk"])
+            api_key = self.model.objects.get(id=payload["_pk"])
         except APIKey.DoesNotExist:
-            raise exceptions.AuthenticationFailed(
-                "No entity matching this api key."
-            )
+            raise exceptions.AuthenticationFailed("No entity matching this api key.")
 
         if api_key.revoked:
-            raise exceptions.AuthenticationFailed(
-                "This API Key has been revoked."
-            )
+            raise exceptions.AuthenticationFailed("This API Key has been revoked.")
 
         return api_key.entity
 
