@@ -73,7 +73,7 @@ class TestApiKeyAuthentication:
         entity = None
         with pytest.raises(
             exceptions.NotAuthenticated,
-            match=r"Authentication credentials were not provided.",
+            match=r"No API key provided.",
         ):
             entity, _ = self.api_key_authentication.authenticate(invalid_request)
 
