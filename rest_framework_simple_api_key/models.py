@@ -14,7 +14,7 @@ def _expiry_date():
 class APIKeyManager(models.Manager):
     key_crypto = ApiKeyCrypto()
 
-    def get_key(self, pk: int | str):
+    def get_api_key(self, pk: int | str):
         return self.get(revoked=False, pk=pk)
 
     def assign_key(self, obj) -> str:
@@ -32,7 +32,7 @@ class APIKeyManager(models.Manager):
         return obj, key
 
     def revoke_api_key(self, pk: int | str):
-        api_key = self.get_key(pk)
+        api_key = self.get_api_key(pk)
 
         api_key.revoked = True
         api_key.save()
@@ -60,6 +60,7 @@ class APIKey(models.Model):
             "(This cannot be undone.)"
         ),
     )
+    created = models.DateTimeField(auto_now=True)
 
     objects = APIKeyManager()
 
