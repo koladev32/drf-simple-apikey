@@ -17,13 +17,15 @@ class ApiKeyCrypto:
         """
         We first start by making some checks on the fernet secret to ensure the value is not empty.
         """
-        fernet_key = settings.SIMPLE_API_KEY.get("FERNET_SECRET")
+        fernet_key, api_key_lifetime = settings.SIMPLE_API_KEY.get(
+            "FERNET_SECRET"
+        ), settings.SIMPLE_API_KEY.get("API_KEY_LIFETIME")
 
         if fernet_key is None or fernet_key == "":
             raise KeyError("A fernet secret is not defined in the Django settings.")
 
         self.fernet = fernet_key
-        self.api_key_lifetime = settings.SIMPLE_API_KEY.get("API_KEY_LIFETIME")
+        self.api_key_lifetime = api_key_lifetime
 
     def encrypt(self, payload: str) -> str:
         """
