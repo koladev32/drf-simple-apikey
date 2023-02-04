@@ -28,7 +28,7 @@ class TestApiKeyModel:
 
         api_key_pk = api_key.pk
 
-        obj = APIKey.objects.get_key(api_key_pk)
+        obj = APIKey.objects.get_api_key(api_key_pk)
         assert obj
 
     def test_revoke_keys(self, active_api_key):

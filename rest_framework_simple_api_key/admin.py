@@ -7,17 +7,34 @@ from .models import APIKey
 
 
 class ApiKeyAdmin(admin.ModelAdmin):
-    list_display = ("entity", "revoked", "expires_at")
+    list_display = (
+        "entity",
+        "revoked",
+        "expires_at",
+        "created",
+    )
 
-    list_filter = ("entity", "revoked", "expires_at")
+    list_filter = (
+        "entity",
+        "revoked",
+        "expires_at",
+        "created",
+    )
 
     def get_readonly_fields(
         self, request: HttpRequest, obj: APIKey = None
     ) -> typing.Tuple[str, ...]:
-        fields = ("entity",)
+        fields = (
+            "entity",
+            "created",
+        )
 
         if obj and obj.revoked:
-            fields += ("name", "revoked", "expires_at")
+            fields += (
+                "name",
+                "revoked",
+                "expires_at",
+            )
 
         return fields
 
