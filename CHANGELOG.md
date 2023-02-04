@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v0.0.1] - 2023-02-04
+------------------
+
 - Add apikey model (#9)
 - Add Django admin to manage API keys (#11)
 - Add authentication backend (#12) 
