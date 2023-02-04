@@ -10,14 +10,14 @@ class ApiKeyAdmin(admin.ModelAdmin):
     list_display = (
         "entity",
         "revoked",
-        "expires_at",
+        "expiry_date",
         "created",
     )
 
     list_filter = (
         "entity",
         "revoked",
-        "expires_at",
+        "expiry_date",
         "created",
     )
 
@@ -33,7 +33,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
             fields += (
                 "name",
                 "revoked",
-                "expires_at",
+                "expiry_date",
             )
 
         return fields

@@ -53,7 +53,7 @@ def test_admin_readonly_fields(rf: RequestFactory, user) -> None:
         "created",
         "name",
         "revoked",
-        "expires_at",
+        "expiry_date",
     )
 
 
