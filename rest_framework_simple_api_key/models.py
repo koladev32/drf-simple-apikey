@@ -39,6 +39,10 @@ class APIKeyManager(models.Manager):
 
 
 class APIKey(models.Model):
+    """
+    API KEY model
+    """
+
     name = models.CharField(max_length=255, null=True, blank=True)
 
     entity = models.ForeignKey(
