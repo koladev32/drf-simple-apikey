@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v0.0.2] - 2023-02-04
+------------------
+
 - Fix typo on admin `expiry_date` <- `expires_at` (#4)
 
 [v0.0.1] - 2023-02-04
