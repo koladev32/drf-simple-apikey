@@ -65,7 +65,7 @@ class TestApiKeyAuthentication:
         assert type(key) is str
 
     def test_authenticate_valid(self, valid_request):
-        entity = self.api_key_authentication.authenticate(valid_request)
+        entity, _ = self.api_key_authentication.authenticate(valid_request)
 
         assert isinstance(entity, User)
 
@@ -75,7 +75,7 @@ class TestApiKeyAuthentication:
             exceptions.NotAuthenticated,
             match=r"Authentication credentials were not provided.",
         ):
-            entity = self.api_key_authentication.authenticate(invalid_request)
+            entity, _ = self.api_key_authentication.authenticate(invalid_request)
 
         assert entity is None
 
@@ -87,7 +87,7 @@ class TestApiKeyAuthentication:
             exceptions.AuthenticationFailed,
             match=r"API Key has already expired.",
         ):
-            entity = self.api_key_authentication.authenticate(
+            entity, _ = self.api_key_authentication.authenticate(
                 invalid_request_with_expired_api_key
             )
 
@@ -101,7 +101,7 @@ class TestApiKeyAuthentication:
             exceptions.AuthenticationFailed,
             match=r"This API Key has been revoked.",
         ):
-            entity = self.api_key_authentication.authenticate(
+            entity, _ = self.api_key_authentication.authenticate(
                 invalid_request_with_revoked_api_key
             )
 
