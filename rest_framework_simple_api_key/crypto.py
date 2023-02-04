@@ -24,7 +24,7 @@ class ApiKeyCrypto:
         if fernet_key is None or fernet_key == "":
             raise KeyError("A fernet secret is not defined in the Django settings.")
 
-        self.fernet = fernet_key
+        self.fernet = Fernet(fernet_key)
         self.api_key_lifetime = api_key_lifetime
 
     def encrypt(self, payload: str) -> str:
