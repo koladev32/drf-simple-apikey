@@ -25,9 +25,9 @@ class APIKeyParser:
             raise NotAuthenticated
 
         try:
-            _, key = authorization.split("{} ".format(self.keyword))
+            _, key = authorization.split(f"{self.keyword} ")
         except ValueError:
-            raise AuthenticationFailed
+            raise AuthenticationFailed("Incorrect API KEY format.")
 
         return key
 
