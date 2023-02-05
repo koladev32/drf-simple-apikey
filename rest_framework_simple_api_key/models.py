@@ -1,14 +1,14 @@
 import typing
 from datetime import timedelta, datetime
 
-from django.conf import settings
 from django.db import models
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
+from rest_framework_simple_api_key.settings import package_settings
 
 
 def _expiry_date():
-    return datetime.now() + timedelta(settings.SIMPLE_API_KEY["API_KEY_LIFETIME"])
+    return datetime.now() + timedelta(package_settings.API_KEY_LIFETIME)
 
 
 class APIKeyManager(models.Manager):
@@ -17,17 +17,17 @@ class APIKeyManager(models.Manager):
     def get_api_key(self, pk: int | str):
         return self.get(revoked=False, pk=pk)
 
-    def assign_key(self, obj) -> str:
+    def assign_api_key(self, obj) -> str:
         payload = {"_pk": obj.pk, "_exp": obj.expiry_date.timestamp()}
         key = self.key_crypto.generate(payload)
 
         return key
 
-    def create_key(self, **kwargs: typing.Any) -> typing.Tuple[typing.Any, str]:
+    def create_api_key(self, **kwargs: typing.Any) -> typing.Tuple[typing.Any, str]:
         # Prevent from manually setting the primary key.
         obj = self.model(**kwargs)
         obj.save()
-        key = self.assign_key(obj)
+        key = self.assign_api_key(obj)
 
         return obj, key
 
@@ -46,7 +46,7 @@ class APIKey(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     entity = models.ForeignKey(
-        settings.SIMPLE_API_KEY["AUTHENTICATION_MODEL"],
+        package_settings.AUTHENTICATION_MODEL,
         on_delete=models.CASCADE,
         related_name="api_keys",
     )

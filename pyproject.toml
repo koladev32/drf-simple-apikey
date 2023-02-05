@@ -6,4 +6,4 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "djangorestframework-simple-apikey"
-version = "0.0.0"
+version = "0.0.3"

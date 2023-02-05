@@ -7,9 +7,10 @@ from copy import copy
 from datetime import timedelta
 
 from cryptography.fernet import Fernet
-from django.conf import settings
 
 from django.utils.timezone import now
+
+from rest_framework_simple_api_key.settings import package_settings
 
 
 class ApiKeyCrypto:
@@ -17,9 +18,10 @@ class ApiKeyCrypto:
         """
         We first start by making some checks on the fernet secret to ensure the value is not empty.
         """
-        fernet_key, api_key_lifetime = settings.SIMPLE_API_KEY.get(
-            "FERNET_SECRET"
-        ), settings.SIMPLE_API_KEY.get("API_KEY_LIFETIME")
+        fernet_key, api_key_lifetime = (
+            package_settings.FERNET_SECRET,
+            package_settings.API_KEY_LIFETIME,
+        )
 
         if fernet_key is None or fernet_key == "":
             raise KeyError("A fernet secret is not defined in the Django settings.")

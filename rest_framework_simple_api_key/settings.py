@@ -17,6 +17,12 @@ REMOVED_SETTINGS = ()
 
 
 class PackageSettings(_APISettings):
+    @property
+    def user_settings(self):
+        if not hasattr(self, "_user_settings"):
+            self._user_settings = getattr(settings, "SIMPLE_API_KEY", {})
+        return self._user_settings
+
     def __check_user_settings(self, user_settings):
         SETTINGS_DOC = "https://django-rest-framework-simple-apikey.readthedocs.io/en/latest/settings.html"
 

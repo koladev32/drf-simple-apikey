@@ -27,8 +27,6 @@ if __name__ == "__main__":
         ),
         SIMPLE_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
-            "API_KEY_LIFETIME": 365,
-            "AUTHENTICATION_MODEL": "auth.User",
         },
     )
 

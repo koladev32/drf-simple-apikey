@@ -10,14 +10,14 @@ class ApiKeyAdmin(admin.ModelAdmin):
     list_display = (
         "entity",
         "revoked",
-        "expires_at",
+        "expiry_date",
         "created",
     )
 
     list_filter = (
         "entity",
         "revoked",
-        "expires_at",
+        "expiry_date",
         "created",
     )
 
@@ -33,7 +33,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
             fields += (
                 "name",
                 "revoked",
-                "expires_at",
+                "expiry_date",
             )
 
         return fields
@@ -53,7 +53,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
         if not obj.pk:
             obj.save()
 
-            key = self.model.objects.assign_key(obj)
+            key = self.model.objects.assign_api_key(obj)
 
             message = (
                 "The API key is: {}. ".format(key)
