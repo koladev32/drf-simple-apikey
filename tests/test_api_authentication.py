@@ -1,5 +1,4 @@
 import pytest
-from django.conf import settings
 
 from django.contrib.auth.models import User
 from rest_framework import exceptions
@@ -7,6 +6,7 @@ from rest_framework import exceptions
 from rest_framework.test import APIRequestFactory
 
 from rest_framework_simple_api_key.backends import APIKeyAuthentication
+from rest_framework_simple_api_key.settings import package_settings
 
 from .fixtures.user import user
 from .fixtures.api_key import expired_api_key, active_api_key, revoked_api_key
@@ -28,7 +28,7 @@ def invalid_request_with_expired_api_key(user, expired_api_key):
 
     return factory.get(
         "/test-request/",
-        HTTP_AUTHORIZATION=f"{settings.SIMPLE_API_KEY['AUTHENTICATION_KEYWORD_HEADER']} {key}",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
     )
 
 
@@ -37,9 +37,11 @@ def invalid_request_with_revoked_api_key(user, revoked_api_key):
     factory = APIRequestFactory()
     _, key = revoked_api_key
 
+    print(package_settings.__dict__)
+
     return factory.get(
         "/test-request/",
-        HTTP_AUTHORIZATION=f"{settings.SIMPLE_API_KEY['AUTHENTICATION_KEYWORD_HEADER']} {key}",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
     )
 
 
@@ -50,7 +52,7 @@ def valid_request(user, active_api_key):
     _, key = active_api_key
     return factory.get(
         "/test-request/",
-        HTTP_AUTHORIZATION=f"{settings.SIMPLE_API_KEY['AUTHENTICATION_KEYWORD_HEADER']} {key}",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
     )
 
 

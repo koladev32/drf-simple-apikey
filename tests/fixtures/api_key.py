@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 import pytest
 from django.utils.timezone import now
 
