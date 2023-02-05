@@ -1,5 +1,4 @@
 import pytest
-from django.conf import settings
 
 from rest_framework.decorators import (
     api_view,
@@ -13,6 +12,7 @@ from rest_framework.test import APIRequestFactory
 
 from rest_framework_simple_api_key.backends import APIKeyAuthentication
 from rest_framework_simple_api_key.permissions import IsActiveEntity
+from rest_framework_simple_api_key.settings import package_settings
 
 from .fixtures.api_key import inactive_entity_api_key, active_api_key
 from .fixtures.user import inactive_user, user
@@ -34,7 +34,7 @@ def request_with_inactive_entity(inactive_user, inactive_entity_api_key):
     _, key = inactive_entity_api_key
     return factory.get(
         "/test-request/",
-        HTTP_AUTHORIZATION=f"{settings.SIMPLE_API_KEY['AUTHENTICATION_KEYWORD_HEADER']} {key}",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
     )
 
 
@@ -45,7 +45,7 @@ def request_with_active_entity(user, active_api_key):
     _, key = active_api_key
     return factory.get(
         "/test-request/",
-        HTTP_AUTHORIZATION=f"{settings.SIMPLE_API_KEY['AUTHENTICATION_KEYWORD_HEADER']} {key}",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
     )
 
 

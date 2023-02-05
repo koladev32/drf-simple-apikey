@@ -48,7 +48,7 @@ class APIKeyAuthentication(BaseBackend):
 
         try:
             payload = key_crypto.decrypt(key)
-        except:
+        except ValueError:
             raise exceptions.AuthenticationFailed("Invalid API Key.")
 
         if "_pk" not in payload or "_exp" not in payload:
