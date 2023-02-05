@@ -5,9 +5,9 @@ Simple API Key is an API Key authentication plugin for REST API built with [Djan
 For the full documentation, visit https://djangorestframework-simple-apikey.readthedocs.io/en/latest/.
 
 ## Generate a Fernet Key
-We've made it easier for you by creating a custom django command to quickly generate a fernet key, which is a crucial component in the 
-authentication system. Make sure to keep the key secure and store it as an environment variable in your code. Losing the key will result
-in a failure of your authentication system, and if someone else gains access to it, they'll be able to decrypt all of your messages.
+We've made it easier for you by creating a custom Django command to quickly generate a fernet key, which is a *crucial component* in the authentication system. Make sure to keep the key secure and store it somewhere safely (ie: environment variable). 
+
+**Important ⛔️** : You should treat the `FERNET_KEY` security at the same level as the Django `SECRET_KEY`. 🫡
 
 To generate the fernet key use the following command:
 
