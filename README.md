@@ -1,64 +1,20 @@
-# Django REST Framework Simple API Key
+# Simple API Key
 
-Simple API Key is an API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
-
-[![PyPI version](https://badge.fury.io/py/djangorestframework-simple-apikey.svg)](https://badge.fury.io/py/djangorestframework-simple-apikey)
+Simple API Key is an API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/). 
 
 For the full documentation, visit https://djangorestframework-simple-apikey.readthedocs.io/en/latest/.
 
-## Introduction
+## Generate a Fernet Key
+We've made it easier for you by creating a custom Django command to quickly generate a fernet key, which is a *crucial component* in the authentication system. Make sure to keep the key secure and store it somewhere safely (ie: environment variable). 
 
-...
+**Important ⛔️** : You should treat the `FERNET_KEY` security at the same level as the Django `SECRET_KEY`. 🫡
 
-## Quickstart
-
-Install with `pip`:
-
-```bash
-pip install djangorestframework-simple-apikey
-```
-
-You will need to register the application in the  `INSTALLED_APPS` in `settings.py` file of the Django project:
+To generate the fernet key use the following command:
 
 ```python
-# settings.py
-
-INSTALLED_APPS = [
-  # ...
-  "rest_framework",
-  "rest_framework_simple_api_key",
-]
+python manage.py generate_fernet_key
 ```
-
-Run the included migrations:
-
-```bash
-python manage.py migrate
-```
-
-In your views then, you can add the authentication class and the permission class. 
-
-> **Note**⚠️: By default, the Django user class is used for authentication. You can configure the model you want to use as an entity using `AUTHENTICATION_MODEL` in the `SIMPLE_API_KEY` setting.
-
+or 
 ```python
-
-from rest_framework import viewsets
-
-from rest_framework_simple_api_key.backends import APIKeyAuthentication
-from rest_framework.response import Response
-
-class FruitViewSets(viewsets.ViewSet):
-    http_method_names = ["get"]
-    authentication_classes = (APIKeyAuthentication, )
-
-    def list(self, request):
-        return Response([{"detail": True}], 200 )
+django-admin generate_fernet_key
 ```
-
-## Changelog
-
-See [CHANGELOG.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CHANGELOG.md).
-
-## Contributing
-
-See [CONTRIBUTING.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CONTRIBUTING.md).
