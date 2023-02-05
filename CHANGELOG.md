@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v0.0.3] - 2023-02-05
+------------------
+
 - Bug: Default settings are not loaded in the project (#25) 
 
 [v0.0.2] - 2023-02-04
