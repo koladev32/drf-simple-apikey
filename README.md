@@ -1,4 +1,4 @@
-# Simple API Key
+# Django REST Framework Simple API Key
 
 Simple API Key is an API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
 
