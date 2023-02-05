@@ -17,17 +17,17 @@ class APIKeyManager(models.Manager):
     def get_api_key(self, pk: int | str):
         return self.get(revoked=False, pk=pk)
 
-    def assign_key(self, obj) -> str:
+    def assign_api_key(self, obj) -> str:
         payload = {"_pk": obj.pk, "_exp": obj.expiry_date.timestamp()}
         key = self.key_crypto.generate(payload)
 
         return key
 
-    def create_key(self, **kwargs: typing.Any) -> typing.Tuple[typing.Any, str]:
+    def create_api_key(self, **kwargs: typing.Any) -> typing.Tuple[typing.Any, str]:
         # Prevent from manually setting the primary key.
         obj = self.model(**kwargs)
         obj.save()
-        key = self.assign_key(obj)
+        key = self.assign_api_key(obj)
 
         return obj, key
 

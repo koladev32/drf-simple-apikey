@@ -66,12 +66,12 @@ class TestApiKeyAuthentication:
         key = self.api_key_authentication.get_key(valid_request)
         assert type(key) is str
 
-    def test_authenticate_valid(self, valid_request):
+    def test_authenticate_valid_request(self, valid_request):
         entity, _ = self.api_key_authentication.authenticate(valid_request)
 
         assert isinstance(entity, User)
 
-    def test_authenticate_invalid(self, invalid_request):
+    def test_authenticate_invalid_request(self, invalid_request):
         entity = None
         with pytest.raises(
             exceptions.NotAuthenticated,
@@ -81,7 +81,7 @@ class TestApiKeyAuthentication:
 
         assert entity is None
 
-    def test_authenticate_invalid_with_expired_key(
+    def test_authenticate_invalid_request_with_expired_key(
         self, invalid_request_with_expired_api_key
     ):
         entity = None
@@ -95,7 +95,7 @@ class TestApiKeyAuthentication:
 
         assert entity is None
 
-    def test_authenticate_invalid_with_revoked_key(
+    def test_authenticate_invalid_request_with_revoked_key(
         self, invalid_request_with_revoked_api_key
     ):
         entity = None

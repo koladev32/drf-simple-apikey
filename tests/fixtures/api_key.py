@@ -10,7 +10,7 @@ def inactive_entity_api_key(inactive_user):
     data = {
         "entity": inactive_user,
     }
-    return APIKey.objects.create_key(
+    return APIKey.objects.create_api_key(
         **data
     )  # This will return api_key:object, key:string@pytest.fixture
 
@@ -20,7 +20,7 @@ def active_api_key(user):
     data = {
         "entity": user,
     }
-    return APIKey.objects.create_key(
+    return APIKey.objects.create_api_key(
         **data
     )  # This will return api_key:object, key:string@pytest.fixture
 
@@ -28,7 +28,7 @@ def active_api_key(user):
 @pytest.fixture
 def expired_api_key(user):
     data = {"entity": user, "expiry_date": now()}
-    return APIKey.objects.create_key(
+    return APIKey.objects.create_api_key(
         **data
     )  # This will return api_key:object, key:string
 
@@ -36,6 +36,6 @@ def expired_api_key(user):
 @pytest.fixture
 def revoked_api_key(user):
     data = {"entity": user, "revoked": True}
-    return APIKey.objects.create_key(
+    return APIKey.objects.create_api_key(
         **data
     )  # This will return api_key:object, key:string

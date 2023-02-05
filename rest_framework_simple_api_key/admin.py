@@ -53,7 +53,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
         if not obj.pk:
             obj.save()
 
-            key = self.model.objects.assign_key(obj)
+            key = self.model.objects.assign_api_key(obj)
 
             message = (
                 "The API key is: {}. ".format(key)

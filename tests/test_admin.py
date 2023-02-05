@@ -77,7 +77,7 @@ def test_admin_update_api_key(rf: RequestFactory, user) -> None:
     request = build_admin_request(rf)
 
     admin = ApiKeyAdmin(APIKey, site)
-    api_key, _ = APIKey.objects.create_key(name="test", entity=user)
+    api_key, _ = APIKey.objects.create_api_key(name="test", entity=user)
 
     api_key.name = "another-test"
     admin.save_model(request, obj=api_key)
