@@ -24,11 +24,9 @@ Acknowledgments
 
 This project borrows code from the `Django REST Framework
 <https://github.com/encode/django-rest-framework/>`__ as well as concepts from
-the implementation of another JSON web token library for the Django REST
-Framework, `django-rest-framework-jwt
-<https://github.com/GetBlimp/django-rest-framework-jwt>`__.  The licenses from
-both of those projects have been included in this repository in the "licenses"
-directory.
+the implementation of another API Key library for the Django REST
+Framework, `djangorestframework-api-key
+<https://github.com/florimondmanca/djangorestframework-api-key>`__.
 
 Contents
 --------
