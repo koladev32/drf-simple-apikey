@@ -2,7 +2,7 @@ Settings
 ===========
 
 Some of Django REST Framework Simple API Key's behavior can be customized through settings variables in
-``settings.py``:
+``settings.py``. You can find below the default `SIMPLE_API_KEY` setting.
 
 .. code-block:: python
 
