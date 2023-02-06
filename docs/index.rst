@@ -18,15 +18,6 @@ An API Key authentication plugin for the `Django REST Framework
 
 Django REST Simple Api Key is a package built upon Django, Django REST Framework, and the fernet cryptography module to generate, encrypt, and decrypt API keys.
 
-Why should you use this package for your API Key authentication?
-
-* ⚡ **Fast**: We use the [fernet](https://cryptography.io/en/latest/fernet/) cryptography module to generate, encrypt, and decrypt API keys. Besides the security facade, it is blazing fast allowing you to treat requests quickly and easily.
-
-* 🔐 **Secure**: Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key, which we call `FERNET_KEY`. As long as you treat the fernet key used to encrypt and decrypt your users API Keys at the same level you treat the Django `SECRET_KEY`, you are good to go.
-
-* 🔧 **Customizable**: The models, the authentication backend, and the permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 We also provide `SIMPLE_API_KEY` setting you can modify in the `settings.py` file of your Django project.
-
-
 
 Acknowledgments
 ---------------
@@ -49,7 +40,6 @@ Contents
     settings
     permissions
     authentication
-    token_types
     development_and_contributing
     changelog
 
