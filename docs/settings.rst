@@ -44,4 +44,5 @@ Indicates the model associated to the API Keys. This model is used in the ``APIK
 ----------------------------
 
 Determines the keyword that should come with every request made to your API. The default value is ``Api-Key`` and it is used in the following format:
+
  Api-Key API_KEY
