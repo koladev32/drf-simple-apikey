@@ -8,12 +8,10 @@ Some of Django REST Framework Simple API Key's behavior can be customized throug
 
   # Django project settings.py
 
-  AUTH_USER_MODEL = "user.User"
-
   SIMPLE_API_KEY = {
        "FERNET_SECRET": "",
        "API_KEY_LIFETIME": 365,
-       "AUTHENTICATION_MODEL": AUTH_USER_MODEL,
+       "AUTHENTICATION_MODEL": settings.AUTH_USER_MODEL,
        "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
   }
 
@@ -39,6 +37,7 @@ Determines the validity period of a generated Api Key. The default value is 365 
 -------------------------
 
 Indicates the model associated to the API Keys. This model is used in the ``Apikey`` model as a ``ForeignKey`` field. It helps identify the entity after authenticating with the API key.
+By default, it points to the ``settings.AUTH_USER_MODEL`` settings which in Django by default is ``django.contrib.auth.User``.
 
 ``AUTHENTICATION_KEYWORD_HEADER``
 ----------------------------
