@@ -7,6 +7,7 @@ Some of Django REST Framework Simple API Key's behavior can be customized throug
 .. code-block:: python
 
   # Django project settings.py
+  ...
 
   SIMPLE_API_KEY = {
        "FERNET_SECRET": "",
