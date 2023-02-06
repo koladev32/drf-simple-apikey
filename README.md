@@ -1,6 +1,6 @@
 # Django REST Framework Simple API Key 🔐
 
-Django REST Framework Simple API Key is fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
+Django REST Framework Simple API Key is a fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
 
 <div>
   <a href="https://badge.fury.io/py/djangorestframework-simple-apikey">
