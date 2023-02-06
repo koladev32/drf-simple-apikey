@@ -3,6 +3,8 @@ Changelog
 
 [Unreleased]
 ------------
+- Add a script to generate a Fernet key (#21)
+-  Add templates for issues and pull requests (#24)
 
 [v0.0.3] - 2023-02-05
 ------------------
@@ -23,4 +25,3 @@ Changelog
 - Add default permissions classes (#13)
 - Add creation date field on ApiKey (#14)
 - Add package for linting, coverage and syntax checker (#18)
-- Add a script to generate a Fernet key (#21)
