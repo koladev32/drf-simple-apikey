@@ -9,7 +9,7 @@ comes with authentication backends that set the ``request.user``. With
 the ``APIKeyAuthentication`` class, you can find the entity of the Api
 Key at ``request.user`` too.
 
-   It might be a little bit counter-intuitive, but we are looking for
+   Working with `request.user` which might not necessarily be an `User` might be a little bit counter-intuitive, but we are looking for
    solutions to have something such as ``request.entity`` without having
    to disrupt the Django REST Framework authentication and authorization
    flow. If you have some ideas, feel free to open an issue
