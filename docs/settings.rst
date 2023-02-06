@@ -33,12 +33,12 @@ Make sure to store it somewhere safe and treat it as you will treat the ``SECRET
 ``API_KEY_LIFETIME``
 --------------------------
 
-Determines the validity period of a generated Api Key. The default value is 365 days. 
+Determines the validity period of a generated Api Key. The default value is 365 days. After the 365 days, any request made using an expired API key will not be successful.
 
 ``AUTHENTICATION_MODEL``
 -------------------------
 
-Indicates the model associated to the API Keys. This model is used in the ``Apikey`` model as a ``ForeignKey`` field. It helps identify the entity after authenticating with the API key.
+Indicates the model associated to the API Keys. This model is used in the ``APIKey`` model as a ``ForeignKey`` field. It helps identify the entity after authenticating with the API key.
 
 ``AUTHENTICATION_KEYWORD_HEADER``
 ----------------------------
