@@ -1,6 +1,6 @@
 # Django REST Framework Simple API Key 🔐
 
-Django REST Framework Simple API Key is fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
+Django REST Framework Simple API Key is a fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
 
 <div>
   <a href="https://badge.fury.io/py/djangorestframework-simple-apikey">
@@ -64,7 +64,7 @@ python manage.py migrate
 
 In your view then, you can add the authentication class and the permission class.
 
-> ⚠️ **Important Note**: By default, the Django User class (django.contrib.auth.User) is used for authentication. You can configure the model you want to use as an entity using `AUTHENTICATION_MODEL` in the `SIMPLE_API_KEY` setting.
+> ⚠️ **Important Note**: By default, authentication is performed using the `AUTH_USER_MODEL` specified in the settings.py file. However, you can specify a different model as the entity for authentication by configuring the `AUTHENTICATION_MODEL` in the `SIMPLE_API_KEY` setting.
 
 ```python
 from rest_framework import viewsets
