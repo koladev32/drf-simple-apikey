@@ -1,14 +1,15 @@
 Django REST Simple Api Key
 ==========
 
-.. image:: https://badge.fury.io/py/djangorestframework-simple-apikey.svg
+.. image:: https://badge.fury.io/py/djangorestframework-simple-apikey.svg/
    :target: https://github.com/koladev32/djangorestframework-simple-apikey/
 
-.. image:: https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/badge.svg
+.. image:: https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/badge.svg/
    :target: https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/
 
-.. image:: https://djangorestframework-simple-apikey.readthedocs.io/en/latest/badge/?version=latest
-  :target: https://djangorestframework-simple-apikey.readthedocs.io/en/latest/
+.. image:: https://readthedocs.org/projects/djangorestframework-simple-apikey/badge/?version=latest
+    :target: https://djangorestframework-simple-apikey.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 An API Key authentication plugin for the `Django REST Framework
 <http://www.django-rest-framework.org/>`__.
