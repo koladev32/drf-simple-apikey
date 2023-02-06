@@ -4,7 +4,8 @@ Changelog
 [Unreleased]
 ------------
 - Add a script to generate a Fernet key (#21)
--  Add templates for issues and pull requests (#24)
+- Add templates for issues and pull requests (#24)
+- Add documentation for the package (#10) 
 
 [v0.0.3] - 2023-02-05
 ------------------
