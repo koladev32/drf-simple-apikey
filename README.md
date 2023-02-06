@@ -2,8 +2,6 @@
 
 Simple API Key is an API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/). 
 
-For the full documentation, visit https://djangorestframework-simple-apikey.readthedocs.io/en/latest/.
-
 ## Generate a Fernet Key
 We've made it easier for you by creating a custom Django command to quickly generate a fernet key, which is a *crucial component* in the authentication system. Make sure to keep the key secure and store it somewhere safely (ie: environment variable). 
 
