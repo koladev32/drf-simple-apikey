@@ -39,5 +39,5 @@ You can then call use this class in your view 👇
        authentication_classes = (APIKeyAuthentication, )
        permission_classes = (IsActiveEntity, )
 
-Feel free to read the code of the authentication class at
+Feel free to read the code of the permission class at
 `https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/rest_framework_simple_api_key/permissions.py <https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/rest_framework_simple_api_key/backends.py>`__.
