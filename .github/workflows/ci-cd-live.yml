@@ -1,4 +1,4 @@
-name: CI for package
+name: Deploy
 
 
 on:
