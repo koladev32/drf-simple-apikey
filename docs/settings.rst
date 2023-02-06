@@ -36,7 +36,7 @@ Determines the validity period of a generated Api Key. The default value is 365 
 ``AUTHENTICATION_MODEL``
 -------------------------
 
-Indicates the model associated to the API Keys. This model is used in the ``Apikey`` model as a ``ForeignKey`` field. It helps identify the entity after authenticating with the API key.
+Indicates the model associated with the API Keys. This model is used in the ``Apikey`` model as a ``ForeignKey`` field. It helps identify the entity after authenticating with the API key.
 By default, it points to the ``settings.AUTH_USER_MODEL`` settings which in Django by default is ``django.contrib.auth.User``.
 
 ``AUTHENTICATION_KEYWORD_HEADER``
