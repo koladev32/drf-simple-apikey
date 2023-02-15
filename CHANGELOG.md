@@ -3,6 +3,7 @@ Changelog
 
 [Unreleased]
 ------------
+- Add an example project to the package (#29)
 
 [v0.1.0] - 2023-02-06
 ------------------
