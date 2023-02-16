@@ -112,19 +112,19 @@ MIDDLEWARE = (
 )
 ```
 
-2 - Define a value for the `custom_entity_name` key in the `SIMPLE_API_KEY` dictionnary.
+2 - Define a value for the `custom_entity` key in the `SIMPLE_API_KEY` dictionnary.
 
 ```python
 SIMPLE_API_KEY={
     # ...
-    "custom_entity_name": "organization"
+    "CUSTOM_ENTITY_NAME": "organization"
 }
 ```
 
 That's it! With these changes in place, you can retrieve your entity using your custom attribute name on every 
-authenticated API request. For example, if you set custom_entity_name to 'organization', you can access the entity with 
-request.organization. If you don't define a custom_entity_name, you can still access the entity using the default 
-attribute name request.entity.
+authenticated API request. For example, if you set `CUSTOM_ENTITY_NAME` to `organization`, you can access the entity with 
+`request.organization`. If you don't define a `CUSTOM_ENTITY_NAME`, you can still access the entity using the default 
+attribute name `request.entity`.
 
 ## Changelog
 
