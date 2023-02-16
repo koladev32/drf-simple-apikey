@@ -6,6 +6,7 @@ def pytest_configure():
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
+        "rest_framework_simple_api_key.middleware.ApiKeyAuthenticationMiddleware",
     )
 
     settings.configure(
@@ -39,7 +40,8 @@ def pytest_configure():
         ),
         PASSWORD_HASHERS=("django.contrib.auth.hashers.MD5PasswordHasher",),
         SIMPLE_API_KEY={
-            "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
+            "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
+            "custom_entity_name": "organization"
         },
     )
 
