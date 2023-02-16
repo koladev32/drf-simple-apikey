@@ -11,6 +11,7 @@ DEFAULTS = {
     "API_KEY_LIFETIME": 365,
     "AUTHENTICATION_MODEL": settings.AUTH_USER_MODEL,
     "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
+    "custom_entity_name": "entity"
 }
 
 REMOVED_SETTINGS = ()
