@@ -52,4 +52,4 @@ Determines the keyword that should come with every request made to your API. The
 ----------------------------
 
 Gives you the flexibility to define a custom attribute name that you can use to retrieve the entity attached to each
-valid API Key on the `request` object.
+valid API Key on the **request** object.
