@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+- Minor refactoring (#35)
+
 [v0.1.0] - 2023-02-06
 ------------------
 - Add a script to generate a Fernet key (#21)
