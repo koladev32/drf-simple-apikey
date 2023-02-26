@@ -90,11 +90,6 @@ To generate the fernet key use the following command:
 ```python
 python manage.py generate_fernet_key
 ```
-or 
-
-```python
-django-admin generate_fernet_key
-```
 
 ## Changelog
 
