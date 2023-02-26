@@ -36,6 +36,7 @@ Contents
 
     getting_started
     settings
+    customizing_api_key_model
     permissions
     authentication
     development_and_contributing
