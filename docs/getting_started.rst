@@ -115,12 +115,6 @@ To generate the fernet key use the following command:
 
    python manage.py generate_fernet_key
 
-or
-
-.. code:: bash
-
-   django-admin generate_fernet_key
-
 Changelog
 ---------
 
