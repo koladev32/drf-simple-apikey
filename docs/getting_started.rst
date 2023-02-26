@@ -82,9 +82,7 @@ In your view then, you can add the authentication class and the
 permission class.
 
    ⚠️ **Important Note**: By default, the Django User class
-   (django.contrib.auth.User) is used for authentication. You can
-   configure the model you want to use as an entity using
-   ``AUTHENTICATION_MODEL`` in the ``SIMPLE_API_KEY`` setting.
+   (django.contrib.auth.User) is used for authentication.
 
 .. code:: python
 

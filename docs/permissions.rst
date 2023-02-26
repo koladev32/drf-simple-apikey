@@ -3,8 +3,7 @@ Permissions
 
 Permissions or authorization in Django are used to make sure the entity
 making the request has the right to read/write the resource. By default,
-entity classes are set to ``django.contrib.auth.User`` in the
-``AUTHENTICATION_MODEL`` setting. We also provide a permission class,
+entity classes are set to ``django.contrib.auth.User``. We also provide a permission class,
 which by default ensures that only active entities ``users`` have
 permission to read/write the resource.
 
