@@ -1,6 +1,7 @@
 import typing
 from datetime import timedelta, datetime
 
+from django.conf import settings
 from django.db import models
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
@@ -50,7 +51,7 @@ class AbstractAPIKey(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
 
     entity = models.ForeignKey(
-        package_settings.AUTHENTICATION_MODEL,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="api_keys",
     )
