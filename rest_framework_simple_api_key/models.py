@@ -11,7 +11,7 @@ def _expiry_date():
     return datetime.now() + timedelta(package_settings.API_KEY_LIFETIME)
 
 
-class APIKeyManager(models.Manager):
+class AbstractAPIKeyManager(models.Manager):
     key_crypto = ApiKeyCrypto()
 
     def get_api_key(self, pk: int | str):
@@ -38,9 +38,13 @@ class APIKeyManager(models.Manager):
         api_key.save()
 
 
-class APIKey(models.Model):
+class APIKeyManager(AbstractAPIKeyManager):
+    pass
+
+
+class AbstractAPIKey(models.Model):
     """
-    API KEY model
+    Abstract API KEY model
     """
 
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -76,3 +80,15 @@ class APIKey(models.Model):
     _has_expired.short_description = "Has expired"
     _has_expired.boolean = True
     has_expired = property(_has_expired)
+
+    class Meta:
+        abstract = True
+        verbose_name = "API key"
+        verbose_name_plural = "API keys"
+
+
+class APIKey(AbstractAPIKey):
+    """
+    API KEY model
+    """
+    pass
