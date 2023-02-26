@@ -14,7 +14,6 @@ Some of Django REST Framework Simple API Key's behavior can be customized throug
        "API_KEY_LIFETIME": 365,
        "AUTHENTICATION_MODEL": settings.AUTH_USER_MODEL,
        "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
-       "CUSTOM_ENTITY_NAME": "entity"
   }
 
 
@@ -47,9 +46,3 @@ By default, it points to the ``settings.AUTH_USER_MODEL`` settings which in Djan
 Determines the keyword that should come with every request made to your API. The default value is ``Api-Key`` and it is used in the following format:
 
  Api-Key API_KEY
-
-``CUSTOM_ENTITY_NAME``
-----------------------------
-
-Gives you the flexibility to define a custom attribute name that you can use to retrieve the entity attached to each
-valid API Key on the **request** object.

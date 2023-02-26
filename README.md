@@ -96,36 +96,6 @@ or
 django-admin generate_fernet_key
 ```
 
-## Custom attribute on the request object
-
-By default, when using Django, you can access the entity associated with an API key using `request.user`. However, 
-we understand that this may not always be convenient for your use case. Therefore, we have provided you with the 
-flexibility to choose your own custom attribute name.
-
-1 - Add the `rest_framework_simple_api_key.middleware.ApiKeyAuthenticationMiddleware` middleware in the `MIDDLEWARE` 
-list in your Django settings.
-
-```python
-MIDDLEWARE = (
-    # ...
-    "rest_framework_simple_api_key.middleware.ApiKeyAuthenticationMiddleware"
-)
-```
-
-2 - Define a value for the `custom_entity` key in the `SIMPLE_API_KEY` dictionnary.
-
-```python
-SIMPLE_API_KEY={
-    # ...
-    "CUSTOM_ENTITY_NAME": "organization"
-}
-```
-
-That's it! With these changes in place, you can retrieve your entity using your custom attribute name on every 
-authenticated API request. For example, if you set `CUSTOM_ENTITY_NAME` to `organization`, you can access the entity with 
-`request.organization`. If you don't define a `CUSTOM_ENTITY_NAME`, you can still access the entity using the default 
-attribute name `request.entity`.
-
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CHANGELOG.md).
