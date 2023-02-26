@@ -1,6 +1,7 @@
 import typing
 from datetime import timedelta, datetime
 
+from django.conf import settings
 from django.db import models
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
@@ -11,7 +12,7 @@ def _expiry_date():
     return datetime.now() + timedelta(package_settings.API_KEY_LIFETIME)
 
 
-class APIKeyManager(models.Manager):
+class AbstractAPIKeyManager(models.Manager):
     key_crypto = ApiKeyCrypto()
 
     def get_api_key(self, pk: int | str):
@@ -38,15 +39,19 @@ class APIKeyManager(models.Manager):
         api_key.save()
 
 
-class APIKey(models.Model):
+class APIKeyManager(AbstractAPIKeyManager):
+    pass
+
+
+class AbstractAPIKey(models.Model):
     """
-    API KEY model
+    Abstract API KEY model
     """
 
     name = models.CharField(max_length=255, null=True, blank=True)
 
     entity = models.ForeignKey(
-        package_settings.AUTHENTICATION_MODEL,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="api_keys",
     )
@@ -76,3 +81,16 @@ class APIKey(models.Model):
     _has_expired.short_description = "Has expired"
     _has_expired.boolean = True
     has_expired = property(_has_expired)
+
+    class Meta:
+        abstract = True
+        verbose_name = "API key"
+        verbose_name_plural = "API keys"
+
+
+class APIKey(AbstractAPIKey):
+    """
+    API KEY model
+    """
+
+    pass

@@ -64,7 +64,7 @@ python manage.py migrate
 
 In your view then, you can add the authentication class and the permission class.
 
-> ⚠️ **Important Note**: By default, authentication is performed using the `AUTH_USER_MODEL` specified in the settings.py file. However, you can specify a different model as the entity for authentication by configuring the `AUTHENTICATION_MODEL` in the `SIMPLE_API_KEY` setting.
+> ⚠️ **Important Note**: By default, authentication is performed using the `AUTH_USER_MODEL` specified in the settings.py file.
 
 ```python
 from rest_framework import viewsets
