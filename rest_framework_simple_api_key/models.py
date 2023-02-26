@@ -92,4 +92,5 @@ class APIKey(AbstractAPIKey):
     """
     API KEY model
     """
+
     pass
