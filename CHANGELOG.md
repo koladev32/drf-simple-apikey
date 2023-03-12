@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+- Fixed: DoesNotExist error not related to custom model (#38)
+
 [v0.1.1] - 2023-02-26
 ------------------
 
