@@ -3,8 +3,10 @@ import typing
 from django.contrib.auth.backends import BaseBackend
 from django.http import HttpRequest
 from django.utils.timezone import now
+from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import exceptions
+
 
 from rest_framework_simple_api_key.crypto import ApiKeyCrypto
 from rest_framework_simple_api_key.models import APIKey
@@ -58,7 +60,7 @@ class APIKeyAuthentication(BaseBackend):
             raise exceptions.AuthenticationFailed("API Key has already expired.")
         try:
             api_key = self.model.objects.get(id=payload["_pk"])
-        except APIKey.DoesNotExist:  # pylint: disable=maybe-no-member
+        except ObjectDoesNotExist:  # pylint: disable=maybe-no-member
             raise exceptions.AuthenticationFailed("No entity matching this api key.")
 
         if api_key.revoked:
