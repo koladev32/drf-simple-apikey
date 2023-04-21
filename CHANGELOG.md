@@ -3,6 +3,7 @@ Changelog
 
 [Unreleased]
 ------------
+- Add an example project to the package (#29)
 
 - Fixed: DoesNotExist error not related to custom model (#38)
 
