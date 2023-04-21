@@ -3,6 +3,9 @@ Changelog
 
 [Unreleased]
 ------------
+
+[v0.1.2] - 2023-04-21
+------------------
 - Add an example project to the package (#29)
 
 - Fixed: DoesNotExist error not related to custom model (#38)
