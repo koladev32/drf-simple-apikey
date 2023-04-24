@@ -9,6 +9,7 @@ USER_SETTINGS = getattr(settings, "SIMPLE_API_KEY", None)
 
 DEFAULTS = {
     "FERNET_SECRET": "",
+    "ROTATION_FERNET_SECRET": "",
     "API_KEY_LIFETIME": 365,
     "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
     "ROTATION_ENABLED": False,
