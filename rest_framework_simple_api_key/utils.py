@@ -1,4 +1,4 @@
-import croniter
+from croniter import croniter
 from django.utils.timezone import now, datetime
 from rest_framework_simple_api_key.settings import package_settings
 
