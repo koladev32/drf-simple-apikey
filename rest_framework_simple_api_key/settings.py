@@ -1,3 +1,4 @@
+from django.utils.timezone import timedelta
 from django.conf import settings
 from django.test.signals import setting_changed
 from django.utils.text import format_lazy
@@ -10,6 +11,9 @@ DEFAULTS = {
     "FERNET_SECRET": "",
     "API_KEY_LIFETIME": 365,
     "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
+    "ROTATION_ENABLED": False,
+    "ROTATION_PERIOD": timedelta(days=7),
+    "ROTATION_DATE": "0 0 1 1,7 *",
 }
 
 REMOVED_SETTINGS = ()

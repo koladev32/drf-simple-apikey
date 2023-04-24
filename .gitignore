@@ -133,3 +133,6 @@ dmypy.json
 
 # Live share
 .DS_Store
+
+# Intellij
+.idea/
