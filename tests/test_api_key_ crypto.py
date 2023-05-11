@@ -6,6 +6,7 @@ from rest_framework_simple_api_key.crypto import ApiKeyCrypto
 class TestApiCrypto:
 
     key_crypto = ApiKeyCrypto()
+    key_crypto.initialize()
     payload = {"user_id": 1}
 
     def _encode_payload(self):
