@@ -14,6 +14,7 @@ def _expiry_date():
 
 class AbstractAPIKeyManager(models.Manager):
     key_crypto = ApiKeyCrypto()
+    key_crypto.initialize()
 
     def get_api_key(self, pk: int | str):
         return self.get(revoked=False, pk=pk)

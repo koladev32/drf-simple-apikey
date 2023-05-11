@@ -17,6 +17,7 @@ class APIKeyAuthentication(BaseBackend):
     model = APIKey
     key_parser = APIKeyParser()
     key_crypto = ApiKeyCrypto()
+    key_crypto.initialize()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
         return self.key_parser.get(request)

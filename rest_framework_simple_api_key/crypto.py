@@ -14,7 +14,11 @@ from rest_framework_simple_api_key.settings import package_settings
 
 
 class ApiKeyCrypto:
-    def __init__(self):
+    fernet = None
+    api_key_lifetime = None
+
+    # Always call this method after creating an instance of ApiKeyCrypto
+    def initialize(self):
         """
         We first start by making some checks on the fernet secret to ensure the value is not empty.
         """
