@@ -93,6 +93,18 @@ python manage.py generate_fernet_key
 
 ## Changelog
 
+You can find a demo in project in the `example` directory. To run the project, you can :
+
+```shell
+cd example
+pip install -r requirements.txt
+
+python manage.py migrate
+python manage.py runserver
+```
+
+## Changelog
+
 See [CHANGELOG.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CHANGELOG.md).
 
 ## Contributing
