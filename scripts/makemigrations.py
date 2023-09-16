@@ -23,8 +23,15 @@ if __name__ == "__main__":
             "django.contrib.staticfiles",
             "rest_framework",
             "rest_framework_simple_api_key",
+            "rest_framework_simple_api_key.rotation",
             "tests",
         ),
+        DATABASES={
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': ':memory:',
+            }
+        },
         SIMPLE_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
         },
