@@ -13,9 +13,9 @@ Some of Django REST Framework Simple API Key's behavior can be customized throug
        "FERNET_SECRET": "",
        "API_KEY_LIFETIME": 365,
        "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
+       "ROTATION_PERIOD": timedelta(days=7),
+       "ROTATION_FERNET_SECRET": ""
   }
-
-
 Above, the default values for these settings are shown.
 
 ``FERNET_SECRET``
@@ -39,3 +39,21 @@ Determines the validity period of a generated Api Key. The default value is 365 
 Determines the keyword that should come with every request made to your API. The default value is ``Api-Key`` and it is used in the following format:
 
  Api-Key API_KEY
+
+``ROTATION_FERNET_SECRET``
+-------------------------
+The ``ROTATION_FERNET_SECRET`` is a secondary Fernet key (`Fernet <https://cryptography.io/en/latest/fernet/>`__)
+utilized within the ``MultiFernet`` cryptographic scheme.
+While the primary Fernet key (**fernet_key**) is used for the main encryption and decryption,
+the ``ROTATION_FERNET_SECRET`` plays a pivotal role during key rotation phases.
+
+In the context of ``MultiFernet``:
+
+- New tokens are encrypted using the ``ROTATION_FERNET_SECRET``.
+- Tokens can be decrypted with either the ``ROTATION_FERNET_SECRET`` enabling a smooth key rotation without rendering existing tokens obsolete.
+
+ python manage.py generate_fernet_key
+
+This strategic usage ensures that as you transition to a new key, older tokens encrypted with the previous key remain valid, and new tokens are encrypted using the new key.
+Thus, a seamless transition is achieved, enhancing security without causing disruptions.
+
