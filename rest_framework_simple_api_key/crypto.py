@@ -36,8 +36,15 @@ class ApiKeyCrypto:
             package_settings.API_KEY_LIFETIME,
         )
 
-        if fernet_key is None or rotation_fernet_key is None or fernet_key == "" or rotation_fernet_key == "":
-            raise KeyError("Fernet secrets are not defined in the Django settings for rotation. Please, check again.")
+        if (
+            fernet_key is None
+            or rotation_fernet_key is None
+            or fernet_key == ""
+            or rotation_fernet_key == ""
+        ):
+            raise KeyError(
+                "Fernet secrets are not defined in the Django settings for rotation. Please, check again."
+            )
 
         self.fernet = MultiFernet([Fernet(rotation_fernet_key), Fernet(fernet_key)])
         self.api_key_lifetime = api_key_lifetime
