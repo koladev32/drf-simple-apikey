@@ -2,6 +2,7 @@ import typing
 
 from django.contrib import admin, messages
 from django.http.request import HttpRequest
+from django.utils import timezone
 
 from .models import Rotation
 from ..settings import package_settings
@@ -43,7 +44,7 @@ class RotationAdmin(admin.ModelAdmin):
 
         if not obj.pk:
             obj.is_rotation_enabled = True
-            obj.ended = obj.started + package_settings.ROTATION_PERIOD
+            obj.ended = timezone.now() + package_settings.ROTATION_PERIOD
             obj.save()
 
             message = "A rotation is enabled."

@@ -32,6 +32,6 @@ class Command(BaseCommand):
             # Start the rotation logic
             obj = Rotation()
             obj.is_rotation_enabled = True
-            obj.ended = obj.started + package_settings.ROTATION_PERIOD
+            obj.ended = timezone.now() + package_settings.ROTATION_PERIOD
             obj.save()
             self.stdout.write(self.style.SUCCESS(f'Successfully started rotation ending at {obj.ended}'))
