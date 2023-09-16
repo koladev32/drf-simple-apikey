@@ -91,7 +91,11 @@ To generate the fernet key use the following command:
 python manage.py generate_fernet_key
 ```
 
-## Changelog
+## Rotation
+
+We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://djangorestframework-simple-apikey.readthedocs.io/en/latest/rotation.html.
+
+## Demo
 
 You can find a demo in project in the `example` directory. To run the project, you can :
 
