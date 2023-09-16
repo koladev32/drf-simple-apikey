@@ -23,6 +23,23 @@ Activation
 
 Before activating a rotation, ensure to set the rotating Fernet key ``ROTATION_FERNET_SECRET`` in the settings of the package.
 
+You will need to add the rotation app ``rest_framework_simple_api_key.rotation`` in the ``INSTALLED_APPS`` Django setting of your project.
+
+   .. code-block:: python
+
+       INSTALLED_APPS=(
+            ...
+            "rest_framework",
+            "rest_framework_simple_api_key",
+            "rest_framework_simple_api_key.rotation", # added app
+        )
+
+And you will need to run the migrate command:
+
+   .. code-block:: shell
+
+      python manage.py migrate rest_framework_simple_api_key.rotation
+
 To activate API Key Rotation, you can choose one of the following methods:
 
 Using Django Management Command
