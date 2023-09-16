@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+- Add an exemple project showcasing how to use the package (#45)
+
 [v0.1.2] - 2023-04-21
 ------------------
 - Add an example project to the package (#29)
