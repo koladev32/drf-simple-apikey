@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v1.0.0] - 2023-09-16
+------------------
+
 - Migrate to Django 4.2 LTS (#46)
 - Key rotation (#42)
 - Add an example project showcasing how to use the package (#45)
