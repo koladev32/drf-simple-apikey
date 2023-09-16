@@ -6,15 +6,43 @@ import json
 from copy import copy
 from datetime import timedelta
 
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, MultiFernet
 
 from django.utils.timezone import now
 
 from rest_framework_simple_api_key.settings import package_settings
+from rest_framework_simple_api_key.rotation.utils import get_rotation_status
 
 
 class ApiKeyCrypto:
     def __init__(self):
+        """
+        We need to check if we are in a period of keys rotation to know whether
+        we need to use the simple fernet setup of the multi fernet setup
+
+        The rotation_happening function tells us whether we are in a rotation period.
+        """
+
+        if not get_rotation_status():
+
+            self._setup_fernet()
+        else:
+            self._setup_multifernet()
+
+    def _setup_multifernet(self):
+        fernet_key, rotation_fernet_key, api_key_lifetime = (
+            package_settings.FERNET_SECRET,
+            package_settings.ROTATION_FERNET_SECRET,
+            package_settings.API_KEY_LIFETIME,
+        )
+
+        if fernet_key is None or rotation_fernet_key is None or fernet_key == "" or rotation_fernet_key == "":
+            raise KeyError("Fernet secrets are not defined in the Django settings for rotation. Please, check again.")
+
+        self.fernet = MultiFernet([Fernet(rotation_fernet_key), Fernet(fernet_key)])
+        self.api_key_lifetime = api_key_lifetime
+
+    def _setup_fernet(self):
         """
         We first start by making some checks on the fernet secret to ensure the value is not empty.
         """
