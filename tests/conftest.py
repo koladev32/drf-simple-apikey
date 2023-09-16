@@ -1,4 +1,6 @@
-from django.core.management import call_command
+import os
+
+import pytest
 
 
 def pytest_configure():
@@ -10,6 +12,21 @@ def pytest_configure():
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
     )
+
+    apps = [
+        "django.contrib.auth",
+        "django.contrib.admin",
+        "django.contrib.contenttypes",
+        "django.contrib.sessions",
+        "django.contrib.sites",
+        "django.contrib.staticfiles",
+        "rest_framework",
+        "rest_framework_simple_api_key",
+        "tests"
+    ]
+
+    if os.environ.get("TEST_WITH_ROTATION"):
+        apps.append("rest_framework_simple_api_key.rotation")
 
     settings.configure(
         DEBUG_PROPAGATE_EXCEPTIONS=True,
@@ -29,18 +46,7 @@ def pytest_configure():
         ],
         MIDDLEWARE=MIDDLEWARE,
         MIDDLEWARE_CLASSES=MIDDLEWARE,
-        INSTALLED_APPS=(
-            "django.contrib.auth",
-            "django.contrib.admin",
-            "django.contrib.contenttypes",
-            "django.contrib.sessions",
-            "django.contrib.sites",
-            "django.contrib.staticfiles",
-            "rest_framework",
-            "rest_framework_simple_api_key",
-            "rest_framework_simple_api_key.rotation",
-            "tests",
-        ),
+        INSTALLED_APPS=apps,
         PASSWORD_HASHERS=("django.contrib.auth.hashers.MD5PasswordHasher",),
         SIMPLE_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
@@ -54,3 +60,14 @@ def pytest_configure():
         django.setup()
     except AttributeError:
         pass
+
+
+@pytest.fixture(autouse=True)
+def setup_rotation_config(db):
+    from django.conf import settings
+
+    """Ensure a RotationConfig object exists for tests."""
+    if "rest_framework_simple_api_key.rotation" in settings.INSTALLED_APPS:
+        from rest_framework_simple_api_key.rotation.models import Rotation
+
+        Rotation.objects.create(is_rotation_enabled=True)

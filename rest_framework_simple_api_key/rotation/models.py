@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class RotationConfig(models.Model):
+class Rotation(models.Model):
     is_rotation_enabled = models.BooleanField(default=False)
-    last_rotation_date = models.DateTimeField(null=True, blank=True)
-    next_rotation_date = models.DateTimeField(null=True, blank=True)
+    started = models.DateTimeField(auto_now_add=True)
+    ended = models.DateTimeField(null=True, blank=True)
