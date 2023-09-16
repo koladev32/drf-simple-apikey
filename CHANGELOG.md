@@ -4,6 +4,7 @@ Changelog
 [Unreleased]
 ------------
 
+- Migrate to Django 4.2 LTS (#46)
 - Key rotation (#42)
 - Add an exemple project showcasing how to use the package (#45)
 
