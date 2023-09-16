@@ -38,7 +38,7 @@ And you will need to run the migrate command:
 
    .. code-block:: shell
 
-      python manage.py migrate rest_framework_simple_api_key.rotation
+      python manage.py migrate rest_framework_simple_api_key_rotation
 
 To activate API Key Rotation, you can choose one of the following methods:
 
