@@ -10,7 +10,7 @@ def test_command_generate_fernet_key():
     args = []
     opts = {}
 
-    call_command('generate_fernet_key', *args, **opts, stdout=out)
+    call_command("generate_fernet_key", *args, **opts, stdout=out)
 
     message = out.getvalue()
 

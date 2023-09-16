@@ -1,3 +1,7 @@
+import pytest
+from django.core.management import call_command
+
+
 def pytest_configure():
     from django.conf import settings
 
@@ -39,7 +43,8 @@ def pytest_configure():
         ),
         PASSWORD_HASHERS=("django.contrib.auth.hashers.MD5PasswordHasher",),
         SIMPLE_API_KEY={
-            "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
+            "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
+            "ROTATION_FERNET_SECRET": "EqkeOOgvV8bt70vUJiVXloNycn5bt_z1VqyoAi9K6f4=",
         },
     )
 

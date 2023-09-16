@@ -4,7 +4,7 @@ from datetime import timedelta, datetime
 from django.conf import settings
 from django.db import models
 
-from rest_framework_simple_api_key.crypto import ApiKeyCrypto
+from rest_framework_simple_api_key.crypto import get_crypto
 from rest_framework_simple_api_key.settings import package_settings
 
 
@@ -13,7 +13,7 @@ def _expiry_date():
 
 
 class AbstractAPIKeyManager(models.Manager):
-    key_crypto = ApiKeyCrypto()
+    key_crypto = get_crypto()
 
     def get_api_key(self, pk: int | str):
         return self.get(revoked=False, pk=pk)

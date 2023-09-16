@@ -1,11 +1,11 @@
 import json
 
-from rest_framework_simple_api_key.crypto import ApiKeyCrypto
+from rest_framework_simple_api_key.crypto import get_crypto
 
 
 class TestApiCrypto:
 
-    key_crypto = ApiKeyCrypto()
+    key_crypto = get_crypto()
     payload = {"user_id": 1}
 
     def _encode_payload(self):
