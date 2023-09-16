@@ -13,14 +13,12 @@ def _expiry_date():
 
 
 class AbstractAPIKeyManager(models.Manager):
-    key_crypto = get_crypto()
-
     def get_api_key(self, pk: int | str):
         return self.get(revoked=False, pk=pk)
 
     def assign_api_key(self, obj) -> str:
         payload = {"_pk": obj.pk, "_exp": obj.expiry_date.timestamp()}
-        key = self.key_crypto.generate(payload)
+        key = get_crypto().generate(payload)
 
         return key
 

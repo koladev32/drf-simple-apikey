@@ -16,7 +16,9 @@ from rest_framework_simple_api_key.parser import APIKeyParser
 class APIKeyAuthentication(BaseBackend):
     model = APIKey
     key_parser = APIKeyParser()
-    key_crypto = get_crypto()
+
+    def __init__(self):
+        self.key_crypto = get_crypto()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
         return self.key_parser.get(request)

@@ -5,7 +5,6 @@ from rest_framework import exceptions
 
 from rest_framework.test import APIRequestFactory
 
-from rest_framework_simple_api_key.backends import APIKeyAuthentication
 from rest_framework_simple_api_key.settings import package_settings
 
 from .fixtures.user import user
@@ -60,7 +59,10 @@ def valid_request(user, active_api_key):
 class TestApiKeyAuthentication:
     pytestmark = pytest.mark.django_db
 
-    api_key_authentication = APIKeyAuthentication()
+    def __init__(self):
+        from rest_framework_simple_api_key.backends import APIKeyAuthentication
+
+        self.api_key_authentication = APIKeyAuthentication()
 
     def test_get_key(self, valid_request):
         key = self.api_key_authentication.get_key(valid_request)

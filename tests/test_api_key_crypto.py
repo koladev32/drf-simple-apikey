@@ -1,11 +1,15 @@
 import json
 
-from rest_framework_simple_api_key.crypto import get_crypto
+import pytest
 
 
+@pytest.mark.django_db
 class TestApiCrypto:
+    def __init__(self):
+        from rest_framework_simple_api_key.crypto import get_crypto
 
-    key_crypto = get_crypto()
+        key_crypto = get_crypto()
+
     payload = {"user_id": 1}
 
     def _encode_payload(self):
@@ -22,7 +26,6 @@ class TestApiCrypto:
         assert type(key_encoded) is str
 
     def test_decrypt(self):
-
         # Encoding key
 
         key_encoded = self.key_crypto.encrypt(self._encode_payload())

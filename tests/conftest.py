@@ -1,4 +1,3 @@
-import pytest
 from django.core.management import call_command
 
 
@@ -39,6 +38,7 @@ def pytest_configure():
             "django.contrib.staticfiles",
             "rest_framework",
             "rest_framework_simple_api_key",
+            "rest_framework_simple_api_key.rotation",
             "tests",
         ),
         PASSWORD_HASHERS=("django.contrib.auth.hashers.MD5PasswordHasher",),
