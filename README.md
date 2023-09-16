@@ -113,4 +113,39 @@ See [CHANGELOG.md](https://github.com/koladev32/djangorestframework-simple-apike
 
 ## Contributing
 
+Thank you for your interest in contributing to the project! Here's a guide to help you get started:
+
+- **Setup Development Environment:**  
+  ```bash
+  git clone https://github.com/koladev32/djangorestframework-simple-apikey.git
+  ```  
+  Use the command below to set up your environment:
+  ```
+  make install
+  ```
+
+- **Format the Code:**  
+  Before submitting any code, please ensure it is formatted according to our standards:
+  ```
+  make format
+  ```
+
+- **Check Code and Migrations:**  
+  Validate your changes against our checks:
+  ```
+  make check
+  ```
+
+- **Run Migrations:**  
+  If your changes include database migrations, run the following:
+  ```
+  make migrations
+  ```
+
+- **Run Tests:**  
+  Always make sure your changes pass all our tests:
+  ```
+  make test
+  ```
+
 See [CONTRIBUTING.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CONTRIBUTING.md).
