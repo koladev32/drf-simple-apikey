@@ -39,6 +39,7 @@ Contents
     customizing_api_key_model
     permissions
     authentication
+    rotation
     development_and_contributing
     changelog
 
