@@ -4,6 +4,7 @@ Changelog
 [Unreleased]
 ------------
 
+- Key rotation (#42)
 - Add an exemple project showcasing how to use the package (#45)
 
 [v0.1.2] - 2023-04-21

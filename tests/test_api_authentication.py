@@ -5,7 +5,6 @@ from rest_framework import exceptions
 
 from rest_framework.test import APIRequestFactory
 
-from rest_framework_simple_api_key.backends import APIKeyAuthentication
 from rest_framework_simple_api_key.settings import package_settings
 
 from .fixtures.user import user
@@ -37,8 +36,6 @@ def invalid_request_with_revoked_api_key(user, revoked_api_key):
     factory = APIRequestFactory()
     _, key = revoked_api_key
 
-    print(package_settings.__dict__)
-
     return factory.get(
         "/test-request/",
         HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
@@ -56,18 +53,22 @@ def valid_request(user, active_api_key):
     )
 
 
+def api_key_authentication():
+    from rest_framework_simple_api_key.backends import APIKeyAuthentication
+
+    return APIKeyAuthentication()
+
+
 @pytest.mark.django_db
 class TestApiKeyAuthentication:
     pytestmark = pytest.mark.django_db
 
-    api_key_authentication = APIKeyAuthentication()
-
     def test_get_key(self, valid_request):
-        key = self.api_key_authentication.get_key(valid_request)
+        key = api_key_authentication().get_key(valid_request)
         assert type(key) is str
 
     def test_authenticate_valid_request(self, valid_request):
-        entity, _ = self.api_key_authentication.authenticate(valid_request)
+        entity, _ = api_key_authentication().authenticate(valid_request)
 
         assert isinstance(entity, User)
 
@@ -77,7 +78,7 @@ class TestApiKeyAuthentication:
             exceptions.NotAuthenticated,
             match=r"No API key provided.",
         ):
-            entity, _ = self.api_key_authentication.authenticate(invalid_request)
+            entity, _ = api_key_authentication().authenticate(invalid_request)
 
         assert entity is None
 
@@ -89,7 +90,7 @@ class TestApiKeyAuthentication:
             exceptions.AuthenticationFailed,
             match=r"API Key has already expired.",
         ):
-            entity, _ = self.api_key_authentication.authenticate(
+            entity, _ = api_key_authentication().authenticate(
                 invalid_request_with_expired_api_key
             )
 
@@ -103,7 +104,7 @@ class TestApiKeyAuthentication:
             exceptions.AuthenticationFailed,
             match=r"This API Key has been revoked.",
         ):
-            entity, _ = self.api_key_authentication.authenticate(
+            entity, _ = api_key_authentication().authenticate(
                 invalid_request_with_revoked_api_key
             )
 

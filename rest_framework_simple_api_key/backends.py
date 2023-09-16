@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
 
 
-from rest_framework_simple_api_key.crypto import ApiKeyCrypto
+from rest_framework_simple_api_key.crypto import get_crypto
 from rest_framework_simple_api_key.models import APIKey
 from rest_framework_simple_api_key.parser import APIKeyParser
 
@@ -16,7 +16,9 @@ from rest_framework_simple_api_key.parser import APIKeyParser
 class APIKeyAuthentication(BaseBackend):
     model = APIKey
     key_parser = APIKeyParser()
-    key_crypto = ApiKeyCrypto()
+
+    def __init__(self):
+        self.key_crypto = get_crypto()
 
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
         return self.key_parser.get(request)
