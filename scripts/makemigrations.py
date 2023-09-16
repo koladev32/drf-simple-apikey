@@ -23,6 +23,7 @@ if __name__ == "__main__":
             "django.contrib.staticfiles",
             "rest_framework",
             "rest_framework_simple_api_key",
+            "rest_framework_simple_api_key.rotation",
             "tests",
         ),
         DATABASES={
