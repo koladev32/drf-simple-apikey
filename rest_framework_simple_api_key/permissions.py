@@ -13,11 +13,9 @@ class IsActiveEntity(BasePermission):
     message = "Entity is not active."
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
-
         return request.user.is_active
 
     def has_object_permission(
         self, request: HttpRequest, view: typing.Any, obj
     ) -> bool:
-
         return request.user.is_active

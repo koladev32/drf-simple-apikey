@@ -22,7 +22,7 @@ class RotationAdmin(admin.ModelAdmin):
     )
 
     def get_readonly_fields(
-            self, request: HttpRequest, obj: Rotation = None
+        self, request: HttpRequest, obj: Rotation = None
     ) -> typing.Tuple[str, ...]:
         fields = (
             "started",
@@ -32,11 +32,11 @@ class RotationAdmin(admin.ModelAdmin):
         return fields
 
     def save_model(
-            self,
-            request: HttpRequest,
-            obj: Rotation,
-            form: typing.Any = None,
-            change: bool = False,
+        self,
+        request: HttpRequest,
+        obj: Rotation,
+        form: typing.Any = None,
+        change: bool = False,
     ) -> None:
         """
         If there is obj.pk, it means that the object has been created already.

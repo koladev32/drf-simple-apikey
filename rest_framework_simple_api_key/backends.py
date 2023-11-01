@@ -7,10 +7,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import exceptions
 
-
 from rest_framework_simple_api_key.crypto import get_crypto
 from rest_framework_simple_api_key.models import APIKey
 from rest_framework_simple_api_key.parser import APIKeyParser
+
+
+def get_key(key_parser, request: HttpRequest) -> typing.Optional[str]:
+    return key_parser.get(request)
 
 
 class APIKeyAuthentication(BaseBackend):
@@ -19,9 +22,6 @@ class APIKeyAuthentication(BaseBackend):
 
     def __init__(self):
         self.key_crypto = get_crypto()
-
-    def get_key(self, request: HttpRequest) -> typing.Optional[str]:
-        return self.key_parser.get(request)
 
     def authenticate(self, request, **kwargs):
         """
@@ -43,11 +43,11 @@ class APIKeyAuthentication(BaseBackend):
         handle the rest.
         """
 
-        key = self.get_key(request)
+        key = get_key(self.key_parser, request)
 
-        return self._authenticate_credentials(request, key)
+        return self._authenticate_credentials(key)
 
-    def _authenticate_credentials(self, request, key):
+    def _authenticate_credentials(self, key):
         key_crypto = self.key_crypto
 
         try:

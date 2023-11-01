@@ -22,7 +22,7 @@ def pytest_configure():
         "django.contrib.staticfiles",
         "rest_framework",
         "rest_framework_simple_api_key",
-        "tests"
+        "tests",
     ]
 
     if os.environ.get("TEST_WITH_ROTATION"):

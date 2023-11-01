@@ -9,10 +9,10 @@ from rest_framework_simple_api_key.mutli_api_crypto import MultiApiCrypto
 
 @pytest.mark.django_db
 class TestCryptoFunctions:
-
-    @pytest.fixture(scope='class')
+    @pytest.fixture(scope="class")
     def key_crypto(self):
         from rest_framework_simple_api_key.crypto import get_crypto
+
         return get_crypto()
 
     def test_encryption_and_decryption(self, key_crypto):
