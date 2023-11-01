@@ -1,7 +1,7 @@
 from rest_framework_simple_api_key.analytics.models import ApiKeyAnalytics
-from rest_framework_simple_api_key.backends import get_key
 from rest_framework_simple_api_key.crypto import get_crypto
 from rest_framework_simple_api_key.parser import APIKeyParser
+from rest_framework_simple_api_key.utils import get_key
 
 
 class ApiKeyAnalyticsMiddleware:
