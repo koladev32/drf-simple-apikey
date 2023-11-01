@@ -14,6 +14,7 @@ DEFAULTS = {
     "API_KEY_LIFETIME": 365,
     "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
     "ROTATION_PERIOD": timedelta(days=7),
+    "API_KEY_CLASS": 'rest_framework_simple_api_key.Apikey',
 }
 
 REMOVED_SETTINGS = ()
