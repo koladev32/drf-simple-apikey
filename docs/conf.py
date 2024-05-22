@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "Django REST Simple Api Key"
-copyright = "2023, Kolawole with ❤️"
+copyright = "2024, koladev with ❤️"
 author = "Kolawole Mangabo"
 
 

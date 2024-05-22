@@ -46,7 +46,7 @@ class ApiKeyAdmin(admin.ModelAdmin):
         change: bool = False,
     ) -> None:
         """
-        If there is obj.pk, it means that the object is been created. We need then to display the
+        If there is obj.pk, it means that the object is being created. We need then to display the
         `api_key` value in the Django admin dashboard.
         """
 

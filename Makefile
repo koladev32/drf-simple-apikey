@@ -22,9 +22,12 @@ format:
 	${bin}black ${pysources}
 
 migrations:
+	@echo "Running migrations..."
 	${bin}python -m scripts.makemigrations
 
+
 migrations-check:
+	@echo "Running migrations checks..."
 	${bin}python -m scripts.makemigrations --check
 
 test:

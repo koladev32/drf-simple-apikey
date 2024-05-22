@@ -16,19 +16,9 @@ class ApiKeyAnalyticsMiddleware:
 
         key = get_key(APIKeyParser(), request)
 
-        api_key = get_crypto().decrypt(key)
+        payload = get_crypto().decrypt(key)
 
-        try:
-            analytic = ApiKeyAnalytics.objects.get(api_key=api_key)
-            analytic.request_number += 1
-            analytic.accessed_endpoints['endpoints'].append(request.url)
-            analytic.save()
-        except ApiKeyAnalytics.DoesNotExist:
-
-            ApiKeyAnalytics.objects.create(
-                api_key_id=api_key,
-                request_number=1,
-                accessed_endpoints={"endpoints": [request.url]},
-            )
+        # Use the custom manager to handle endpoint access logging
+        ApiKeyAnalytics.objects.add_endpoint_access(api_key_id=payload["_pk"], endpoint=request.path)
 
         return response

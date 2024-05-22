@@ -7,3 +7,4 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "djangorestframework-simple-apikey"
 version = "1.0.2"
+dynamic = ["description", "readme", "optional-dependencies", "dependencies", "classifiers", "authors", "license"]

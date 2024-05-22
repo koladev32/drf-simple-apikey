@@ -9,7 +9,6 @@ root = pathlib.Path(__file__).parent.parent
 sys.path.append(str(root))
 
 if __name__ == "__main__":
-    APP = "rest_framework_simple_api_key"
 
     from django.conf import settings
 
@@ -24,6 +23,7 @@ if __name__ == "__main__":
             "rest_framework",
             "rest_framework_simple_api_key",
             "rest_framework_simple_api_key.rotation",
+            "rest_framework_simple_api_key.analytics",
             "tests",
         ),
         DATABASES={
@@ -41,5 +41,8 @@ if __name__ == "__main__":
 
     # For available options, see:
     # https://docs.djangoproject.com/en/3.0/ref/django-admin/#makemigrations
-    options = sys.argv[1:]
-    call_command("makemigrations", *options, APP)
+    if len(sys.argv) > 1:
+        app_labels = sys.argv[1:]
+        call_command("makemigrations", *app_labels)
+    else:
+        print("No app label provided. Usage: python -m scripts.makemigrations [app_label]")
