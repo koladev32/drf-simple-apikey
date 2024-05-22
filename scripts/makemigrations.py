@@ -45,4 +45,6 @@ if __name__ == "__main__":
         app_labels = sys.argv[1:]
         call_command("makemigrations", *app_labels)
     else:
-        print("No app label provided. Usage: python -m scripts.makemigrations [app_label]")
+        print(
+            "No app label provided. Usage: python -m scripts.makemigrations [app_label]"
+        )

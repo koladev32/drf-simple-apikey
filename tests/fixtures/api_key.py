@@ -30,9 +30,7 @@ def active_only_api_key(user):
     data = {
         "entity": user,
     }
-    apikey, _ = APIKey.objects.create_api_key(
-        **data
-    )  # This will return api_key:object
+    apikey, _ = APIKey.objects.create_api_key(**data)  # This will return api_key:object
 
     return apikey
 

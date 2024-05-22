@@ -7,14 +7,18 @@ class ApiKeyAnalyticsManager(models.Manager):
         """
         Retrieve or create ApiKeyAnalytics instance and increment the endpoint access count.
         """
-        obj, created = self.get_or_create(api_key_id=api_key_id, defaults={'accessed_endpoints': {'endpoints': {}}})
+        obj, created = self.get_or_create(
+            api_key_id=api_key_id, defaults={"accessed_endpoints": {"endpoints": {}}}
+        )
 
         # Initialize endpoints dictionary if it doesn't exist
         if "endpoints" not in obj.accessed_endpoints:
             obj.accessed_endpoints["endpoints"] = {}
 
         # Increment endpoint count
-        obj.accessed_endpoints["endpoints"][endpoint] = obj.accessed_endpoints["endpoints"].get(endpoint, 0) + 1
+        obj.accessed_endpoints["endpoints"][endpoint] = (
+            obj.accessed_endpoints["endpoints"].get(endpoint, 0) + 1
+        )
         obj.request_number += 1
         obj.save()
 
@@ -23,11 +27,14 @@ class ApiKeyAnalyticsManager(models.Manager):
         Returns the most accessed endpoints for a given API key, sorted by access count.
         """
         obj = self.get(api_key_id=api_key_id)
-        if "endpoints" in obj.accessed_endpoints and obj.accessed_endpoints["endpoints"]:
+        if (
+            "endpoints" in obj.accessed_endpoints
+            and obj.accessed_endpoints["endpoints"]
+        ):
             return sorted(
                 obj.accessed_endpoints["endpoints"].items(),
                 key=lambda item: item[1],
-                reverse=True
+                reverse=True,
             )
         return []
 

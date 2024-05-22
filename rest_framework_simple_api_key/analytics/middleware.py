@@ -19,6 +19,8 @@ class ApiKeyAnalyticsMiddleware:
         payload = get_crypto().decrypt(key)
 
         # Use the custom manager to handle endpoint access logging
-        ApiKeyAnalytics.objects.add_endpoint_access(api_key_id=payload["_pk"], endpoint=request.path)
+        ApiKeyAnalytics.objects.add_endpoint_access(
+            api_key_id=payload["_pk"], endpoint=request.path
+        )
 
         return response

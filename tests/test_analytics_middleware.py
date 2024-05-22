@@ -27,15 +27,20 @@ def request_factory():
 
 
 @pytest.mark.django_db
-def test_api_key_analytics_middleware(middleware, user, active_api_key, request_factory):
+def test_api_key_analytics_middleware(
+    middleware, user, active_api_key, request_factory
+):
     apikey, key = active_api_key
     # Create a mock request
-    request = request_factory.get('/some-path')
+    request = request_factory.get("/some-path")
 
     # Assume get_key and get_crypto are properly mocked to return expected values
-    with mock.patch('rest_framework_simple_api_key.parser.APIKeyParser.get', return_value=key), \
-            mock.patch('rest_framework_simple_api_key.crypto.ApiCrypto.decrypt',
-                       return_value={'_pk': apikey.pk}):
+    with mock.patch(
+        "rest_framework_simple_api_key.parser.APIKeyParser.get", return_value=key
+    ), mock.patch(
+        "rest_framework_simple_api_key.crypto.ApiCrypto.decrypt",
+        return_value={"_pk": apikey.pk},
+    ):
         # Call middleware
         response = middleware(request)
 
@@ -44,4 +49,4 @@ def test_api_key_analytics_middleware(middleware, user, active_api_key, request_
 
         # Check if ApiKeyAnalytics was updated
         analytics = ApiKeyAnalytics.objects.get(api_key_id=apikey.pk)
-        assert '/some-path' in analytics.accessed_endpoints['endpoints']
+        assert "/some-path" in analytics.accessed_endpoints["endpoints"]
