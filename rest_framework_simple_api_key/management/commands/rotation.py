@@ -3,8 +3,8 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
-from drf_apikey.rotation.models import Rotation
-from drf_apikey.settings import package_settings
+from rest_framework_simple_api_key.rotation.models import Rotation
+from rest_framework_simple_api_key.settings import package_settings
 
 
 class Command(BaseCommand):

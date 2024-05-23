@@ -3,15 +3,15 @@
 Django REST Framework Simple API Key is a fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
 
 <div>
-  <a href="https://badge.fury.io/py/drf-apikey">
-      <img src="https://badge.fury.io/py/drf-apikey.svg" alt="Version"/>
+  <a href="https://badge.fury.io/py/djangorestframework-simple-apikey">
+      <img src="https://badge.fury.io/py/djangorestframework-simple-apikey.svg" alt="Version"/>
   </a>
-  <a href="https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml">
-      <img src="https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml/badge.svg" alt="Testing"/>
+  <a href="https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml">
+      <img src="https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/badge.svg" alt="Testing"/>
   </a>
 </div>
 
-For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+For the full documentation, visit [https://drf-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
 
 ## Package Renaming Notice
 
@@ -21,7 +21,6 @@ For the full documentation, visit [https://djangorestframework-simple-apikey.rea
    ```bash
    pip uninstall djangorestframework-simple-apikey
    pip install drf-apikey
-For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
 
 ## Introduction
 
@@ -35,7 +34,7 @@ Why should you use this package for your API Key authentication?
     
 * 🔐 **Secure**: Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key, which we call `FERNET_KEY`. As long as you treat the fernet key at the same level you treat the Django `SECRET_KEY` setting, you are good to go.
     
-* 🔧 **Customizable**: The models, authentication backend, and permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 Your Api Key authentication settings are kept in a single configuration dictionary named `DRF_API_KEY` in the `settings.py` file of your Django project. It can be customized to fit your project needs.
+* 🔧 **Customizable**: The models, authentication backend, and permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 Your Api Key authentication settings are kept in a single configuration dictionary named `SIMPLE_API_KEY` in the `settings.py` file of your Django project. It can be customized to fit your project needs.
     
 
 ## Quickstart
@@ -43,7 +42,7 @@ Why should you use this package for your API Key authentication?
 1 - Install with `pip`:
 
 ```bash
-pip install drf-apikey
+pip install djangorestframework-simple-apikey
 ```
 
 2 - Register the app in the `INSTALLED_APPS` in the `settings.py` file:
@@ -54,14 +53,14 @@ pip install drf-apikey
 INSTALLED_APPS = [
   # ...
   "rest_framework",
-  "drf_apikey",
+  "rest_framework_simple_api_key",
 ]
 ```
 
-3- Add the `FERNET_KEY` setting in your `DRF_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
+3- Add the `FERNET_KEY` setting in your `SIMPLE_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
 
 ```python
-DRF_API_KEY = {
+SIMPLE_API_KEY = {
     "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
 }
 ```
@@ -79,16 +78,15 @@ In your view then, you can add the authentication class and the permission class
 ```python
 from rest_framework import viewsets
 
-from drf_apikey.backends import APIKeyAuthentication
+from rest_framework_simple_api_key.backends import APIKeyAuthentication
 from rest_framework.response import Response
 
-
 class FruitViewSets(viewsets.ViewSet):
-  http_method_names = ["get"]
-  authentication_classes = (APIKeyAuthentication,)
+    http_method_names = ["get"]
+    authentication_classes = (APIKeyAuthentication, )
 
-  def list(self, request):
-    return Response([{"detail": True}], 200)
+    def list(self, request):
+        return Response([{"detail": True}], 200 )
 ```
 
 ## Generate a Fernet Key
@@ -120,7 +118,7 @@ python manage.py runserver
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/koladev32/drf-apikey/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CHANGELOG.md).
 
 ## Contributing
 
@@ -128,7 +126,7 @@ Thank you for your interest in contributing to the project! Here's a guide to he
 
 - **Setup Development Environment:**  
   ```bash
-  git clone https://github.com/koladev32/drf-apikey.git
+  git clone https://github.com/koladev32/djangorestframework-simple-apikey.git
   ```  
   Use the command below to set up your environment:
   ```
@@ -159,4 +157,4 @@ Thank you for your interest in contributing to the project! Here's a guide to he
   make test
   ```
 
-See [CONTRIBUTING.md](https://github.com/koladev32/drf-apikey/blob/main/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CONTRIBUTING.md).

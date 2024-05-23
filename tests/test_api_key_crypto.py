@@ -4,7 +4,7 @@ import pytest
 
 
 def key_crypto():
-    from drf_apikey.crypto import get_crypto
+    from rest_framework_simple_api_key.crypto import get_crypto
 
     return get_crypto()
 

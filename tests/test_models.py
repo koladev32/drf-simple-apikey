@@ -1,6 +1,6 @@
 import pytest
 
-from drf_apikey.models import APIKey
+from rest_framework_simple_api_key.models import APIKey
 from .fixtures.user import user
 from .fixtures.api_key import active_api_key
 

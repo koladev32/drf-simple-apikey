@@ -1,13 +1,13 @@
 Django REST Simple Api Key
 ==========
 
-.. image:: https://badge.fury.io/py/drf-apikey.svg/
-   :target: https://github.com/koladev32/drf-apikey/
+.. image:: https://badge.fury.io/py/djangorestframework-simple-apikey.svg/
+   :target: https://github.com/koladev32/djangorestframework-simple-apikey/
 
-.. image:: https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml/badge.svg/
-   :target: https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml/
+.. image:: https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/badge.svg/
+   :target: https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/
 
-.. image:: https://readthedocs.org/projects/drf-apikey/badge/?version=latest
+.. image:: https://readthedocs.org/projects/djangorestframework-simple-apikey/badge/?version=latest
     :target: https://djangorestframework-simple-apikey.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 

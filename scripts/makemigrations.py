@@ -21,9 +21,9 @@ if __name__ == "__main__":
             "django.contrib.sites",
             "django.contrib.staticfiles",
             "rest_framework",
-            "drf_apikey",
-            "drf_apikey.rotation",
-            "drf_apikey.analytics",
+            "rest_framework_simple_api_key",
+            "rest_framework_simple_api_key.rotation",
+            "rest_framework_simple_api_key.analytics",
             "tests",
         ),
         DATABASES={
@@ -32,7 +32,7 @@ if __name__ == "__main__":
                 "NAME": ":memory:",
             }
         },
-        DRF_API_KEY={
+        SIMPLE_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
         },
     )

@@ -9,7 +9,7 @@ example using a custom class called ``Organization``.
 
    # organizations/models.py
    from django.db import models
-   from drf-apikey.models import AbstractAPIKey
+   from rest_framework_simple_api_key.models import AbstractAPIKey
 
    class Organization(models.Model):
        name = models.CharField(max_length=255)
