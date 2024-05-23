@@ -6,5 +6,5 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drf-simple-apikey"
-version = "2.0.0"
+version = "2.0.1"
 dynamic = ["description", "readme", "optional-dependencies", "dependencies", "classifiers", "authors", "license"]
