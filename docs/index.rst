@@ -8,7 +8,7 @@ Django REST Simple Api Key
    :target: https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml/
 
 .. image:: https://readthedocs.org/projects/drf-apikey/badge/?version=latest
-    :target: https://drf-apikey.readthedocs.io/en/latest/?badge=latest
+    :target: https://djangorestframework-simple-apikey.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
 An API Key authentication plugin for the `Django REST Framework

@@ -11,7 +11,7 @@ Django REST Framework Simple API Key is a fast and secure API Key authentication
   </a>
 </div>
 
-For the full documentation, visit [https://drf-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
 
 ## Package Renaming Notice
 
@@ -21,7 +21,7 @@ For the full documentation, visit [https://drf-apikey.readthedocs.io/en/latest/]
    ```bash
    pip uninstall djangorestframework-simple-apikey
    pip install drf-apikey
-For the full documentation, visit [https://drf-apikey.readthedocs.io/en/latest/](https://drf-apikey.readthedocs.io/en/latest/).
+For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
 
 ## Introduction
 
@@ -104,7 +104,7 @@ python manage.py generate_fernet_key
 
 ## Rotation
 
-We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://drf-apikey.readthedocs.io/en/latest/rotation.html.
+We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://djangorestframework-simple-apikey.readthedocs.io/en/latest/rotation.html.
 
 ## Demo
 
