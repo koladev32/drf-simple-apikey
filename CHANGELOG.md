@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v2.1.0] - 2024-05-23
+------------------
+
 - Add migrating documentation (#62)  
 
 [v2.0.1] - 2024-05-23
