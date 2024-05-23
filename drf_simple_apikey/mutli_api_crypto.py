@@ -1,7 +1,7 @@
 from cryptography.fernet import MultiFernet, Fernet
 
-from drf_apikey.crypto import BaseApiCrypto
-from drf_apikey.settings import package_settings
+from drf_simple_apikey.crypto import BaseApiCrypto
+from drf_simple_apikey.settings import package_settings
 
 
 class MultiApiCrypto(BaseApiCrypto):

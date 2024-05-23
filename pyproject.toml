@@ -5,6 +5,6 @@ requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "drf-apikey"
+name = "drf-simple-apikey"
 version = "2.0.0"
 dynamic = ["description", "readme", "optional-dependencies", "dependencies", "classifiers", "authors", "license"]

@@ -3,11 +3,11 @@
 Django REST Framework Simple API Key is a fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
 
 <div>
-  <a href="https://badge.fury.io/py/drf-apikey">
-      <img src="https://badge.fury.io/py/drf-apikey.svg" alt="Version"/>
+  <a href="https://badge.fury.io/py/drf-simple-apikey">
+      <img src="https://badge.fury.io/py/drf-simple-apikey.svg" alt="Version"/>
   </a>
-  <a href="https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml">
-      <img src="https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml/badge.svg" alt="Testing"/>
+  <a href="https://github.com/koladev32/drf-simple-apikey/actions/workflows/ci-cd.yml">
+      <img src="https://github.com/koladev32/drf-simple-apikey/actions/workflows/ci-cd.yml/badge.svg" alt="Testing"/>
   </a>
 </div>
 
@@ -15,12 +15,12 @@ For the full documentation, visit [https://djangorestframework-simple-apikey.rea
 
 ## Package Renaming Notice
 
-**Notice:** The `djangorestframework-simple-apikey` package is being renamed to `drf-apikey` to improve usability and align with common naming conventions. Please update your installations:
+**Notice:** The `djangorestframework-simple-apikey` package is being renamed to `drf-simple-apikey` to improve usability and align with common naming conventions. Please update your installations:
 
 1. Replace the old package:
    ```bash
    pip uninstall djangorestframework-simple-apikey
-   pip install drf-apikey
+   pip install drf-simple-apikey
 For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
 
 ## Introduction
@@ -43,7 +43,7 @@ Why should you use this package for your API Key authentication?
 1 - Install with `pip`:
 
 ```bash
-pip install drf-apikey
+pip install drf-simple-apikey
 ```
 
 2 - Register the app in the `INSTALLED_APPS` in the `settings.py` file:
@@ -54,7 +54,7 @@ pip install drf-apikey
 INSTALLED_APPS = [
   # ...
   "rest_framework",
-  "drf_apikey",
+  "drf_simple_apikey",
 ]
 ```
 
@@ -79,7 +79,7 @@ In your view then, you can add the authentication class and the permission class
 ```python
 from rest_framework import viewsets
 
-from drf_apikey.backends import APIKeyAuthentication
+from drf_simple_apikey.backends import APIKeyAuthentication
 from rest_framework.response import Response
 
 
@@ -120,7 +120,7 @@ python manage.py runserver
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/koladev32/drf-apikey/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/koladev32/drf-simple-apikey/blob/main/CHANGELOG.md).
 
 ## Contributing
 
@@ -128,7 +128,7 @@ Thank you for your interest in contributing to the project! Here's a guide to he
 
 - **Setup Development Environment:**  
   ```bash
-  git clone https://github.com/koladev32/drf-apikey.git
+  git clone https://github.com/koladev32/drf-simple-apikey.git
   ```  
   Use the command below to set up your environment:
   ```
@@ -159,4 +159,4 @@ Thank you for your interest in contributing to the project! Here's a guide to he
   make test
   ```
 
-See [CONTRIBUTING.md](https://github.com/koladev32/drf-apikey/blob/main/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/koladev32/drf-simple-apikey/blob/main/CONTRIBUTING.md).

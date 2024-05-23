@@ -1,7 +1,7 @@
 import pytest
 from django.utils.timezone import now
 
-from drf_apikey.models import APIKey
+from drf_simple_apikey.models import APIKey
 from .user import user, inactive_user
 
 

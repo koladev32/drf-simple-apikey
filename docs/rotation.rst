@@ -13,7 +13,7 @@ project using the package, detailing the inner workings of the rotation process.
 Key Rotation Overview
 ---------------------
 
-API Key Rotation in the `drf-apikey` package involves periodically
+API Key Rotation in the `drf-simple-apikey` package involves periodically
 changing the encryption keys used to secure API keys. During rotation, a new key is introduced,
 and both the old and new keys are used for a transition period. This ensures that existing API
 keys remain valid while new keys are encrypted with the fresh key.
@@ -23,22 +23,22 @@ Activation
 
 Before activating a rotation, ensure to set the rotating Fernet key ``ROTATION_FERNET_SECRET`` in the settings of the package.
 
-You will need to add the rotation app ``drf-apikey.rotation`` in the ``INSTALLED_APPS`` Django setting of your project.
+You will need to add the rotation app ``drf-simple-apikey.rotation`` in the ``INSTALLED_APPS`` Django setting of your project.
 
    .. code-block:: python
 
        INSTALLED_APPS=(
             ...
             "rest_framework",
-            "drf-apikey",
-            "drf-apikey.rotation", # added app
+            "drf-simple-apikey",
+            "drf-simple-apikey.rotation", # added app
         )
 
 And you will need to run the migrate command:
 
    .. code-block:: shell
 
-      python manage.py migrate drf-apikey_rotation
+      python manage.py migrate drf-simple-apikey_rotation
 
 To activate API Key Rotation, you can choose one of the following methods:
 

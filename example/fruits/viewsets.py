@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 
-from drf_apikey.backends import APIKeyAuthentication
-from drf_apikey.permissions import IsActiveEntity
+from drf_simple_apikey.backends import APIKeyAuthentication
+from drf_simple_apikey.permissions import IsActiveEntity
 from rest_framework.response import Response
 
 

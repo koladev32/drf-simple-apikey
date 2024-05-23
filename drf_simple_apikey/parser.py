@@ -3,7 +3,7 @@ import typing
 from django.http import HttpRequest
 from rest_framework.exceptions import NotAuthenticated, AuthenticationFailed
 
-from drf_apikey.settings import package_settings
+from drf_simple_apikey.settings import package_settings
 
 
 class APIKeyParser:

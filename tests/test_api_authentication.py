@@ -5,7 +5,7 @@ from rest_framework import exceptions
 
 from rest_framework.test import APIRequestFactory
 
-from drf_apikey.settings import package_settings
+from drf_simple_apikey.settings import package_settings
 
 from .fixtures.user import user
 from .fixtures.api_key import expired_api_key, active_api_key, revoked_api_key
@@ -54,7 +54,7 @@ def valid_request(user, active_api_key):
 
 
 def api_key_authentication():
-    from drf_apikey.backends import APIKeyAuthentication
+    from drf_simple_apikey.backends import APIKeyAuthentication
 
     return APIKeyAuthentication()
 

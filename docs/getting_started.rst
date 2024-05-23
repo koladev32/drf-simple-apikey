@@ -46,7 +46,7 @@ Quickstart
 
 .. code:: bash
 
-   pip install drf-apikey
+   pip install drf-simple-apikey
 
 2 - Register the app in the ``INSTALLED_APPS`` in the ``settings.py``
 file:
@@ -58,7 +58,7 @@ file:
    INSTALLED_APPS = [
      # ...
      "rest_framework",
-     "drf-apikey",
+     "drf-simple-apikey",
    ]
 
 3- Add the ``FERNET_KEY`` setting in your ``DRF_API_KEY``
@@ -88,7 +88,7 @@ permission class.
 
    from rest_framework import viewsets
 
-   from drf-apikey.backends import APIKeyAuthentication
+   from drf-simple-apikey.backends import APIKeyAuthentication
    from rest_framework.response import Response
 
    class FruitViewSets(viewsets.ViewSet):
@@ -119,10 +119,10 @@ Changelog
 ---------
 
 See
-`CHANGELOG.md <https://github.com/koladev32/drf-apikey/blob/main/CHANGELOG.md>`__.
+`CHANGELOG.md <https://github.com/koladev32/drf-simple-apikey/blob/main/CHANGELOG.md>`__.
 
 Contributing
 ------------
 
 See
-`CONTRIBUTING.md <https://github.com/koladev32/drf-apikey/blob/main/CONTRIBUTING.md>`__.
+`CONTRIBUTING.md <https://github.com/koladev32/drf-simple-apikey/blob/main/CONTRIBUTING.md>`__.

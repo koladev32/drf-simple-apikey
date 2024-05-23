@@ -11,7 +11,7 @@ from django.conf import settings
 
 from django.utils.timezone import now
 
-from drf_apikey.settings import package_settings
+from drf_simple_apikey.settings import package_settings
 
 
 class BaseApiCrypto:
@@ -60,11 +60,11 @@ class ApiCrypto(BaseApiCrypto):
 
 
 def get_crypto():
-    if "drf_apikey.rotation" in settings.INSTALLED_APPS:
+    if "drf_simple_apikey.rotation" in settings.INSTALLED_APPS:
         try:
             # Try to import necessary components and initialize the MultiApiCrypto.
             # This might fail if certain conditions aren't met, like missing migrations.
-            from drf_apikey.rotation.utils import get_rotation_status
+            from drf_simple_apikey.rotation.utils import get_rotation_status
             from .mutli_api_crypto import MultiApiCrypto
 
             if get_rotation_status():

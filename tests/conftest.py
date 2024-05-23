@@ -11,7 +11,7 @@ def pytest_configure():
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
-        "drf_apikey.analytics.middleware.ApiKeyAnalyticsMiddleware",
+        "drf_simple_apikey.analytics.middleware.ApiKeyAnalyticsMiddleware",
     )
 
     apps = [
@@ -22,13 +22,13 @@ def pytest_configure():
         "django.contrib.sites",
         "django.contrib.staticfiles",
         "rest_framework",
-        "drf_apikey",
-        "drf_apikey.analytics",
+        "drf_simple_apikey",
+        "drf_simple_apikey.analytics",
         "tests",
     ]
 
     if os.environ.get("TEST_WITH_ROTATION"):
-        apps.append("drf_apikey.rotation")
+        apps.append("drf_simple_apikey.rotation")
 
     settings.configure(
         DEBUG_PROPAGATE_EXCEPTIONS=True,
@@ -69,7 +69,7 @@ def setup_rotation_config(db):
     from django.conf import settings
 
     """Ensure a RotationConfig object exists for tests."""
-    if "drf_apikey.rotation" in settings.INSTALLED_APPS:
-        from drf_apikey.rotation.models import Rotation
+    if "drf_simple_apikey.rotation" in settings.INSTALLED_APPS:
+        from drf_simple_apikey.rotation.models import Rotation
 
         Rotation.objects.create(is_rotation_enabled=True)

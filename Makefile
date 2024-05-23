@@ -1,6 +1,6 @@
 venv = venv
 bin = ${venv}/bin/
-pysources = drf-apikey/ example/ tests/
+pysources = drf_simple_apikey/ example/ tests/
 
 build:
 	${bin}python -m build

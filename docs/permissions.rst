@@ -31,7 +31,7 @@ You can then call use this class in your view 👇
 
 .. code:: python
 
-   from drf-apikey.permissions import IsActiveEntity
+   from drf-simple-apikey.permissions import IsActiveEntity
 
    class YourViewSet(viewsets.ViewSet):
        ...
@@ -39,4 +39,4 @@ You can then call use this class in your view 👇
        permission_classes = (IsActiveEntity, )
 
 Feel free to read the code of the permission class at
-`https://github.com/koladev32/drf-apikey/blob/main/drf-apikey/permissions.py <https://github.com/koladev32/drf-apikey/blob/main/drf-apikey/backends.py>`__.
+`https://github.com/koladev32/drf-simple-apikey/blob/main/drf-simple-apikey/permissions.py <https://github.com/koladev32/drf-simple-apikey/blob/main/drf-simple-apikey/backends.py>`__.

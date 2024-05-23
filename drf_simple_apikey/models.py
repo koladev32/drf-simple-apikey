@@ -4,8 +4,8 @@ from datetime import timedelta, datetime
 from django.conf import settings
 from django.db import models
 
-from drf_apikey.crypto import get_crypto
-from drf_apikey.settings import package_settings
+from drf_simple_apikey.crypto import get_crypto
+from drf_simple_apikey.settings import package_settings
 
 
 def _expiry_date():

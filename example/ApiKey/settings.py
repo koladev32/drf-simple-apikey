@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "drf_apikey",
+    "drf_simple_apikey",
     "fruits",
 ]
 

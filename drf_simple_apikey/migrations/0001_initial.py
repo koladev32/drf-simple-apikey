@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import drf_apikey.models
+import drf_simple_apikey.models
 
 
 class Migration(migrations.Migration):
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 (
                     "expiry_date",
                     models.DateTimeField(
-                        default=drf_apikey.models._expiry_date,
+                        default=drf_simple_apikey.models._expiry_date,
                         help_text="Once API key expires, entities cannot use it anymore.",
                         verbose_name="Expires",
                     ),
