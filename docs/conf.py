@@ -31,7 +31,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
-    "sphinx_rtd_dark_mode"
 ]
 
 intersphinx_mapping = {
@@ -50,6 +49,3 @@ epub_show_urls = "footnote"
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
-# user starts in light mode
-default_dark_mode = False
