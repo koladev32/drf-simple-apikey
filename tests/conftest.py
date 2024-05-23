@@ -11,6 +11,7 @@ def pytest_configure():
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
+        "rest_framework_simple_api_key.analytics.middleware.ApiKeyAnalyticsMiddleware",
     )
 
     apps = [
@@ -22,7 +23,8 @@ def pytest_configure():
         "django.contrib.staticfiles",
         "rest_framework",
         "rest_framework_simple_api_key",
-        "tests"
+        "rest_framework_simple_api_key.analytics",
+        "tests",
     ]
 
     if os.environ.get("TEST_WITH_ROTATION"):

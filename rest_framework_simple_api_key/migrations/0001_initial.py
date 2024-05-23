@@ -7,7 +7,6 @@ import rest_framework_simple_api_key.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

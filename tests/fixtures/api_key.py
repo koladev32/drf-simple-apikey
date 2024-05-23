@@ -26,6 +26,16 @@ def active_api_key(user):
 
 
 @pytest.fixture
+def active_only_api_key(user):
+    data = {
+        "entity": user,
+    }
+    apikey, _ = APIKey.objects.create_api_key(**data)  # This will return api_key:object
+
+    return apikey
+
+
+@pytest.fixture
 def expired_api_key(user):
     data = {"entity": user, "expiry_date": now()}
     return APIKey.objects.create_api_key(

@@ -40,6 +40,7 @@ Contents
     permissions
     authentication
     rotation
+    analytics
     development_and_contributing
     changelog
 

@@ -85,6 +85,9 @@ class AbstractAPIKey(models.Model):
         verbose_name = "API key"
         verbose_name_plural = "API keys"
 
+    def __str__(self):
+        return self.name
+
 
 class APIKey(AbstractAPIKey):
     """

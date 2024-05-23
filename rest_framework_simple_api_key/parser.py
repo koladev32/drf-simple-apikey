@@ -16,7 +16,6 @@ class APIKeyParser:
     message = "No API key provided."
 
     def get(self, request: HttpRequest) -> typing.Optional[str]:
-
         return self.get_from_authorization(request)
 
     def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
