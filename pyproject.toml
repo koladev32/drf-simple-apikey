@@ -5,6 +5,6 @@ requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "drf-apikey"
-version = "2.0.0"
+name = "djangorestframework-simple-apikey"
+version = "1.1.1"
 dynamic = ["description", "readme", "optional-dependencies", "dependencies", "classifiers", "authors", "license"]

@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "drf_apikey",
+    "rest_framework_simple_api_key",
     "fruits",
 ]
 
@@ -126,4 +126,4 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-DRF_API_KEY = {"FERNET_SECRET": "foo"}
+SIMPLE_API_KEY = {"FERNET_SECRET": "foo"}

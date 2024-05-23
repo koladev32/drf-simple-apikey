@@ -1,5 +1,5 @@
 from django.db import models
-from drf_apikey.settings import package_settings
+from rest_framework_simple_api_key.settings import package_settings
 
 
 class ApiKeyAnalyticsManager(models.Manager):

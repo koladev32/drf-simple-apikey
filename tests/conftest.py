@@ -11,7 +11,7 @@ def pytest_configure():
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
-        "drf_apikey.analytics.middleware.ApiKeyAnalyticsMiddleware",
+        "rest_framework_simple_api_key.analytics.middleware.ApiKeyAnalyticsMiddleware",
     )
 
     apps = [
@@ -22,13 +22,13 @@ def pytest_configure():
         "django.contrib.sites",
         "django.contrib.staticfiles",
         "rest_framework",
-        "drf_apikey",
-        "drf_apikey.analytics",
+        "rest_framework_simple_api_key",
+        "rest_framework_simple_api_key.analytics",
         "tests",
     ]
 
     if os.environ.get("TEST_WITH_ROTATION"):
-        apps.append("drf_apikey.rotation")
+        apps.append("rest_framework_simple_api_key.rotation")
 
     settings.configure(
         DEBUG_PROPAGATE_EXCEPTIONS=True,
@@ -50,7 +50,7 @@ def pytest_configure():
         MIDDLEWARE_CLASSES=MIDDLEWARE,
         INSTALLED_APPS=apps,
         PASSWORD_HASHERS=("django.contrib.auth.hashers.MD5PasswordHasher",),
-        DRF_API_KEY={
+        SIMPLE_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
             "ROTATION_FERNET_SECRET": "EqkeOOgvV8bt70vUJiVXloNycn5bt_z1VqyoAi9K6f4=",
         },
@@ -69,7 +69,7 @@ def setup_rotation_config(db):
     from django.conf import settings
 
     """Ensure a RotationConfig object exists for tests."""
-    if "drf_apikey.rotation" in settings.INSTALLED_APPS:
-        from drf_apikey.rotation.models import Rotation
+    if "rest_framework_simple_api_key.rotation" in settings.INSTALLED_APPS:
+        from rest_framework_simple_api_key.rotation.models import Rotation
 
         Rotation.objects.create(is_rotation_enabled=True)

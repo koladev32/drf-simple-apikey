@@ -3,8 +3,8 @@ from unittest import mock
 import pytest
 from django.http import HttpResponse
 from django.test import RequestFactory
-from drf_apikey.analytics.middleware import ApiKeyAnalyticsMiddleware
-from drf_apikey.analytics.models import ApiKeyAnalytics
+from rest_framework_simple_api_key.analytics.middleware import ApiKeyAnalyticsMiddleware
+from rest_framework_simple_api_key.analytics.models import ApiKeyAnalytics
 from .fixtures.api_key import active_api_key
 from .fixtures.user import user
 
@@ -36,9 +36,9 @@ def test_api_key_analytics_middleware(
 
     # Assume get_key and get_crypto are properly mocked to return expected values
     with mock.patch(
-        "drf_apikey.parser.APIKeyParser.get", return_value=key
+        "rest_framework_simple_api_key.parser.APIKeyParser.get", return_value=key
     ), mock.patch(
-        "drf_apikey.crypto.ApiCrypto.decrypt",
+        "rest_framework_simple_api_key.crypto.ApiCrypto.decrypt",
         return_value={"_pk": apikey.pk},
     ):
         # Call middleware

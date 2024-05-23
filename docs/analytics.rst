@@ -2,7 +2,7 @@
 API Key Analytics Middleware
 ======================
 
-The API Key Analytics Middleware is a component of the `drf-apikey` package that provides
+The API Key Analytics Middleware is a component of the `rest_framework_simple_api_key` package that provides
 real-time analytics on API key usage. It records each API request, tracking which endpoints are accessed and how frequently.
 
 API Key Analytics Middleware Usage cases
@@ -31,7 +31,7 @@ Setup
 
 To use the `ApiKeyAnalyticsMiddleware`, follow these setup instructions:
 
-1. Ensure the middleware app `drf-apikey.analytics` is included in the ``INSTALLED_APPS`` setting
+1. Ensure the middleware app `rest_framework_simple_api_key.analytics` is included in the ``INSTALLED_APPS`` setting
    of your Django project.
 
    .. code-block:: python
@@ -39,8 +39,8 @@ To use the `ApiKeyAnalyticsMiddleware`, follow these setup instructions:
        INSTALLED_APPS = (
            ...
            "rest_framework",
-           "drf-apikey",
-           "drf-apikey.analytics",  # Ensure this app is added
+           "rest_framework_simple_api_key",
+           "rest_framework_simple_api_key.analytics",  # Ensure this app is added
        )
 
 2. Add the `ApiKeyAnalyticsMiddleware` to the `MIDDLEWARE` settings in your Django configuration.
@@ -50,7 +50,7 @@ To use the `ApiKeyAnalyticsMiddleware`, follow these setup instructions:
        MIDDLEWARE = [
            ...
            'django.middleware.security.SecurityMiddleware',
-           'drf-apikey.analytics.middleware.ApiKeyAnalyticsMiddleware',  # Add the middleware here
+           'rest_framework_simple_api_key.analytics.middleware.ApiKeyAnalyticsMiddleware',  # Add the middleware here
            ...
        ]
 
@@ -58,7 +58,7 @@ To use the `ApiKeyAnalyticsMiddleware`, follow these setup instructions:
 
    .. code-block:: shell
 
-      python manage.py migrate drf-apikey_analytics
+      python manage.py migrate rest_framework_simple_api_key_analytics
 
 Activation
 ----------

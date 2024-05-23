@@ -8,9 +8,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
 
 
-from drf_apikey.crypto import get_crypto
-from drf_apikey.models import APIKey
-from drf_apikey.parser import APIKeyParser
+from rest_framework_simple_api_key.crypto import get_crypto
+from rest_framework_simple_api_key.models import APIKey
+from rest_framework_simple_api_key.parser import APIKeyParser
 
 
 class APIKeyAuthentication(BaseBackend):
