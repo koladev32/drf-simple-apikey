@@ -12,7 +12,7 @@ def get_rotation_status():
         rotation_status is None
     ):  # We should check for 'None' specifically because the cached value could be False
         # Lazy load the Rotation model
-        Rotation = apps.get_model("drf-apikey_rotation", "Rotation")
+        Rotation = apps.get_model("drf_apikey_rotation", "Rotation")
 
         # Filter the latest rotation that is enabled
         config = (

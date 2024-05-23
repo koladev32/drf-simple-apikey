@@ -28,7 +28,7 @@ class PackageSettings(_APISettings):
         return self._user_settings
 
     def __check_user_settings(self, user_settings):
-        SETTINGS_DOC = "https://django-rest-framework-simple-apikey.readthedocs.io/en/latest/settings.html"
+        SETTINGS_DOC = "https://drf-apikey.readthedocs.io/en/latest/settings.html"
 
         for setting in REMOVED_SETTINGS:
             if setting in user_settings:
