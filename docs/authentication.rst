@@ -36,7 +36,7 @@ you can modify in the ``settings.py`` file of your Django project.
 
 .. code:: python
 
-   SIMPLE_API_KEY = {
+   DRF_API_KEY = {
        ...
        "AUTHENTICATION_KEYWORD_HEADER": "YOUR_CUSTOM_VALUE",
    }

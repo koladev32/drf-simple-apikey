@@ -6,7 +6,7 @@ from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework.settings import APISettings as _APISettings
 
-USER_SETTINGS = getattr(settings, "SIMPLE_API_KEY", None)
+USER_SETTINGS = getattr(settings, "DRF_API_KEY", None)
 
 DEFAULTS = {
     "FERNET_SECRET": "",
@@ -24,7 +24,7 @@ class PackageSettings(_APISettings):
     @property
     def user_settings(self):
         if not hasattr(self, "_user_settings"):
-            self._user_settings = getattr(settings, "SIMPLE_API_KEY", {})
+            self._user_settings = getattr(settings, "DRF_API_KEY", {})
         return self._user_settings
 
     def __check_user_settings(self, user_settings):
@@ -53,7 +53,7 @@ def reload_api_settings(*args, **kwargs):
 
     setting, value = kwargs["setting"], kwargs["value"]
 
-    if setting == "SIMPLE_API_KEY":
+    if setting == "DRF_API_KEY":
         package_settings = PackageSettings(value, DEFAULTS)
 
 

@@ -35,7 +35,7 @@ Why should you use this package for your API Key authentication?
     
 * 🔐 **Secure**: Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key, which we call `FERNET_KEY`. As long as you treat the fernet key at the same level you treat the Django `SECRET_KEY` setting, you are good to go.
     
-* 🔧 **Customizable**: The models, authentication backend, and permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 Your Api Key authentication settings are kept in a single configuration dictionary named `SIMPLE_API_KEY` in the `settings.py` file of your Django project. It can be customized to fit your project needs.
+* 🔧 **Customizable**: The models, authentication backend, and permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 Your Api Key authentication settings are kept in a single configuration dictionary named `DRF_API_KEY` in the `settings.py` file of your Django project. It can be customized to fit your project needs.
     
 
 ## Quickstart
@@ -58,10 +58,10 @@ INSTALLED_APPS = [
 ]
 ```
 
-3- Add the `FERNET_KEY` setting in your `SIMPLE_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
+3- Add the `FERNET_KEY` setting in your `DRF_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
 
 ```python
-SIMPLE_API_KEY = {
+DRF_API_KEY = {
     "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
 }
 ```

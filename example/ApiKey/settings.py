@@ -126,4 +126,4 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-SIMPLE_API_KEY = {"FERNET_SECRET": "foo"}
+DRF_API_KEY = {"FERNET_SECRET": "foo"}
