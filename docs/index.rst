@@ -41,6 +41,7 @@ Contents
     authentication
     rotation
     analytics
+    migrating
     development_and_contributing
     changelog
 
