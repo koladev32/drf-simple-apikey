@@ -1,6 +1,16 @@
 Changelog
 =========
 
+[v1.1.0] - 2024-05-23
+------------------
+
+- Analytics and Monitoring (#52)
+
+[v1.0.2] - 2023-09-16
+------------------
+
+- Fix rotation command
+
 [v0.1.2] - 2023-04-21
 ------------------
 - Add an example project to the package (#29)
