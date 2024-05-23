@@ -1,5 +1,5 @@
 import pytest
-from rest_framework_simple_api_key.analytics.models import ApiKeyAnalytics
+from drf_apikey.analytics.models import ApiKeyAnalytics
 
 from .fixtures.api_key import active_only_api_key
 from .fixtures.user import user

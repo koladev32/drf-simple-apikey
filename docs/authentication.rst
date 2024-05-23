@@ -13,7 +13,7 @@ Key at ``request.user`` too.
    solutions to have something such as ``request.entity`` without having
    to disrupt the Django REST Framework authentication and authorization
    flow. If you have some ideas, feel free to open an issue
-   https://github.com/koladev32/djangorestframework-simple-apikey/issues.
+   https://github.com/koladev32/drf-apikey/issues.
 
 Use the ``APIKeyAuthentication`` backend
 ----------------------------------------
@@ -36,10 +36,10 @@ you can modify in the ``settings.py`` file of your Django project.
 
 .. code:: python
 
-   SIMPLE_API_KEY = {
+   DRF_API_KEY = {
        ...
        "AUTHENTICATION_KEYWORD_HEADER": "YOUR_CUSTOM_VALUE",
    }
 
 Feel free to read the code of the authentication class at
-https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/rest_framework_simple_api_key/backends.py.
+https://github.com/koladev32/drf-apikey/blob/main/drf-apikey/backends.py.

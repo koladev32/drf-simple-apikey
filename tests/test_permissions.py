@@ -10,9 +10,9 @@ from rest_framework.response import Response
 
 from rest_framework.test import APIRequestFactory
 
-from rest_framework_simple_api_key.backends import APIKeyAuthentication
-from rest_framework_simple_api_key.permissions import IsActiveEntity
-from rest_framework_simple_api_key.settings import package_settings
+from drf_apikey.backends import APIKeyAuthentication
+from drf_apikey.permissions import IsActiveEntity
+from drf_apikey.settings import package_settings
 
 from .fixtures.api_key import inactive_entity_api_key, active_api_key
 from .fixtures.user import inactive_user, user

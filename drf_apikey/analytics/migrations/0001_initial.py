@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("rest_framework_simple_api_key", "0002_alter_apikey_options"),
+        ("drf_apikey", "0002_alter_apikey_options"),
     ]
 
     operations = [
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="analytics",
-                        to="rest_framework_simple_api_key.apikey",
+                        to="drf_apikey.apikey",
                     ),
                 ),
             ],
