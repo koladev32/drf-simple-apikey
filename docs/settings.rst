@@ -2,14 +2,14 @@ Settings
 ===========
 
 Some of Django REST Framework Simple API Key's behavior can be customized through settings variables in
-``settings.py``. You can find below the default `SIMPLE_API_KEY` setting.
+``settings.py``. You can find below the default `DRF_API_KEY` setting.
 
 .. code-block:: python
 
   # Django project settings.py
   ...
 
-  SIMPLE_API_KEY = {
+  DRF_API_KEY = {
        "FERNET_SECRET": "",
        "API_KEY_LIFETIME": 365,
        "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",

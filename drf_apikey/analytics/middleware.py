@@ -1,7 +1,7 @@
-from rest_framework_simple_api_key.analytics.models import ApiKeyAnalytics
-from rest_framework_simple_api_key.crypto import get_crypto
-from rest_framework_simple_api_key.parser import APIKeyParser
-from rest_framework_simple_api_key.utils import get_key
+from drf_apikey.analytics.models import ApiKeyAnalytics
+from drf_apikey.crypto import get_crypto
+from drf_apikey.parser import APIKeyParser
+from drf_apikey.utils import get_key
 
 
 class ApiKeyAnalyticsMiddleware:
