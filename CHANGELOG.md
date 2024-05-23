@@ -4,10 +4,12 @@ Changelog
 [Unreleased]
 ------------
 
+- Add Deprecation Warnings for Project Renaming (#58)
+
 [v1.1.0] - 2024-05-23
 ------------------
 
--  Analytics and Monitoring (#52)
+- Analytics and Monitoring (#52)
 
 [v1.0.2] - 2023-09-16
 ------------------
