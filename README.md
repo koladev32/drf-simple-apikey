@@ -11,7 +11,16 @@ Django REST Framework Simple API Key is a fast and secure API Key authentication
   </a>
 </div>
 
-For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+For the full documentation, visit [https://drf-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+
+## Package Renaming Notice
+
+**Notice:** The `djangorestframework-simple-apikey` package is being renamed to `drf-apikey` to improve usability and align with common naming conventions. Please update your installations:
+
+1. Replace the old package:
+   ```bash
+   pip uninstall djangorestframework-simple-apikey
+   pip install drf-apikey
 
 ## Introduction
 
