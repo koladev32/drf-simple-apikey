@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v1.1.1] - 2024-05-23
+------------------
+
 - Add Deprecation Warnings for Project Renaming (#58)
 
 [v1.1.0] - 2024-05-23
