@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.apps import apps
 from django.utils import timezone
 
-from rest_framework_simple_api_key.settings import package_settings
+from drf_apikey.settings import package_settings
 
 
 def get_rotation_status():
@@ -12,7 +12,7 @@ def get_rotation_status():
         rotation_status is None
     ):  # We should check for 'None' specifically because the cached value could be False
         # Lazy load the Rotation model
-        Rotation = apps.get_model("rest_framework_simple_api_key_rotation", "Rotation")
+        Rotation = apps.get_model("drf-apikey_rotation", "Rotation")
 
         # Filter the latest rotation that is enabled
         config = (

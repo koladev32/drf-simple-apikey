@@ -3,15 +3,15 @@
 Django REST Framework Simple API Key is a fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
 
 <div>
-  <a href="https://badge.fury.io/py/djangorestframework-simple-apikey">
-      <img src="https://badge.fury.io/py/djangorestframework-simple-apikey.svg" alt="Version"/>
+  <a href="https://badge.fury.io/py/drf-apikey">
+      <img src="https://badge.fury.io/py/drf-apikey.svg" alt="Version"/>
   </a>
-  <a href="https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml">
-      <img src="https://github.com/koladev32/djangorestframework-simple-apikey/actions/workflows/ci-cd.yml/badge.svg" alt="Testing"/>
+  <a href="https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml">
+      <img src="https://github.com/koladev32/drf-apikey/actions/workflows/ci-cd.yml/badge.svg" alt="Testing"/>
   </a>
 </div>
 
-For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+For the full documentation, visit [https://drf-apikey.readthedocs.io/en/latest/](https://drf-apikey.readthedocs.io/en/latest/).
 
 ## Introduction
 
@@ -33,7 +33,7 @@ Why should you use this package for your API Key authentication?
 1 - Install with `pip`:
 
 ```bash
-pip install djangorestframework-simple-apikey
+pip install drf-apikey
 ```
 
 2 - Register the app in the `INSTALLED_APPS` in the `settings.py` file:
@@ -44,7 +44,7 @@ pip install djangorestframework-simple-apikey
 INSTALLED_APPS = [
   # ...
   "rest_framework",
-  "rest_framework_simple_api_key",
+  "drf_apikey",
 ]
 ```
 
@@ -69,15 +69,16 @@ In your view then, you can add the authentication class and the permission class
 ```python
 from rest_framework import viewsets
 
-from rest_framework_simple_api_key.backends import APIKeyAuthentication
+from drf_apikey.backends import APIKeyAuthentication
 from rest_framework.response import Response
 
-class FruitViewSets(viewsets.ViewSet):
-    http_method_names = ["get"]
-    authentication_classes = (APIKeyAuthentication, )
 
-    def list(self, request):
-        return Response([{"detail": True}], 200 )
+class FruitViewSets(viewsets.ViewSet):
+  http_method_names = ["get"]
+  authentication_classes = (APIKeyAuthentication,)
+
+  def list(self, request):
+    return Response([{"detail": True}], 200)
 ```
 
 ## Generate a Fernet Key
@@ -93,7 +94,7 @@ python manage.py generate_fernet_key
 
 ## Rotation
 
-We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://djangorestframework-simple-apikey.readthedocs.io/en/latest/rotation.html.
+We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://drf-apikey.readthedocs.io/en/latest/rotation.html.
 
 ## Demo
 
@@ -109,7 +110,7 @@ python manage.py runserver
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/koladev32/drf-apikey/blob/main/CHANGELOG.md).
 
 ## Contributing
 
@@ -117,7 +118,7 @@ Thank you for your interest in contributing to the project! Here's a guide to he
 
 - **Setup Development Environment:**  
   ```bash
-  git clone https://github.com/koladev32/djangorestframework-simple-apikey.git
+  git clone https://github.com/koladev32/drf-apikey.git
   ```  
   Use the command below to set up your environment:
   ```
@@ -148,4 +149,4 @@ Thank you for your interest in contributing to the project! Here's a guide to he
   make test
   ```
 
-See [CONTRIBUTING.md](https://github.com/koladev32/djangorestframework-simple-apikey/blob/main/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/koladev32/drf-apikey/blob/main/CONTRIBUTING.md).

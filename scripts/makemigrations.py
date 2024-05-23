@@ -21,9 +21,9 @@ if __name__ == "__main__":
             "django.contrib.sites",
             "django.contrib.staticfiles",
             "rest_framework",
-            "rest_framework_simple_api_key",
-            "rest_framework_simple_api_key.rotation",
-            "rest_framework_simple_api_key.analytics",
+            "drf_apikey",
+            "drf_apikey.rotation",
+            "drf_apikey.analytics",
             "tests",
         ),
         DATABASES={
