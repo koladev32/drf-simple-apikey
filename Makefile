@@ -23,12 +23,12 @@ format:
 
 migrations:
 	@echo "Running migrations..."
-	${bin}python -m scripts.makemigrations $(app)
+	${bin}python -m scripts.makemigrations
 
 
 migrations-check:
 	@echo "Running migrations checks..."
-	${bin}python -m scripts.makemigrations --check $(app)
+	${bin}python -m scripts.makemigrations --check
 
 test:
 	${bin}pytest && TEST_WITH_ROTATION=1 ${bin}pytest
