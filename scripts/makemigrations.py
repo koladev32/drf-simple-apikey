@@ -24,6 +24,7 @@ if __name__ == "__main__":
             "drf_simple_apikey",
             "drf_simple_apikey.rotation",
             "drf_simple_apikey.analytics",
+            "drf_simple_apikey.ip_management",
             "tests",
         ),
         DATABASES={
