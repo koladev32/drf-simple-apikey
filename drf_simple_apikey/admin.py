@@ -12,6 +12,8 @@ class ApiKeyAdmin(admin.ModelAdmin):
         "revoked",
         "expiry_date",
         "created",
+        "whitelisted_ips",
+        "blacklisted_ips",
     )
 
     list_filter = (
@@ -34,6 +36,8 @@ class ApiKeyAdmin(admin.ModelAdmin):
                 "name",
                 "revoked",
                 "expiry_date",
+                "whitelisted_ips",
+                "blacklisted_ips",
             )
 
         return fields

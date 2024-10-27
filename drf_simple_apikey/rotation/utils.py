@@ -35,9 +35,11 @@ def get_rotation_status():
         cache.set(
             "rotation_status",
             rotation_status,
-            package_settings.ROTATION_PERIOD.total_seconds()
-            if rotation_status
-            else None,
+            (
+                package_settings.ROTATION_PERIOD.total_seconds()
+                if rotation_status
+                else None
+            ),
         )  # Cache for the rotation period if true
 
     return rotation_status

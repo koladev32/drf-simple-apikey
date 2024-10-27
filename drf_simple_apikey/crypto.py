@@ -2,6 +2,7 @@
 This modules provides the `ApiKeyCrypto` classes that contain
 methods needed to generate, encrypt, and decrypt an API Key.
 """
+
 import json
 from copy import copy
 from datetime import timedelta

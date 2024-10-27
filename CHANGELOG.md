@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+- Adding IP whitelisting and blacklisting (#68)
+
 [v2.1.0] - 2024-05-23
 ------------------
 

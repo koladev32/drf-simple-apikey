@@ -54,6 +54,8 @@ def test_admin_readonly_fields(rf: RequestFactory, user) -> None:
         "name",
         "revoked",
         "expiry_date",
+        "whitelisted_ips",
+        "blacklisted_ips",
     )
 
 
