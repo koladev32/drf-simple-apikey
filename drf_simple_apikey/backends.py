@@ -11,6 +11,7 @@ from rest_framework import exceptions
 from drf_simple_apikey.crypto import get_crypto
 from drf_simple_apikey.models import APIKey
 from drf_simple_apikey.parser import APIKeyParser
+from drf_simple_apikey.settings import package_settings
 
 
 class APIKeyAuthentication(BaseBackend):
@@ -67,6 +68,14 @@ class APIKeyAuthentication(BaseBackend):
 
         if api_key.revoked:
             raise exceptions.AuthenticationFailed("This API Key has been revoked.")
+
+        # IP address validation
+        client_ip = request.META.get(package_settings.IP_ADDRESS_HEADER)
+        if api_key.blacklisted_ips and client_ip in api_key.blacklisted_ips:
+            raise exceptions.AuthenticationFailed("Access denied from blacklisted IP.")
+
+        if api_key.whitelisted_ips and client_ip not in api_key.whitelisted_ips:
+            raise exceptions.AuthenticationFailed("Access restricted to specific IP addresses.")
 
         return api_key.entity, key
 

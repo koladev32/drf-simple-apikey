@@ -15,6 +15,7 @@ DEFAULTS = {
     "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
     "ROTATION_PERIOD": timedelta(days=7),
     "API_KEY_CLASS": "drf_simple_apikey.Apikey",
+    "IP_ADDRESS_HEADER": "REMOTE_ADDR",
 }
 
 REMOVED_SETTINGS = ()

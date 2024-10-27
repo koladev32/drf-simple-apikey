@@ -69,6 +69,17 @@ class AbstractAPIKey(models.Model):
     )
     created = models.DateTimeField(auto_now=True)
 
+    whitelisted_ips = models.JSONField(
+        blank=True,
+        null=True,
+        help_text="List of allowed IP addresses for this API key.",
+    )
+    blacklisted_ips = models.JSONField(
+        blank=True,
+        null=True,
+        help_text="List of denied IP addresses for this API key.",
+    )
+
     objects = APIKeyManager()
 
     def _has_expired(self) -> bool:
