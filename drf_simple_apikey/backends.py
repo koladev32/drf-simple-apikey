@@ -75,7 +75,9 @@ class APIKeyAuthentication(BaseBackend):
             raise exceptions.AuthenticationFailed("Access denied from blacklisted IP.")
 
         if api_key.whitelisted_ips and client_ip not in api_key.whitelisted_ips:
-            raise exceptions.AuthenticationFailed("Access restricted to specific IP addresses.")
+            raise exceptions.AuthenticationFailed(
+                "Access restricted to specific IP addresses."
+            )
 
         return api_key.entity, key
 
