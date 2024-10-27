@@ -36,8 +36,8 @@ class ApiKeyAdmin(admin.ModelAdmin):
                 "name",
                 "revoked",
                 "expiry_date",
-                "blacklisted_ips",
                 "whitelisted_ips",
+                "blacklisted_ips",
             )
 
         return fields
