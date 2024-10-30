@@ -23,7 +23,7 @@ class IsActiveEntity(BasePermission):
 
 class ReadOnlyEntity(BasePermission):
 
-    message = "API key is read only."
+    message = "This resource is read only."
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
         return request.method == "GET"
@@ -36,7 +36,7 @@ class ReadOnlyEntity(BasePermission):
 
 class CreateOnlyEntity(BasePermission):
 
-    message = "API key is create only."
+    message = "This resource is create only."
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
         return request.method == "POST"
@@ -49,7 +49,7 @@ class CreateOnlyEntity(BasePermission):
 
 class UpdateOnlyEntity(BasePermission):
 
-    message = "API key is update only."
+    message = "This resource is update only."
 
     def has_permission(self, request: HttpRequest, view: typing.Any) -> bool:
         return request.method == "PUT"
