@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+- Fixed: Additional migration is generated (#73) 
+
 [v2.1.0] - 2024-05-23
 ------------------
 
