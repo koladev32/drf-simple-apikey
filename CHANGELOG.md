@@ -6,6 +6,11 @@ Changelog
 
 - Adding IP whitelisting and blacklisting (#68)
 
+[v2.1.1] - 2024-12-27
+------------------
+
+- Fixed: Additional migration is generated (#73) 
+
 [v2.1.0] - 2024-05-23
 ------------------
 
