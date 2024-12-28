@@ -23,15 +23,15 @@ Activation
 
 Before activating a rotation, ensure to set the rotating Fernet key ``ROTATION_FERNET_SECRET`` in the settings of the package.
 
-You will need to add the rotation app ``drf-simple-apikey.rotation`` in the ``INSTALLED_APPS`` Django setting of your project.
+You will need to add the rotation app ``drf_simple_apikey.rotation`` in the ``INSTALLED_APPS`` Django setting of your project.
 
    .. code-block:: python
 
        INSTALLED_APPS=(
             ...
             "rest_framework",
-            "drf-simple-apikey",
-            "drf-simple-apikey.rotation", # added app
+            "drf_simple_apikey",
+            "drf_simple_apikey.rotation", # added app
         )
 
 And you will need to run the migrate command:

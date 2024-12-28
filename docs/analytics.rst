@@ -39,8 +39,8 @@ To use the `ApiKeyAnalyticsMiddleware`, follow these setup instructions:
        INSTALLED_APPS = (
            ...
            "rest_framework",
-           "drf-simple-apikey",
-           "drf-simple-apikey.analytics",  # Ensure this app is added
+           "drf_simple_apikey",
+           "drf_simple_apikey.analytics",  # Ensure this app is added
        )
 
 2. Add the `ApiKeyAnalyticsMiddleware` to the `MIDDLEWARE` settings in your Django configuration.
@@ -50,7 +50,7 @@ To use the `ApiKeyAnalyticsMiddleware`, follow these setup instructions:
        MIDDLEWARE = [
            ...
            'django.middleware.security.SecurityMiddleware',
-           'drf-simple-apikey.analytics.middleware.ApiKeyAnalyticsMiddleware',  # Add the middleware here
+           'drf_simple_apikey.analytics.middleware.ApiKeyAnalyticsMiddleware',  # Add the middleware here
            ...
        ]
 

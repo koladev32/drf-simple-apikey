@@ -58,7 +58,7 @@ file:
    INSTALLED_APPS = [
      # ...
      "rest_framework",
-     "drf-simple-apikey",
+     "drf_simple_apikey",
    ]
 
 3- Add the ``FERNET_KEY`` setting in your ``DRF_API_KEY``
@@ -88,7 +88,7 @@ permission class.
 
    from rest_framework import viewsets
 
-   from drf-simple-apikey.backends import APIKeyAuthentication
+   from drf_simple_apikey.backends import APIKeyAuthentication
    from rest_framework.response import Response
 
    class FruitViewSets(viewsets.ViewSet):

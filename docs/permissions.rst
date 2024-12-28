@@ -31,7 +31,7 @@ You can then call use this class in your view 👇
 
 .. code:: python
 
-   from drf-simple-apikey.permissions import IsActiveEntity
+   from drf_simple_apikey.permissions import IsActiveEntity
 
    class YourViewSet(viewsets.ViewSet):
        ...
