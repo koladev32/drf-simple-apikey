@@ -14,7 +14,8 @@ Some of Django REST Framework Simple API Key's behavior can be customized throug
        "API_KEY_LIFETIME": 365,
        "AUTHENTICATION_KEYWORD_HEADER": "Api-Key",
        "ROTATION_PERIOD": timedelta(days=7),
-       "ROTATION_FERNET_SECRET": ""
+       "ROTATION_FERNET_SECRET": "",
+       "IGNORED_ROUTES": ["/admin/"]  # Routes that should be ignored by API key authentication
   }
 Above, the default values for these settings are shown.
 
@@ -56,4 +57,19 @@ In the context of ``MultiFernet``:
 
 This strategic usage ensures that as you transition to a new key, older tokens encrypted with the previous key remain valid, and new tokens are encrypted using the new key.
 Thus, a seamless transition is achieved, enhancing security without causing disruptions.
+
+``IGNORED_ROUTES``
+-------------------------
+A list of URL paths that should be ignored by the API key authentication. Any request to a path that starts with any of these routes will bypass the API key authentication. The default value is ``["/admin/"]``.
+
+Example:
+.. code-block:: python
+
+  DRF_API_KEY = {
+      "IGNORED_ROUTES": [
+          "/admin/",  # Ignores all admin panel routes
+          "/api/documents/",  # Ignores all document API routes
+          "/health/",  # Ignores health check endpoints
+      ]
+  }
 
