@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v2.2.0] - 2025-05-10
+------------------
+
 - Fixed: Admin routes asking for API Keys (#74)
 - Adding IP whitelisting and blacklisting (#68)
 
