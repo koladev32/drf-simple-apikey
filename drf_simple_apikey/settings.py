@@ -16,6 +16,7 @@ DEFAULTS = {
     "ROTATION_PERIOD": timedelta(days=7),
     "API_KEY_CLASS": "drf_simple_apikey.Apikey",
     "IP_ADDRESS_HEADER": "REMOTE_ADDR",
+    "IGNORED_ROUTES": ["/admin/"],  # Routes that should be ignored by API key authentication
 }
 
 REMOVED_SETTINGS = ()
