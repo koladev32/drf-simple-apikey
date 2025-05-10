@@ -14,6 +14,9 @@ install: install-python
 venv:
 	python3 -m venv ${venv}
 
+venv-activate:
+	source ${venv}/bin/activate
+
 install-python: venv
 	${bin}pip install --upgrade pip
 	${bin}pip install -e ".[test]"

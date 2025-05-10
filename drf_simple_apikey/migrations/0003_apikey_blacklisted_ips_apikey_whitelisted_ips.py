@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("drf_simple_apikey", "0002_alter_apikey_options"),
+        ("drf_simple_apikey", "0003_alter_apikey_id"),
     ]
 
     operations = [
