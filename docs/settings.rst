@@ -60,16 +60,16 @@ Thus, a seamless transition is achieved, enhancing security without causing disr
 
 ``IGNORED_ROUTES``
 -------------------------
-A list of URL paths that should be ignored by the API key authentication. Any request to a path that starts with any of these routes will bypass the API key authentication. The default value is ``["/admin/"]``.
+A list of URL paths that should be ignored by the API Key Analytics Middleware. Any request to a path that starts with any of these routes will not be tracked in the analytics. The default value is ``["/admin/"]``. This setting is specifically used by the analytics middleware to determine which routes should be excluded from usage tracking.
 
 Example:
 .. code-block:: python
 
   DRF_API_KEY = {
       "IGNORED_ROUTES": [
-          "/admin/",  # Ignores all admin panel routes
-          "/api/documents/",  # Ignores all document API routes
-          "/health/",  # Ignores health check endpoints
+          "/admin/",  # Excludes admin panel routes from analytics
+          "/api/documents/",  # Excludes document API routes from analytics
+          "/health/",  # Excludes health check endpoints from analytics
       ]
   }
 
