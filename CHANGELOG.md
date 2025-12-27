@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v2.3.0] - 2025-12-27
+------------------
+
 - Added: Comprehensive security hardening (#91)
   - Timing attack protection with constant-time comparisons
   - Fernet key validation with security warnings
