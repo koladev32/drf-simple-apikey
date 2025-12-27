@@ -5,7 +5,11 @@ methods needed to generate, encrypt, and decrypt an API Key.
 
 from __future__ import annotations
 
+import base64
 import json
+import logging
+import os
+import re
 from copy import copy
 from datetime import timedelta
 
@@ -15,6 +19,59 @@ from django.conf import settings
 from django.utils.timezone import now
 
 from drf_simple_apikey.settings import package_settings
+
+logger = logging.getLogger(__name__)
+
+
+def _validate_fernet_key(fernet_key: str) -> tuple[bool, list[str]]:
+    """
+    Validate Fernet key format and security.
+    Returns (is_valid, warnings_list).
+    """
+    warnings = []
+
+    # Check if key is empty
+    if not fernet_key or fernet_key.strip() == "":
+        return False, ["Fernet key is empty"]
+
+    # Check key format (base64, 32 bytes when decoded)
+    try:
+        decoded = base64.urlsafe_b64decode(fernet_key)
+        if len(decoded) != 32:
+            return False, [f"Fernet key must be 32 bytes when decoded, got {len(decoded)}"]
+    except Exception as e:
+        return False, [f"Invalid Fernet key format: {str(e)}"]
+
+    # Check for weak patterns (all same character, sequential, etc.)
+    if len(set(decoded)) < 4:
+        warnings.append("Fernet key appears to have low entropy (weak pattern detected)")
+
+    # Check if key appears to be hardcoded (common patterns)
+    # This is a heuristic check - look for keys in common locations
+    if not os.getenv("FERNET_SECRET") and not os.getenv("DRF_API_KEY_FERNET_SECRET"):
+        # Check if key looks like it might be in source code
+        # (This is a simple heuristic - keys from env vars usually look random)
+        if re.match(r"^[A-Za-z0-9+/=]{43}$", fernet_key):
+            # Check if it's a common example/test key pattern
+            common_patterns = [
+                "test",
+                "example",
+                "demo",
+                "default",
+                "changeme",
+                "secret",
+            ]
+            key_lower = fernet_key.lower()
+            if any(pattern in key_lower for pattern in common_patterns):
+                warnings.append(
+                    "Fernet key appears to contain common words - may be insecure"
+                )
+            else:
+                warnings.append(
+                    "Fernet key not found in environment variables - ensure it's not hardcoded"
+                )
+
+    return True, warnings
 
 
 class BaseApiCrypto:
@@ -58,7 +115,20 @@ class ApiCrypto(BaseApiCrypto):
         if fernet_key is None or fernet_key == "":
             raise KeyError("A fernet secret is not defined in the Django settings.")
 
-        self.fernet = Fernet(fernet_key)
+        # Validate Fernet key
+        is_valid, warnings = _validate_fernet_key(fernet_key)
+        if not is_valid:
+            raise ValueError(f"Invalid Fernet key: {', '.join(warnings)}")
+
+        # Log warnings if any
+        for warning in warnings:
+            logger.warning(f"Fernet key security warning: {warning}")
+
+        try:
+            self.fernet = Fernet(fernet_key)
+        except Exception as e:
+            raise ValueError(f"Failed to initialize Fernet with provided key: {str(e)}")
+
         self.api_key_lifetime = api_key_lifetime
 
 
@@ -73,7 +143,12 @@ def get_crypto() -> BaseApiCrypto:
             if get_rotation_status():
                 return MultiApiCrypto()
         except Exception as e:
-            print(f"Error initializing MultiApiCrypto: {e}")
+            # Use proper logging instead of print
+            logger.error(
+                "Error initializing MultiApiCrypto",
+                extra={"error": str(e)},
+                exc_info=True,
+            )
             raise
 
     # If the rotation module isn't installed, or if there was an error initializing MultiApiCrypto,

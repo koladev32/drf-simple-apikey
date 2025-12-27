@@ -1,0 +1,184 @@
+Security
+========
+
+Keeping your API keys secure is crucial, and we've built several security features
+into the package to help protect your API. This page explains how these features
+work and why they matter.
+
+Why Security Matters
+--------------------
+
+API keys are like passwords—if someone gets hold of them, they can access your API
+as if they were the legitimate user. That's why we've implemented multiple layers of
+security to keep your API keys safe from common attacks.
+
+Security Features
+-----------------
+
+Timing Attack Protection
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Have you ever wondered if an attacker could figure out a valid API key just by
+measuring how long it takes for your server to respond? This is called a timing
+attack, and it's a real security concern.
+
+**What we do:** We use constant-time comparisons and add small delays to ensure
+that failed authentication attempts take the same amount of time, regardless of
+whether the API key format is valid or not. This means attackers can't learn
+anything useful by timing your responses.
+
+**Why it matters:** Without this protection, an attacker could potentially discover
+valid API keys by measuring response times. With it, they get no useful information
+from timing attacks.
+
+**How it works:** The authentication backend uses secure comparison functions
+that take the same amount of time whether the comparison succeeds or fails. We
+also add a small, constant delay to normalize response times.
+
+Fernet Key Security
+~~~~~~~~~~~~~~~~~~~
+
+Your Fernet key is the master key that encrypts and decrypts all your API keys.
+If someone gets this key, they can decrypt any API key you've issued. That's why
+we validate and check your Fernet key setup.
+
+**What we check:**
+- The key format is correct (base64, proper length)
+- The key isn't hardcoded in your source code (we warn you if it looks like it is)
+- The key follows security best practices
+
+**Why it matters:** A weak or exposed Fernet key compromises all your API keys.
+We help catch common mistakes before they become security problems.
+
+**Best practice:** Always store your Fernet key in environment variables, never
+in your source code. Treat it with the same care as your Django ``SECRET_KEY``.
+
+HTTPS Enforcement
+~~~~~~~~~~~~~~~~~
+
+Sending API keys over unencrypted HTTP connections is like writing your password
+on a postcard—anyone who intercepts the traffic can read it.
+
+**What we do:** By default, we enforce HTTPS connections in production. If someone
+tries to use an API key over HTTP, the request is rejected with a clear error message.
+
+**Why it matters:** API keys transmitted over HTTP can be intercepted by anyone
+on the network. HTTPS encrypts the connection, making it much harder for attackers
+to steal your keys.
+
+**How to configure:** You can control this behavior in your settings:
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "ENFORCE_HTTPS": True,  # Default: True in production, False in development
+   }
+
+**Note:** In development, you might want to set this to ``False`` to allow HTTP
+connections. But always use ``True`` in production! 🛡️
+
+IP Address Validation
+~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes you want to restrict API key access to specific IP addresses. But if
+you're behind a proxy or load balancer, IP addresses can be spoofed if not handled
+correctly.
+
+**What we do:** We safely extract the real client IP address, even when you're
+behind proxies or load balancers. We validate the IP format and handle common
+proxy headers like ``X-Forwarded-For`` and ``X-Real-IP`` safely.
+
+**Why it matters:** If IP validation isn't done correctly, attackers could spoof
+their IP address by manipulating proxy headers. We handle this safely so you don't
+have to worry about it.
+
+**How it works:** The authentication backend checks the IP address from trusted
+sources, validates the format, and falls back to ``REMOTE_ADDR`` if proxy headers
+aren't available or trusted.
+
+Input Sanitization
+~~~~~~~~~~~~~~~~~~
+
+When tracking API usage in analytics, we store which endpoints were accessed.
+But what if someone tries to send malicious data in the endpoint path?
+
+**What we do:** We sanitize and validate endpoint paths before storing them.
+We remove dangerous characters, limit the length, and cap the number of unique
+endpoints tracked per API key.
+
+**Why it matters:** Without sanitization, malicious or malformed endpoint paths
+could cause problems in your database or analytics. We clean them up automatically.
+
+**How to configure:** You can set limits in your settings:
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "MAX_ENDPOINTS_PER_KEY": 1000,  # Maximum unique endpoints to track
+       "MAX_ENDPOINT_LENGTH": 500,     # Maximum endpoint path length
+   }
+
+Audit Logging
+~~~~~~~~~~~~~
+
+Knowing who accessed what and when is crucial for security. That's why we log
+important security events.
+
+**What we log:**
+- Successful and failed authentication attempts
+- API key creation and revocation
+- IP-based access denials
+- Security-related errors
+
+**Why it matters:** If something goes wrong, audit logs help you figure out what
+happened. You can see who accessed your API, when, and from where.
+
+**How to access:** Audit logs are written to Django's logging system. Configure
+your logging settings to capture these events:
+
+.. code-block:: python
+
+   LOGGING = {
+       'version': 1,
+       'handlers': {
+           'file': {
+               'class': 'logging.FileHandler',
+               'filename': 'security.log',
+           },
+       },
+       'loggers': {
+           'drf_simple_apikey': {
+               'handlers': ['file'],
+               'level': 'INFO',
+           },
+       },
+   }
+
+Security Best Practices
+-----------------------
+
+Here are some recommendations to keep your API keys secure:
+
+1. **Store Fernet keys securely**: Always use environment variables, never hardcode
+   them in your source code. Use a secrets management service in production.
+
+2. **Use HTTPS**: Always enforce HTTPS in production. Never send API keys over
+   unencrypted connections.
+
+3. **Rotate keys regularly**: Use the rotation feature to periodically change your
+   encryption keys. See :doc:`rotation` for details.
+
+4. **Monitor audit logs**: Regularly review your audit logs for suspicious activity.
+   Look for unusual patterns or repeated failed authentication attempts.
+
+5. **Limit IP access**: When possible, use IP whitelisting to restrict API key
+   access to known IP addresses.
+
+6. **Revoke compromised keys**: If you suspect an API key has been compromised,
+   revoke it immediately through the admin interface or programmatically.
+
+7. **Keep dependencies updated**: Regularly update the package and its dependencies
+   to get the latest security patches.
+
+Remember: Security is an ongoing process, not a one-time setup. Stay vigilant! 🛡️
+

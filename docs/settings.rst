@@ -73,3 +73,73 @@ Example:
       ]
   }
 
+``ENFORCE_HTTPS``
+-------------------------
+
+By default, we enforce HTTPS connections in production to prevent API keys from
+being transmitted over unencrypted HTTP. If someone tries to use an API key over
+HTTP, the request will be rejected.
+
+**Default:** ``None`` (auto-detects: ``True`` in production when ``DEBUG=False``, ``False`` in development or test environments)
+
+**Example:**
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "ENFORCE_HTTPS": True,  # Reject HTTP requests in production
+   }
+
+**Note:** ⚠️ Always set this to ``True`` in production! Sending API keys over
+HTTP is like sending passwords in plain text. See :doc:`security` for more details.
+
+``ENABLE_AUDIT_LOGGING``
+-------------------------
+
+Controls whether security events are logged. When enabled, the package logs
+authentication attempts, API key creation/revocation, and security-related events.
+
+**Default:** ``True``
+
+**Example:**
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "ENABLE_AUDIT_LOGGING": True,  # Log security events
+   }
+
+See :doc:`security` for information about what events are logged and how to access them.
+
+``MAX_ENDPOINTS_PER_KEY``
+--------------------------
+
+Limits the number of unique endpoints that can be tracked per API key in analytics.
+This helps prevent abuse and keeps your database size manageable.
+
+**Default:** ``1000``
+
+**Example:**
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "MAX_ENDPOINTS_PER_KEY": 1000,  # Limit tracked endpoints
+   }
+
+``MAX_ENDPOINT_LENGTH``
+------------------------
+
+Limits the maximum length of endpoint paths stored in analytics. This prevents
+malicious or malformed endpoint paths from causing issues.
+
+**Default:** ``500``
+
+**Example:**
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "MAX_ENDPOINT_LENGTH": 500,  # Maximum endpoint path length
+   }
+

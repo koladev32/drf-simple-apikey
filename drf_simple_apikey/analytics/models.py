@@ -1,16 +1,56 @@
 from __future__ import annotations
 
+import re
 import typing
 
 from django.db import models
 from drf_simple_apikey.settings import package_settings
 
 
+def _sanitize_endpoint(endpoint: str) -> str:
+    """
+    Sanitize endpoint path to prevent injection and data pollution.
+    - Remove dangerous characters
+    - Limit length
+    - Normalize path
+    """
+    if not endpoint:
+        return ""
+
+    # Limit length
+    max_length = package_settings.MAX_ENDPOINT_LENGTH
+    if len(endpoint) > max_length:
+        endpoint = endpoint[:max_length]
+
+    # Remove null bytes and other dangerous characters
+    # Keep only printable ASCII characters and common URL characters
+    endpoint = re.sub(r'[^\x20-\x7E/?#[\]@!$&\'()*+,;=]', '', endpoint)
+
+    # Remove multiple consecutive slashes (except at start)
+    endpoint = re.sub(r'/+', '/', endpoint)
+    if endpoint.startswith('//'):
+        endpoint = '/' + endpoint.lstrip('/')
+
+    # Limit to reasonable path length
+    if len(endpoint) > max_length:
+        endpoint = endpoint[:max_length]
+
+    return endpoint
+
+
 class ApiKeyAnalyticsManager(models.Manager):
     def add_endpoint_access(self, api_key_id: int, endpoint: str) -> None:
         """
         Retrieve or create ApiKeyAnalytics instance and increment the endpoint access count.
+        Sanitizes endpoint path before storage to prevent injection and data pollution.
         """
+        # Sanitize endpoint path
+        sanitized_endpoint = _sanitize_endpoint(endpoint)
+
+        # Skip if endpoint is empty after sanitization
+        if not sanitized_endpoint:
+            return
+
         obj, created = self.get_or_create(
             api_key_id=api_key_id, defaults={"accessed_endpoints": {"endpoints": {}}}
         )
@@ -19,9 +59,17 @@ class ApiKeyAnalyticsManager(models.Manager):
         if "endpoints" not in obj.accessed_endpoints:
             obj.accessed_endpoints["endpoints"] = {}
 
+        # Check endpoint limit
+        max_endpoints = package_settings.MAX_ENDPOINTS_PER_KEY
+        current_endpoints = obj.accessed_endpoints["endpoints"]
+
+        # If we're at the limit and this is a new endpoint, skip it
+        if len(current_endpoints) >= max_endpoints and sanitized_endpoint not in current_endpoints:
+            return
+
         # Increment endpoint count
-        obj.accessed_endpoints["endpoints"][endpoint] = (
-            obj.accessed_endpoints["endpoints"].get(endpoint, 0) + 1
+        current_endpoints[sanitized_endpoint] = (
+            current_endpoints.get(sanitized_endpoint, 0) + 1
         )
         obj.request_number += 1
         obj.save()
