@@ -7,7 +7,7 @@ Keeping your API keys secure is crucial, and we've built several security featur
 
 ## Why Security Matters
 
-API keys are like passwords—if someone gets hold of them, they can access your API as if they were the legitimate user. That's why we've implemented multiple layers of security to keep your API keys safe from common attacks.
+API keys are like passwords: if someone gets hold of them, they can access your API as if they were the legitimate user. That's why we've implemented multiple layers of security to keep your API keys safe from common attacks.
 
 ## Security Features
 
@@ -36,7 +36,7 @@ Your Fernet key is the master key that encrypts and decrypts all your API keys. 
 
 ### HTTPS Enforcement
 
-Sending API keys over unencrypted HTTP connections is like writing your password on a postcard—anyone who intercepts the traffic can read it.
+Sending API keys over unencrypted HTTP connections is like writing your password on a postcard: anyone who intercepts the traffic can read it.
 
 **What we do:** By default, we enforce HTTPS connections in production. If someone tries to use an API key over HTTP, the request is rejected with a clear error message.
 

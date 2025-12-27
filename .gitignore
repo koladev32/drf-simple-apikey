@@ -136,3 +136,5 @@ drf-docs/.next/
 drf-docs/.source/
 drf-docs/node_modules/
 drf-docs/out/
+
+node_modules/
