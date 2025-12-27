@@ -26,25 +26,6 @@ Changelog
 - Added: New security settings (ENFORCE_HTTPS, ENABLE_AUDIT_LOGGING, MAX_ENDPOINTS_PER_KEY, MAX_ENDPOINT_LENGTH)
 - Added: Comprehensive security documentation
 
-- Added: Comprehensive security hardening (#91)
-  - Timing attack protection with constant-time comparisons
-  - Fernet key validation with security warnings
-  - Input sanitization for analytics endpoint paths
-  - HTTPS enforcement (auto-enabled in production)
-  - IP address validation with safe proxy header handling
-  - Comprehensive audit logging for security events
-- Added: Type annotations across the entire codebase (#64)
-- Added: Python 3.12 and 3.13 support (#92)
-- Updated: Dependencies with security patches (#92)
-  - Cryptography: 38.0.4 → 43.0.0
-  - Django: 4.2 → 4.2.17,<6.0 (Django 5.x support)
-  - DRF: 3.14.0 → 3.15.2
-  - Black: 22.3.0 → 24.0.0
-- Updated: GitHub Actions to v4/v5 with pip caching (#92)
-- Fixed: Admin interface entity field now editable when creating API keys (#78)
-- Added: New security settings (ENFORCE_HTTPS, ENABLE_AUDIT_LOGGING, MAX_ENDPOINTS_PER_KEY, MAX_ENDPOINT_LENGTH)
-- Added: Comprehensive security documentation
-
 [v2.2.1] - 2025-05-10
 ------------------
 
