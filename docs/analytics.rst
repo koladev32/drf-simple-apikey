@@ -86,4 +86,23 @@ To access the analytics data:
 
 2. Access the `ApiKeyAnalytics` model through Django's ORM to perform custom queries or export data for further analysis.
 
+Security and Data Protection
+----------------------------
+
+We take security seriously, even in analytics. That's why we automatically
+sanitize endpoint paths before storing them. This prevents malicious or malformed
+data from causing problems in your database.
+
+**What we do:**
+- Clean endpoint paths (remove dangerous characters)
+- Limit endpoint path length
+- Cap the number of unique endpoints tracked per API key
+
+**Why it matters:** Without sanitization, someone could potentially send malicious
+data that could cause issues in your database or analytics reports. We handle this
+automatically, so you don't have to worry about it.
+
+You can configure these limits in your settings—see :doc:`settings` for details.
+For more information about security features, check out the :doc:`security` documentation.
+
 

@@ -41,5 +41,22 @@ you can modify in the ``settings.py`` file of your Django project.
        "AUTHENTICATION_KEYWORD_HEADER": "YOUR_CUSTOM_VALUE",
    }
 
+Security Features
+-----------------
+
+The authentication backend includes several security features to protect your API:
+
+- **Timing attack protection**: We use constant-time comparisons to prevent
+  attackers from learning about valid API keys by measuring response times.
+
+- **HTTPS enforcement**: By default, we reject API key authentication over
+  unencrypted HTTP connections in production.
+
+- **IP address validation**: When using IP whitelisting or blacklisting, we
+  safely extract and validate IP addresses, even when behind proxies.
+
+For more details about these security features and how they work, see the
+:doc:`security` documentation.
+
 Feel free to read the code of the authentication class at
 https://github.com/koladev32/drf-simple-apikey/blob/main/drf-simple-apikey/backends.py.

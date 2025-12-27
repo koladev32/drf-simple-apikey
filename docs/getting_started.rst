@@ -115,6 +115,23 @@ To generate the fernet key use the following command:
 
    python manage.py generate_fernet_key
 
+Security Considerations
+-----------------------
+
+Before deploying to production, here are a few security tips to keep in mind:
+
+- **Treat your Fernet key like your Django SECRET_KEY**: Store it in environment
+  variables, never commit it to version control, and rotate it periodically.
+
+- **Always use HTTPS in production**: The package can enforce HTTPS connections
+  to prevent API keys from being transmitted over unencrypted HTTP. See
+  :doc:`security` for details.
+
+- **Review your audit logs**: The package logs important security events. Make
+  sure you're monitoring these logs to catch any suspicious activity.
+
+For more detailed security information, check out the :doc:`security` documentation.
+
 Changelog
 ---------
 

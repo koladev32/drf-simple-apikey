@@ -39,6 +39,7 @@ Contents
     customizing_api_key_model
     permissions
     authentication
+    security
     rotation
     analytics
     migrating

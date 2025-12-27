@@ -11,7 +11,8 @@ from drf_simple_apikey.settings import package_settings
 
 
 def _expiry_date() -> datetime:
-    return datetime.now() + timedelta(package_settings.API_KEY_LIFETIME)
+    from django.utils import timezone
+    return timezone.now() + timedelta(days=package_settings.API_KEY_LIFETIME)
 
 
 class AbstractAPIKeyManager(models.Manager):
@@ -85,9 +86,10 @@ class AbstractAPIKey(models.Model):
     objects = APIKeyManager()
 
     def _has_expired(self) -> bool:
+        from django.utils import timezone
         if self.expiry_date is None:
             return False
-        return self.expiry_date < datetime.now()
+        return self.expiry_date < timezone.now()
 
     _has_expired.short_description = "Has expired"
     _has_expired.boolean = True
