@@ -184,6 +184,3 @@ Here are some recommendations to keep your API keys secure:
 
 7. **Keep dependencies updated**: Regularly update the package and its dependencies
    to get the latest security patches.
-
-Remember: Security is an ongoing process, not a one-time setup. Stay vigilant! 🛡️
-
