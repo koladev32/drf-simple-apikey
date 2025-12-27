@@ -23,6 +23,58 @@ Pull Request Process
    other developers, or if you do not have permission to do that, you
    may request the second reviewer to merge it for you.
 
+Version Management
+-------------------
+
+We use `bump2version <https://github.com/c4urself/bump2version>`__ to manage
+version numbers across the project. This ensures that version numbers are
+updated consistently in all the right places.
+
+**Installing bump2version:**
+
+.. code-block:: bash
+
+   pip install bump2version
+
+**How it works:**
+
+The project uses a ``setup.cfg`` file to configure bump2version. It automatically
+updates version numbers in:
+
+- ``setup.cfg`` (current_version)
+- ``pyproject.toml`` (version field)
+- ``drf_simple_apikey/version.py`` (VERSION constant)
+- ``CHANGELOG.md`` (adds new version entry with date)
+
+**Bumping versions:**
+
+To bump the version, use one of these commands:
+
+.. code-block:: bash
+
+   # Bump patch version (2.2.1 → 2.2.2)
+   bump2version patch
+
+   # Bump minor version (2.2.1 → 2.3.0)
+   bump2version minor
+
+   # Bump major version (2.2.1 → 3.0.0)
+   bump2version major
+
+**What happens:**
+
+1. Bump2version updates all version numbers in the configured files
+2. It automatically creates a commit with the version bump
+3. It creates a git tag for the new version
+4. It updates the CHANGELOG.md with a new version entry
+
+**Important notes:**
+
+- Always update the CHANGELOG.md with the changes before bumping the version
+- The CHANGELOG entry for the new version will be created automatically, but
+  you need to add the actual changes under it
+- After bumping, push both the commit and the tag: ``git push && git push --tags``
+
 Code of Conduct
 ---------------
 
