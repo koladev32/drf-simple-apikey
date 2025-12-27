@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from cryptography.fernet import MultiFernet, Fernet
 
 from drf_simple_apikey.crypto import BaseApiCrypto
@@ -5,7 +7,7 @@ from drf_simple_apikey.settings import package_settings
 
 
 class MultiApiCrypto(BaseApiCrypto):
-    def __init__(self):
+    def __init__(self) -> None:
         fernet_key, rotation_fernet_key, api_key_lifetime = (
             package_settings.FERNET_SECRET,
             package_settings.ROTATION_FERNET_SECRET,

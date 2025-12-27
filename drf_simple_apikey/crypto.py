@@ -3,6 +3,8 @@ This modules provides the `ApiKeyCrypto` classes that contain
 methods needed to generate, encrypt, and decrypt an API Key.
 """
 
+from __future__ import annotations
+
 import json
 from copy import copy
 from datetime import timedelta
@@ -47,7 +49,7 @@ class BaseApiCrypto:
 
 
 class ApiCrypto(BaseApiCrypto):
-    def __init__(self):
+    def __init__(self) -> None:
         fernet_key, api_key_lifetime = (
             package_settings.FERNET_SECRET,
             package_settings.API_KEY_LIFETIME,
@@ -60,7 +62,7 @@ class ApiCrypto(BaseApiCrypto):
         self.api_key_lifetime = api_key_lifetime
 
 
-def get_crypto():
+def get_crypto() -> BaseApiCrypto:
     if "drf_simple_apikey.rotation" in settings.INSTALLED_APPS:
         try:
             # Try to import necessary components and initialize the MultiApiCrypto.
@@ -72,7 +74,7 @@ def get_crypto():
                 return MultiApiCrypto()
         except Exception as e:
             print(f"Error initializing MultiApiCrypto: {e}")
-            raise e
+            raise
 
     # If the rotation module isn't installed, or if there was an error initializing MultiApiCrypto,
     # fall back to returning an instance of the standard ApiCrypto.

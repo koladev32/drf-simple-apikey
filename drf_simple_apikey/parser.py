@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 
 from django.http import HttpRequest
@@ -15,10 +17,10 @@ class APIKeyParser:
     keyword = package_settings.AUTHENTICATION_KEYWORD_HEADER
     message = "No API key provided."
 
-    def get(self, request: HttpRequest) -> typing.Optional[str]:
+    def get(self, request: HttpRequest) -> str | None:
         return self.get_from_authorization(request)
 
-    def get_from_authorization(self, request: HttpRequest) -> typing.Optional[str]:
+    def get_from_authorization(self, request: HttpRequest) -> str | None:
         authorization = request.META.get("HTTP_AUTHORIZATION")
 
         if not authorization:
@@ -31,5 +33,5 @@ class APIKeyParser:
 
         return key
 
-    def get_from_header(self, request: HttpRequest, name: str) -> typing.Optional[str]:
+    def get_from_header(self, request: HttpRequest, name: str) -> str | None:
         return request.META.get(name) or None

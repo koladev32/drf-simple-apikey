@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 
 from django.contrib import admin, messages
@@ -23,7 +25,7 @@ class RotationAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(
         self, request: HttpRequest, obj: Rotation = None
-    ) -> typing.Tuple[str, ...]:
+    ) -> tuple[str, ...]:
         fields = (
             "started",
             "ended",

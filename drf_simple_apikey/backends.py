@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 
 from django.contrib.auth.backends import BaseBackend
@@ -24,7 +26,9 @@ class APIKeyAuthentication(BaseBackend):
     def get_key(self, request: HttpRequest) -> typing.Optional[str]:
         return self.key_parser.get(request)
 
-    def authenticate(self, request, **kwargs):
+    def authenticate(
+        self, request: HttpRequest, **kwargs: typing.Any
+    ) -> tuple[typing.Any, str] | None:
         """
         The `authenticate` method is called on every request regardless of
         whether the endpoint requires api key authentication.
@@ -48,7 +52,9 @@ class APIKeyAuthentication(BaseBackend):
 
         return self._authenticate_credentials(request, key)
 
-    def _authenticate_credentials(self, request, key):
+    def _authenticate_credentials(
+        self, request: HttpRequest, key: str | None
+    ) -> tuple[typing.Any, str]:
         key_crypto = self.key_crypto
 
         try:
@@ -81,7 +87,7 @@ class APIKeyAuthentication(BaseBackend):
 
         return api_key.entity, key
 
-    def authenticate_header(self, request):
+    def authenticate_header(self, request: HttpRequest) -> str | None:
         """
         Return a string to be used as the value of the `WWW-Authenticate`
         header in a `401 Unauthenticated` response, or `None` if the
