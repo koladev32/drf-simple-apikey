@@ -1,8 +1,0 @@
-{
-  "buildCommand": "cd drf-docs && npm install && npm run build",
-  "outputDirectory": "drf-docs/.next",
-  "installCommand": "cd drf-docs && npm install",
-  "framework": "nextjs",
-  "rootDirectory": "drf-docs"
-}
-
