@@ -4,6 +4,14 @@ Changelog
 [Unreleased]
 ------------
 
+- Fixed: Documentation updates and fixes
+  - Added Python 3.10-3.13 and Django 4.2.17+/5.x support info to README
+  - Added security features and type annotations mention to README
+  - Documented bump2version usage in CONTRIBUTING.md
+  - Fixed import error in customizing_api_key_model.rst
+  - Fixed broken links and typos in documentation
+  - Added missing settings documentation (IP_ADDRESS_HEADER, API_KEY_CLASS, ROTATION_PERIOD)
+
 [v2.3.0] - 2025-12-27
 ------------------
 
