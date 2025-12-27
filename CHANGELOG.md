@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v2.3.1] - 2025-12-27
+------------------
+
 - Fixed: Documentation updates and fixes
   - Added Python 3.10-3.13 and Django 4.2.17+/5.x support info to README
   - Added security features and type annotations mention to README
