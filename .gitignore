@@ -130,3 +130,9 @@ dmypy.json
 
 # idea files
 .idea
+
+# Next.js / Fumadocs
+drf-docs/.next/
+drf-docs/.source/
+drf-docs/node_modules/
+drf-docs/out/

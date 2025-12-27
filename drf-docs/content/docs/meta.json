@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "index",
+    "getting-started",
+    "settings",
+    "authentication",
+    "permissions",
+    "customizing-api-key-model",
+    "security",
+    "rotation",
+    "analytics",
+    "migrating",
+    "development-and-contributing",
+    "changelog"
+  ]
+}
+
