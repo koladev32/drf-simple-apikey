@@ -36,19 +36,22 @@ def test_admin_readonly_fields(rf: RequestFactory, user) -> None:
 
     admin = ApiKeyAdmin(APIKey, site)
 
+    # When creating (obj is None), entity should be editable
     assert admin.get_readonly_fields(request) == (
-        "entity",
         "created",
     )
 
+    # When editing (obj is not None), entity should be readonly
     api_key = APIKey(name="test", entity=user)
-    assert admin.get_readonly_fields(request, obj=api_key) == (
-        "entity",
-        "created",
-    )
+    readonly_fields = admin.get_readonly_fields(request, obj=api_key)
+    assert "entity" in readonly_fields
+    assert "created" in readonly_fields
+    assert len(readonly_fields) == 2
 
+    # When editing a revoked key, additional fields should be readonly
     api_key = APIKey(name="test", entity=user, revoked=True)
-    assert admin.get_readonly_fields(request, obj=api_key) == (
+    readonly_fields = admin.get_readonly_fields(request, obj=api_key)
+    expected_fields = {
         "entity",
         "created",
         "name",
@@ -56,7 +59,8 @@ def test_admin_readonly_fields(rf: RequestFactory, user) -> None:
         "expiry_date",
         "whitelisted_ips",
         "blacklisted_ips",
-    )
+    }
+    assert set(readonly_fields) == expected_fields
 
 
 @pytest.mark.django_db
