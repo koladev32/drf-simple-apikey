@@ -1,0 +1,36 @@
+---
+title: Customizing API Key Model
+description: How to create a custom API key model for your entity
+---
+
+You can customize the Api Key model to suit your needs if, for example, you have an entity different than the default one used. Here's an example using a custom class called `Organization`.
+
+```python
+# organizations/models.py
+from django.db import models
+from drf_simple_apikey.models import AbstractAPIKey
+
+class Organization(models.Model):
+    name = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+
+class OrganizationAPIKey(AbstractAPIKey):
+    entity = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+        related_name="api_keys",
+    )
+```
+
+After that, run the `makemigrations` command to generate to tell Django to generate a new table for the custom model.
+
+```bash
+python manage.py makemigrations
+```
+
+And then run the migrations.
+
+```bash
+python manage.py migrate
+```
+

@@ -1,0 +1,105 @@
+---
+title: Getting Started
+description: Django REST Framework Simple API Key is fast and secure API Key authentication plugin for REST API built with Django Rest Framework.
+---
+
+Django REST Framework Simple API Key is fast and secure API Key authentication plugin for REST API built with [Django Rest Framework](https://www.django-rest-framework.org/).
+
+## Introduction
+
+Django REST Simple Api Key is a package built upon Django, Django REST Framework, and the fernet cryptography module to generate, encrypt, and decrypt API keys. It provides fast, secure and customizable API Key authentication.
+
+## Benefits
+
+Why should you use this package for your API Key authentication?
+
+- ⚡ **Fast**: We use the [fernet](https://cryptography.io/en/latest/fernet/) cryptography module to generate, encrypt, and decrypt API keys. Besides the security facade, it is blazing fast allowing you to treat requests quickly and easily.
+
+- 🔐 **Secure**: Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key, which we call `FERNET_KEY`. As long as you treat the fernet key at the same level you treat the Django `SECRET_KEY` setting, you are good to go.
+
+- 🔧 **Customizable**: The models, authentication backend, and permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 Your Api Key authentication settings are kept in a single configuration dictionary named `DRF_API_KEY` in the `settings.py` file of your Django project. It can be customized to fit your project needs.
+
+## Quickstart
+
+1 - Install with `pip`:
+
+```bash
+pip install drf-simple-apikey
+```
+
+2 - Register the app in the `INSTALLED_APPS` in the `settings.py` file:
+
+```python
+# settings.py
+
+INSTALLED_APPS = [
+  # ...
+  "rest_framework",
+  "drf_simple_apikey",
+]
+```
+
+3- Add the `FERNET_KEY` setting in your `DRF_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
+
+```python
+DRF_API_KEY = {
+    "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
+}
+```
+
+4 - Run migrations:
+
+```bash
+python manage.py migrate
+```
+
+In your view then, you can add the authentication class and the permission class.
+
+> ⚠️ **Important Note**: By default, the Django User class (django.contrib.auth.User) is used for authentication.
+
+```python
+from rest_framework import viewsets
+
+from drf_simple_apikey.backends import APIKeyAuthentication
+from rest_framework.response import Response
+
+class FruitViewSets(viewsets.ViewSet):
+    http_method_names = ["get"]
+    authentication_classes = (APIKeyAuthentication, )
+
+    def list(self, request):
+        return Response([{"detail": True}], 200 )
+```
+
+## Generate a Fernet Key
+
+We've made it easier for you by creating a custom Django command to quickly generate a fernet key, which is a **crucial component** in the authentication system. Make sure to keep the key secure and store it somewhere safely (ie: environment variable).
+
+**Important ⛔️** : You should treat the `FERNET_KEY` security at the same level as the Django `SECRET_KEY`. 🫡
+
+To generate the fernet key use the following command:
+
+```bash
+python manage.py generate_fernet_key
+```
+
+## Security Considerations
+
+Before deploying to production, here are a few security tips to keep in mind:
+
+- **Treat your Fernet key like your Django SECRET_KEY**: Store it in environment variables, never commit it to version control, and rotate it periodically.
+
+- **Always use HTTPS in production**: The package can enforce HTTPS connections to prevent API keys from being transmitted over unencrypted HTTP. See [Security](/docs/security) for details.
+
+- **Review your audit logs**: The package logs important security events. Make sure you're monitoring these logs to catch any suspicious activity.
+
+For more detailed security information, check out the [Security](/docs/security) documentation.
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/koladev32/drf-simple-apikey/blob/main/CHANGELOG.md).
+
+## Contributing
+
+See [CONTRIBUTING.md](https://github.com/koladev32/drf-simple-apikey/blob/main/CONTRIBUTING.md).
+
