@@ -17,7 +17,7 @@ DEFAULTS = {
     "API_KEY_CLASS": "drf_simple_apikey.Apikey",
     "IP_ADDRESS_HEADER": "REMOTE_ADDR",
     "IGNORED_ROUTES": ["/admin/"],  # Routes that should be ignored by API key authentication
-    "ENFORCE_HTTPS": None,  # None means auto-detect based on DEBUG setting
+    "ENFORCE_HTTPS": None,  # None means auto-detect: True when DEBUG=False, False when DEBUG=True
     "ENABLE_AUDIT_LOGGING": True,
     "MAX_ENDPOINTS_PER_KEY": 1000,
     "MAX_ENDPOINT_LENGTH": 500,

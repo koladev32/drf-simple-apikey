@@ -80,7 +80,7 @@ By default, we enforce HTTPS connections in production to prevent API keys from
 being transmitted over unencrypted HTTP. If someone tries to use an API key over
 HTTP, the request will be rejected.
 
-**Default:** ``None`` (auto-detects: ``True`` in production when ``DEBUG=False``, ``False`` in development or test environments)
+**Default:** ``None`` (auto-detects: ``True`` when ``DEBUG=False``, ``False`` when ``DEBUG=True``)
 
 **Example:**
 

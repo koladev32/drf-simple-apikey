@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import secrets
-import sys
 import time
 import typing
 
@@ -69,13 +68,16 @@ class APIKeyAuthentication(BaseBackend):
         enforce_https = package_settings.ENFORCE_HTTPS
 
         # Auto-detect based on DEBUG if not explicitly set
-        # Also check if we're in a test environment (pytest sets this)
+        # Default to not DEBUG (enforce HTTPS in production, allow HTTP in development)
+        # But also check if we're in a test environment
         if enforce_https is None:
-            # Don't enforce HTTPS in test environments
+            # Don't enforce HTTPS in test environments (pytest, unittest, etc.)
+            import sys
             is_test = (
-                hasattr(settings, "TESTING")
-                or "pytest" in sys.modules
+                "pytest" in sys.modules
+                or "unittest" in sys.modules
                 or "test" in sys.argv
+                or hasattr(settings, "TESTING")
             )
             enforce_https = not settings.DEBUG and not is_test
 

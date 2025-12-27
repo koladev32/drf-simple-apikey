@@ -66,16 +66,21 @@ tries to use an API key over HTTP, the request is rejected with a clear error me
 on the network. HTTPS encrypts the connection, making it much harder for attackers
 to steal your keys.
 
-**How to configure:** You can control this behavior in your settings:
+**How to configure:** By default, HTTPS enforcement automatically follows your
+``DEBUG`` setting. When ``DEBUG=True`` (development), HTTP is allowed. When
+``DEBUG=False`` (production), HTTPS is enforced.
+
+You can also explicitly set it:
 
 .. code-block:: python
 
    DRF_API_KEY = {
-       "ENFORCE_HTTPS": True,  # Default: True in production, False in development
+       "ENFORCE_HTTPS": True,  # Explicitly enable (or None to auto-detect from DEBUG)
    }
 
-**Note:** In development, you might want to set this to ``False`` to allow HTTP
-connections. But always use ``True`` in production! 🛡️
+**Note:** The default behavior (``None``) means HTTPS is enforced in production
+(``DEBUG=False``) and allowed in development (``DEBUG=True``). This way, you don't
+have to worry about it in development, but your production API stays secure! 🛡️
 
 IP Address Validation
 ~~~~~~~~~~~~~~~~~~~~~
