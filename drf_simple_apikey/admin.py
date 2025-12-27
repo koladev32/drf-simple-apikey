@@ -27,9 +27,12 @@ class ApiKeyAdmin(admin.ModelAdmin):
         self, request: HttpRequest, obj: APIKey = None
     ) -> typing.Tuple[str, ...]:
         fields = (
-            "entity",
             "created",
         )
+
+        # Entity should be editable when creating, readonly when editing
+        if obj is not None:
+            fields += ("entity",)
 
         if obj and obj.revoked:
             fields += (
