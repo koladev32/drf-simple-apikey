@@ -1,9 +1,13 @@
+from __future__ import annotations
+
+import typing
+
 from django.db import models
 from drf_simple_apikey.settings import package_settings
 
 
 class ApiKeyAnalyticsManager(models.Manager):
-    def add_endpoint_access(self, api_key_id, endpoint):
+    def add_endpoint_access(self, api_key_id: int, endpoint: str) -> None:
         """
         Retrieve or create ApiKeyAnalytics instance and increment the endpoint access count.
         """
@@ -22,7 +26,9 @@ class ApiKeyAnalyticsManager(models.Manager):
         obj.request_number += 1
         obj.save()
 
-    def get_most_accessed_endpoints(self, api_key_id):
+    def get_most_accessed_endpoints(
+        self, api_key_id: int
+    ) -> list[tuple[str, int]]:
         """
         Returns the most accessed endpoints for a given API key, sorted by access count.
         """
@@ -50,5 +56,5 @@ class ApiKeyAnalytics(models.Model):
 
     objects = ApiKeyAnalyticsManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"API Key {self.api_key.name} Analytics"

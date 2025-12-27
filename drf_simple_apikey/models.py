@@ -8,21 +8,21 @@ from drf_simple_apikey.crypto import get_crypto
 from drf_simple_apikey.settings import package_settings
 
 
-def _expiry_date():
+def _expiry_date() -> datetime:
     return datetime.now() + timedelta(package_settings.API_KEY_LIFETIME)
 
 
 class AbstractAPIKeyManager(models.Manager):
-    def get_api_key(self, pk: int | str):
+    def get_api_key(self, pk: int | str) -> "AbstractAPIKey":
         return self.get(revoked=False, pk=pk)
 
-    def assign_api_key(self, obj) -> str:
+    def assign_api_key(self, obj: "AbstractAPIKey") -> str:
         payload = {"_pk": obj.pk, "_exp": obj.expiry_date.timestamp()}
         key = get_crypto().generate(payload)
 
         return key
 
-    def create_api_key(self, **kwargs: typing.Any) -> typing.Tuple[typing.Any, str]:
+    def create_api_key(self, **kwargs: typing.Any) -> tuple[typing.Any, str]:
         # Prevent from manually setting the primary key.
         obj = self.model(**kwargs)
         obj.save()
@@ -30,7 +30,7 @@ class AbstractAPIKeyManager(models.Manager):
 
         return obj, key
 
-    def revoke_api_key(self, pk: int | str):
+    def revoke_api_key(self, pk: int | str) -> None:
         api_key = self.get_api_key(pk)
 
         api_key.revoked = True
@@ -96,8 +96,8 @@ class AbstractAPIKey(models.Model):
         verbose_name = "API key"
         verbose_name_plural = "API keys"
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return self.name or ""
 
 
 class APIKey(AbstractAPIKey):

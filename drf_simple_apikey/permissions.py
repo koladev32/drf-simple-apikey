@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 
 from django.http import HttpRequest
@@ -16,7 +18,7 @@ class IsActiveEntity(BasePermission):
         return request.user.is_active
 
     def has_object_permission(
-        self, request: HttpRequest, view: typing.Any, obj
+        self, request: HttpRequest, view: typing.Any, obj: typing.Any
     ) -> bool:
         return request.user.is_active
 
@@ -29,7 +31,7 @@ class ReadOnlyEntity(BasePermission):
         return request.method == "GET"
 
     def has_object_permission(
-        self, request: HttpRequest, view: typing.Any, obj
+        self, request: HttpRequest, view: typing.Any, obj: typing.Any
     ) -> bool:
         return request.method == "GET"
 
@@ -42,7 +44,7 @@ class CreateOnlyEntity(BasePermission):
         return request.method == "POST"
 
     def has_object_permission(
-        self, request: HttpRequest, view: typing.Any, obj
+        self, request: HttpRequest, view: typing.Any, obj: typing.Any
     ) -> bool:
         return request.method == "POST"
 
@@ -55,7 +57,7 @@ class UpdateOnlyEntity(BasePermission):
         return request.method == "PUT"
 
     def has_object_permission(
-        self, request: HttpRequest, view: typing.Any, obj
+        self, request: HttpRequest, view: typing.Any, obj: typing.Any
     ) -> bool:
         return request.method == "PUT"
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.core.cache import cache
 from django.apps import apps
 from django.utils import timezone
@@ -5,7 +7,7 @@ from django.utils import timezone
 from drf_simple_apikey.settings import package_settings
 
 
-def get_rotation_status():
+def get_rotation_status() -> bool:
     rotation_status = cache.get("rotation_status")
 
     if (
