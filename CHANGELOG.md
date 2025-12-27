@@ -26,9 +26,6 @@ Changelog
 - Added: New security settings (ENFORCE_HTTPS, ENABLE_AUDIT_LOGGING, MAX_ENDPOINTS_PER_KEY, MAX_ENDPOINT_LENGTH)
 - Added: Comprehensive security documentation
 
-[v2.3.0] - TBD
-------------------
-
 - Added: Comprehensive security hardening (#91)
   - Timing attack protection with constant-time comparisons
   - Fernet key validation with security warnings
