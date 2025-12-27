@@ -41,6 +41,24 @@ Determines the keyword that should come with every request made to your API. The
 
  Api-Key API_KEY
 
+``ROTATION_PERIOD``
+-------------------------
+The duration for which key rotation remains active. After this period, the rotation
+process completes and you'll need to manually swap the ``FERNET_SECRET`` and
+``ROTATION_FERNET_SECRET`` values.
+
+**Default:** ``timedelta(days=7)``
+
+**Example:**
+
+.. code-block:: python
+
+   from datetime import timedelta
+
+   DRF_API_KEY = {
+       "ROTATION_PERIOD": timedelta(days=7),  # Rotation active for 7 days
+   }
+
 ``ROTATION_FERNET_SECRET``
 -------------------------
 The ``ROTATION_FERNET_SECRET`` is a secondary Fernet key (`Fernet <https://cryptography.io/en/latest/fernet/>`__)
@@ -53,7 +71,9 @@ In the context of ``MultiFernet``:
 - New tokens are encrypted using the ``ROTATION_FERNET_SECRET``.
 - Tokens can be decrypted with either the ``ROTATION_FERNET_SECRET`` enabling a smooth key rotation without rendering existing tokens obsolete.
 
- python manage.py generate_fernet_key
+.. code-block:: bash
+
+   python manage.py generate_fernet_key
 
 This strategic usage ensures that as you transition to a new key, older tokens encrypted with the previous key remain valid, and new tokens are encrypted using the new key.
 Thus, a seamless transition is achieved, enhancing security without causing disruptions.
@@ -142,4 +162,42 @@ malicious or malformed endpoint paths from causing issues.
    DRF_API_KEY = {
        "MAX_ENDPOINT_LENGTH": 500,  # Maximum endpoint path length
    }
+
+``IP_ADDRESS_HEADER``
+------------------------
+
+Specifies which HTTP header to use for extracting the client IP address. This is
+useful when your application is behind a proxy or load balancer.
+
+**Default:** ``"REMOTE_ADDR"``
+
+**Example:**
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "IP_ADDRESS_HEADER": "HTTP_X_FORWARDED_FOR",  # Use X-Forwarded-For header
+   }
+
+**Note:** The authentication backend safely handles proxy headers to prevent IP
+spoofing. See :doc:`security` for more details.
+
+``API_KEY_CLASS``
+------------------------
+
+The fully qualified path to your custom API key model class, if you've created one.
+This is used by the analytics addon to reference the API key model.
+
+**Default:** ``"drf_simple_apikey.Apikey"``
+
+**Example:**
+
+.. code-block:: python
+
+   DRF_API_KEY = {
+       "API_KEY_CLASS": "myapp.models.CustomAPIKey",  # Use custom model
+   }
+
+**Note:** Only change this if you've created a custom API key model. See
+:doc:`customizing_api_key_model` for details.
 

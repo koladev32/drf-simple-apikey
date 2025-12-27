@@ -11,10 +11,28 @@ Please note we have a code of conduct, please follow it in all your interactions
    build.
 2. Update the README.md with details of changes to the interface, this includes new environment 
    variables, exposed ports, useful file locations and container parameters.
-3. Increase the version numbers in any examples files and the README.md to the new version that this
-   Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
+3. Update the CHANGELOG.md with your changes under the `[Unreleased]` section. The versioning scheme 
+   we use is [SemVer](http://semver.org/).
 4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you 
    do not have permission to do that, you may request the second reviewer to merge it for you.
+
+## Version Management
+
+We use `bump2version` to manage version numbers across the project. This ensures that version 
+numbers are updated consistently in all the right places.
+
+**Important:** Only maintainers should bump versions. When a PR is merged and ready for release:
+
+1. Update the CHANGELOG.md with changes under `[Unreleased]`
+2. Use `bump2version` to bump the version:
+   ```bash
+   bump2version patch  # for bug fixes (2.3.0 → 2.3.1)
+   bump2version minor  # for new features (2.3.0 → 2.4.0)
+   bump2version major  # for breaking changes (2.3.0 → 3.0.0)
+   ```
+3. Push both commits and tags: `git push && git push --tags`
+
+For more details, see the [Development and Contributing documentation](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/development_and_contributing.html#version-management).
 
 ## Code of Conduct
 

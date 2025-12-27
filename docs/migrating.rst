@@ -61,6 +61,6 @@ Ensure that you update these settings throughout your project configuration file
 Support and Feedback
 --------------------
 
-For more information, detailed support, or to provide feedback about the migration process, please visit our documentation site at [New Package Documentation URL](https://example.com/new-package-info) or contact support directly.
+For more information, detailed support, or to provide feedback about the migration process, please visit our documentation site at https://djangorestframework-simple-apikey.readthedocs.io/en/latest/ or open an issue on GitHub.
 
 We appreciate your cooperation and understanding as we continue to improve our software offerings.

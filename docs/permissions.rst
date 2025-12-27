@@ -39,4 +39,4 @@ You can then call use this class in your view 👇
        permission_classes = (IsActiveEntity, )
 
 Feel free to read the code of the permission class at
-`https://github.com/koladev32/drf-simple-apikey/blob/main/drf-simple-apikey/permissions.py <https://github.com/koladev32/drf-simple-apikey/blob/main/drf-simple-apikey/backends.py>`__.
+https://github.com/koladev32/drf-simple-apikey/blob/main/drf_simple_apikey/permissions.py.

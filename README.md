@@ -21,11 +21,18 @@ For the full documentation, visit [https://djangorestframework-simple-apikey.rea
    ```bash
    pip uninstall djangorestframework-simple-apikey
    pip install drf-simple-apikey
+   ```
+
 For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
 
 ## Introduction
 
 Django REST Simple Api Key is a package built upon Django, Django REST Framework, and the fernet cryptography module to generate, encrypt, and decrypt API keys. It provides fast, secure and customizable API Key authentication.
+
+**Requirements:**
+- Python 3.10, 3.11, 3.12, or 3.13
+- Django 4.2.17+ or Django 5.x (up to 6.0)
+- Django REST Framework 3.15.2+
 
 ### Benefits
 
@@ -33,9 +40,11 @@ Why should you use this package for your API Key authentication?
 
 * ⚡**️Fast**: We use the [fernet](https://cryptography.io/en/latest/fernet/) cryptography module to generate, encrypt, and decrypt API keys. Besides the security facade, it is blazing fast allowing you to treat requests quickly and easily.
     
-* 🔐 **Secure**: Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key, which we call `FERNET_KEY`. As long as you treat the fernet key at the same level you treat the Django `SECRET_KEY` setting, you are good to go.
+* 🔐 **Secure**: Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key, which we call `FERNET_KEY`. The package includes comprehensive security features like timing attack protection, HTTPS enforcement, IP validation, and audit logging. As long as you treat the fernet key at the same level you treat the Django `SECRET_KEY` setting, you are good to go.
     
 * 🔧 **Customizable**: The models, authentication backend, and permissions classes can be rewritten and fit your needs. We do our best to extend Django classes and methods, so you can easily extend our classes and methods.😉 Your Api Key authentication settings are kept in a single configuration dictionary named `DRF_API_KEY` in the `settings.py` file of your Django project. It can be customized to fit your project needs.
+
+* 📝 **Well-typed**: The entire codebase includes comprehensive type annotations, making it easier to work with in modern Python development environments.
     
 
 ## Quickstart
