@@ -5,6 +5,10 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
+  // Ensure path aliases work correctly
+  experimental: {
+    optimizePackageImports: ['fumadocs-ui', 'fumadocs-core'],
+  },
 };
 
 export default withMDX(config);
