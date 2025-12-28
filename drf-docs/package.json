@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "fumadocs-mdx && next build",
+    "build": "fumadocs-mdx && node -e \"require('fs').accessSync('.source/server.ts')\" && next build",
     "dev": "next dev",
     "start": "next start",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
