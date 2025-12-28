@@ -6,7 +6,7 @@ import {
   DocsTitle,
 } from 'fumadocs-ui/layouts/docs/page';
 import { notFound } from 'next/navigation';
-import { getMDXComponents } from '@/mdx-components';
+import { getMDXComponents } from '../../mdx-components.js';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 
