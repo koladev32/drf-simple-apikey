@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "fumadocs-mdx && node -e \"require('fs').accessSync('.source/server.ts')\" && next build",
+    "prebuild": "node -e \"const fs = require('fs'); console.log('Checking files...'); console.log('lib/source.ts exists:', fs.existsSync('lib/source.ts')); console.log('lib/layout.shared.tsx exists:', fs.existsSync('lib/layout.shared.tsx')); console.log('.source/server.ts exists:', fs.existsSync('.source/server.ts')); console.log('Current dir:', process.cwd()); console.log('Files in lib:', fs.readdirSync('lib'));\"",
+    "build": "fumadocs-mdx && npm run prebuild && next build",
     "dev": "next dev",
     "start": "next start",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
