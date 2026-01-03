@@ -4,6 +4,9 @@ Changelog
 [Unreleased]
 ------------
 
+[v2.4.0] - 2026-01-03
+------------------
+
 - Added: Modern documentation site with Fumadocs
   - Migrated from RST/Read the Docs to Next.js/Fumadocs
   - Deployed at https://drf-api-key.koladev.xyz
