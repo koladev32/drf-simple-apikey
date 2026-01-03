@@ -1,0 +1,21 @@
+# Exclude documentation directories
+exclude drf-docs/
+recursive-exclude drf-docs *
+
+# Exclude other non-package directories
+exclude docs/
+exclude tests/
+exclude example/
+exclude .github/
+exclude venv/
+exclude *.egg-info/
+
+# Include necessary files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include SECURITY.md
+include CONTRIBUTING.md
+include pyproject.toml
+include setup.cfg
+include setup.py

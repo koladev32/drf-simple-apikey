@@ -4,6 +4,12 @@ Changelog
 [Unreleased]
 ------------
 
+- Added: Modern documentation site with Fumadocs
+  - Migrated from RST/Read the Docs to Next.js/Fumadocs
+  - Deployed at https://drf-api-key.koladev.xyz
+  - Comprehensive SEO configuration with Open Graph and Twitter Cards
+  - Structured data (JSON-LD) for better search engine visibility
+
 [v2.3.1] - 2025-12-27
 ------------------
 
