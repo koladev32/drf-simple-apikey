@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+- Changed: Documentation theme updated to shadcn for a modern, professional appearance
+
 [v2.4.1] - 2026-01-03
 ------------------
 

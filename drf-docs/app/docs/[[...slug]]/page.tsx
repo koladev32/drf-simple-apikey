@@ -34,8 +34,8 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
       '@type': 'Organization',
       name: 'DRF Simple API Key',
     },
-    datePublished: page.data.date || new Date().toISOString(),
-    dateModified: page.data.date || new Date().toISOString(),
+    datePublished: new Date().toISOString(),
+    dateModified: new Date().toISOString(),
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': pageUrl,
