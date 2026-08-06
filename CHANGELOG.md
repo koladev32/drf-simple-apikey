@@ -10,6 +10,23 @@ Changelog
 - Changed: `request.auth` set by `APIKeyAuthentication` is now the `APIKey` instance
   instead of the raw key string, matching DRF's convention (e.g. `TokenAuthentication`).
 - Changed: Documentation theme updated to shadcn for a modern, professional appearance
+- Fixed: Removed the `__init__.py` deprecation warning that incorrectly told users of the
+  current `drf-simple-apikey` package to switch away from itself; fixed stale
+  `readthedocs.io` links (old package name) across README, CONTRIBUTING, and
+  `settings.py` to point at the canonical docs site
+- Added: [Threat Model](https://drf-api-key.koladev.xyz/docs/threat-model) documentation
+  covering the encrypted-vs-hashed storage trade-off, what a leaked `FERNET_SECRET`
+  exposes, and incident-response steps
+- Fixed: `SECURITY.md` no longer contains generic template placeholder content
+- Changed: Rewrote the quickstart into a full production-ready walkthrough (env-var
+  secret, key creation/hand-off, curl example, `request.user`/`request.auth`,
+  revocation, and a table of every 403 failure cause and why it's 403 not 401)
+- Added: [Comparison](https://drf-api-key.koladev.xyz/docs/comparison) page against
+  djangorestframework-api-key, OAuth2, and JWT
+- Fixed: Packaging metadata — wheels were built as `py2.py3-none-any` due to a leftover
+  `universal = 1` setting; added `Requires-Python`, corrected `keyword` to `keywords`
+  (previously silently ignored), and added Django/DRF compatibility classifiers and
+  `project_urls`
 
 [v2.4.1] - 2026-01-03
 ------------------
