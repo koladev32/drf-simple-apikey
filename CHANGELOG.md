@@ -3,7 +3,21 @@ Changelog
 
 [Unreleased]
 ------------
-
+- Added: Opt-in `ENABLE_PER_KEY_SECRET` setting (default `False`). When enabled,
+  new API keys carry a random per-key secret (SHA-256 hash stored, verified with
+  a constant-time comparison), checked in addition to Fernet decryption
+  succeeding. This means a leaked `FERNET_SECRET` alone is no longer enough to
+  forge a working key for an existing entity. Off by default; only affects keys
+  created after enabling it; existing keys keep working unchanged. See the
+  [Threat Model](https://drf-api-key.koladev.xyz/docs/threat-model) docs.
+- Fixed: `reload_api_settings` rebound the module-level `package_settings` name
+  to a brand-new object on `DRF_API_KEY` changes instead of reloading the
+  existing singleton in place. Every other module holds its own
+  `from drf_simple_apikey.settings import package_settings` reference, which
+  never saw the rebind — so dynamic settings changes (e.g. via Django's
+  `override_settings` in a host project's own tests) were silently ignored
+  everywhere except the settings module itself. Now reloads in place via
+  `package_settings.reload()`, matching how DRF's own settings object works.
 - **Changed (potentially breaking)**: `APIKeyAuthentication` now returns `None`
   instead of raising `NotAuthenticated`/`AuthenticationFailed` when the request
   has no `Authorization` header or uses a different scheme's keyword, matching

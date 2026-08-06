@@ -7,6 +7,69 @@ Authentication is used here to identify an entity and make it easy to verify aut
 
 > Working with `request.user` which might not necessarily be an `User` might be a little bit counter-intuitive, but we are looking for solutions to have something such as `request.entity` without having to disrupt the Django REST Framework authentication and authorization flow. If you have some ideas, feel free to open an issue https://github.com/koladev32/drf-simple-apikey/issues.
 
+## How it works
+
+By default, an API key is a [Fernet](https://cryptography.io/en/latest/fernet/)-encrypted token carrying the issuing row's id and expiry — nothing is stored in the database that could be turned back into a valid key, so there's nothing to compare a presented key against except by decrypting it:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App as Your code
+    participant Mgr as APIKeyManager
+    participant DB as Database
+    participant Client
+    participant Auth as APIKeyAuthentication
+
+    Note over App,DB: Issuing a key
+    App->>Mgr: create_api_key(entity=user)
+    Mgr->>DB: save APIKey row (revoked=False, expiry_date, ...)
+    DB-->>Mgr: pk
+    Mgr->>Mgr: encrypt({"_pk": pk, "_exp": expiry}) with FERNET_SECRET
+    Mgr-->>App: (api_key, key)
+
+    Note over Client,Auth: Authenticating a request
+    Client->>Auth: Authorization: Api-Key key
+    Auth->>Auth: decrypt(key) with FERNET_SECRET
+    Auth->>Auth: expiry in the future?
+    Auth->>DB: SELECT APIKey WHERE id = pk
+    DB-->>Auth: row (revoked, ips, scopes, ...)
+    Auth->>Auth: revoked? IP allowed? scopes satisfied?
+    Auth-->>Client: 200 OK - request.user and request.auth set
+```
+
+The trade-off is that `FERNET_SECRET` alone is enough to decrypt (or forge) that token — see the [Threat Model](/docs/threat-model) for exactly what that means. The opt-in [`ENABLE_PER_KEY_SECRET`](/docs/settings#enable_per_key_secret) setting adds a second, independent secret that only exists as a hash in the database, so a leaked `FERNET_SECRET` on its own is no longer enough:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App as Your code
+    participant Mgr as APIKeyManager
+    participant DB as Database
+    participant Client
+    participant Auth as APIKeyAuthentication
+
+    Note over App,DB: Issuing a key (ENABLE_PER_KEY_SECRET=True)
+    App->>Mgr: create_api_key(entity=user)
+    Mgr->>DB: save APIKey row (revoked=False, expiry_date, ...)
+    DB-->>Mgr: pk
+    Mgr->>Mgr: secret = token_urlsafe(32)
+    Mgr->>DB: save hashed_secret = sha256(secret)
+    Mgr->>Mgr: encrypt({"_pk": pk, "_exp": expiry, "_secret": secret}) with FERNET_SECRET
+    Mgr-->>App: (api_key, key)
+
+    Note over Client,Auth: Authenticating a request
+    Client->>Auth: Authorization: Api-Key key
+    Auth->>Auth: decrypt(key) with FERNET_SECRET
+    Auth->>Auth: expiry in the future?
+    Auth->>DB: SELECT APIKey WHERE id = pk
+    DB-->>Auth: row (hashed_secret, revoked, ips, scopes, ...)
+    Auth->>Auth: sha256(_secret) matches hashed_secret? (hmac.compare_digest)
+    Auth->>Auth: revoked? IP allowed? scopes satisfied?
+    Auth-->>Client: 200 OK - request.user and request.auth set
+```
+
+The only two additions are highlighted by the extra steps around `secret`/`hashed_secret`: everything else is identical to the default flow. Forging a key now requires knowing `FERNET_SECRET` **and** guessing a 256-bit random value — decrypting successfully is no longer sufficient on its own. This only applies to keys created while the setting is on; keys issued before that (or with it left off, the default) have no `hashed_secret` and are authenticated exactly as in the first diagram. See [`ENABLE_PER_KEY_SECRET`](/docs/settings#enable_per_key_secret) for how to turn it on, and the [Threat Model](/docs/threat-model#what-a-leaked-fernet-secret-lets-an-attacker-do) for why plain SHA-256 (not a password hasher) is used to check it.
+
 ## Use the `APIKeyAuthentication` backend
 
 In your view, you can add the `APIKeyAuthentication` class to the `authentication_classes` attribute.

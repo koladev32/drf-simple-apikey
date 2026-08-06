@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import secrets
 import typing
 from datetime import timedelta, datetime
 
@@ -21,6 +23,31 @@ class AbstractAPIKeyManager(models.Manager):
 
     def assign_api_key(self, obj: "AbstractAPIKey") -> str:
         payload = {"_pk": obj.pk, "_exp": obj.expiry_date.timestamp()}
+
+        if package_settings.ENABLE_PER_KEY_SECRET:
+            # Opt-in defense-in-depth: a random per-key secret, stored only
+            # as a hash, so that a leaked FERNET_SECRET alone isn't enough
+            # to forge a working key for an existing entity — the attacker
+            # would also need this secret (or database access), since the
+            # hash can't be reversed back into it. See the Threat Model
+            # docs for the full rationale. Off by default so existing
+            # setups and already-issued keys are unaffected; enabling it
+            # only changes keys created from that point on.
+            #
+            # This intentionally uses a plain SHA-256 digest, not a
+            # password hasher (PBKDF2/bcrypt/Argon2). Those are slow *on
+            # purpose* to resist brute-forcing low-entropy human passwords
+            # -- there's no such risk here, since the secret is a 256-bit
+            # random token, not something guessable. Using a slow hasher
+            # would add real per-request latency for no security benefit
+            # against this threat model (see the PR description for
+            # benchmarks), which conflicts with why this package uses
+            # Fernet in the first place.
+            secret = secrets.token_urlsafe(32)
+            obj.hashed_secret = hashlib.sha256(secret.encode()).hexdigest()
+            obj.save(update_fields=["hashed_secret"])
+            payload["_secret"] = secret
+
         key = get_crypto().generate(payload)
 
         return key
@@ -89,6 +116,19 @@ class AbstractAPIKey(models.Model):
         help_text=(
             "List of scopes granted to this API key (e.g. ['read', 'write']). "
             "Leave empty for unrestricted access."
+        ),
+    )
+
+    hashed_secret = models.CharField(
+        max_length=64,
+        blank=True,
+        default="",
+        editable=False,
+        help_text=(
+            "SHA-256 hash of a random per-key secret embedded in the issued "
+            "key, checked in addition to Fernet decryption succeeding. Only "
+            "set when ENABLE_PER_KEY_SECRET is on. Empty for keys issued "
+            "before this field existed or while the setting is off."
         ),
     )
 

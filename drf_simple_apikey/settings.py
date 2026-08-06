@@ -21,6 +21,7 @@ DEFAULTS = {
     "ENABLE_AUDIT_LOGGING": True,
     "MAX_ENDPOINTS_PER_KEY": 1000,
     "MAX_ENDPOINT_LENGTH": 500,
+    "ENABLE_PER_KEY_SECRET": False,  # Opt-in defense-in-depth; see Threat Model docs
 }
 
 REMOVED_SETTINGS = ()
@@ -55,12 +56,15 @@ package_settings = PackageSettings(USER_SETTINGS, DEFAULTS)
 
 
 def reload_api_settings(*args, **kwargs):
-    global package_settings
-
-    setting, value = kwargs["setting"], kwargs["value"]
-
-    if setting == "DRF_API_KEY":
-        package_settings = PackageSettings(value, DEFAULTS)
+    # Reload in place (matching DRF's own APISettings.reload()) rather than
+    # rebinding the module-level `package_settings` name to a new object:
+    # every other module does `from drf_simple_apikey.settings import
+    # package_settings`, which copies a reference to *this* object into
+    # their own namespace. Rebinding the name here would only update this
+    # module's reference, leaving everyone else holding a stale settings
+    # snapshot from before the change.
+    if kwargs["setting"] == "DRF_API_KEY":
+        package_settings.reload()
 
 
 setting_changed.connect(reload_api_settings)
