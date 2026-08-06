@@ -1,0 +1,76 @@
+---
+title: Threat Model
+description: What a Fernet secret protects, what happens if it leaks, and how to respond
+---
+
+This page explains, concretely, what this package's cryptographic design does and does not protect against. Read this before you decide the Fernet secret can live somewhere less carefully guarded than your Django `SECRET_KEY`.
+
+## Encrypted-at-rest, not hashed-at-rest
+
+Most API key libraries store a **hash** of the key (like a password hash): the raw key exists only once, at creation time, and the database never holds anything an attacker could turn back into a valid key. A stolen database dump is useless on its own.
+
+This package works differently. An API key is a [Fernet](https://cryptography.io/en/latest/fernet/) token — a symmetric, **reversible** encryption of a small JSON payload (`{"_pk": <api key row id>, "_exp": <expiry timestamp>}`). Nothing about the key itself is stored in the database; instead, the database row (`revoked`, `expiry_date`, `whitelisted_ips`, `scopes`, ...) is looked up by the `_pk` embedded in the token once it's decrypted.
+
+This trade-off is deliberate: it means issuing, inspecting, and revoking keys never requires storing a hash comparable to the original secret, and it lets the key carry its own expiry. But it also means **the single `FERNET_SECRET` is the only thing standing between an attacker and every key you've ever issued** — current, past, and future, until you change it.
+
+## What a leaked Fernet secret lets an attacker do
+
+If `FERNET_SECRET` leaks, an attacker does not need to steal any individual API key, intercept traffic, or touch your database. With the secret alone they can:
+
+- **Forge a valid key for any entity ID they choose.** `assign_api_key` (`drf_simple_apikey/models.py`) just encrypts `{"_pk": obj.pk, "_exp": ...}`. Anyone holding `FERNET_SECRET` can encrypt that same payload for any `_pk` — including ids they merely guess (e.g. `1`, `2`, `3`) — and get back a token that passes signature verification and decryption.
+- **Decrypt any token they capture**, revealing which entity and expiry it maps to.
+- **Bypass expiry** by setting `_exp` arbitrarily far in the future in a forged token.
+
+What a leaked secret does **not** immediately do:
+
+- It does not bypass the `revoked` flag, IP allow/deny lists, or `scopes` — those are enforced from the database row after decryption succeeds, not from the token itself. A forged token for a real, non-revoked entity still works; a forged token pointing at an id that doesn't exist, or at a row you've since revoked, still fails.
+
+This is why revocation matters even when the secret hasn't leaked, and why it becomes essential — not optional — once you suspect it has.
+
+## Protecting the secret
+
+- Store `FERNET_SECRET` (and `ROTATION_FERNET_SECRET`, if you use [rotation](/docs/rotation)) in an environment variable or a secrets manager — never in source control, never logged.
+- Treat it exactly like Django's `SECRET_KEY`: same access controls, same handling in CI/CD, same exclusion from error reporting/logging integrations.
+- Generate it with `python manage.py generate_fernet_key` rather than hand-rolling one; the package validates key format and warns about low-entropy or placeholder-looking keys (see [Security](/docs/security#fernet-key-security)).
+
+## Rotation is for planned key changes, not incident response
+
+The built-in [rotation](/docs/rotation) mechanism (`drf_simple_apikey.rotation`) is designed for periodic, **planned** key changes: during the transition window, both the old and new Fernet keys decrypt successfully (via `MultiFernet`), so already-issued keys keep working while new keys are encrypted with the new secret.
+
+That overlap is exactly why rotation is the wrong tool for responding to a confirmed leak: if the *old* secret is the one that was compromised, it stays trusted for the entire `ROTATION_PERIOD` transition window, and anything an attacker forged with it keeps validating until the window closes.
+
+## Incident response: the Fernet secret is confirmed or suspected leaked
+
+Do these in order:
+
+1. **Revoke every existing key immediately** — `APIKey.objects.revoke_api_key(pk)` for each row, or a bulk `APIKey.objects.filter(revoked=False).update(revoked=True)` if you need it fast. This is the only step that stops a forged token from working *right now*, since revocation is checked from the database regardless of which secret decrypted the token.
+2. **Generate a brand-new `FERNET_SECRET`** — do not feed the compromised value into `ROTATION_FERNET_SECRET`. Rotation assumes the old key is still trustworthy for the overlap period; a compromised key is, by definition, not.
+3. **Deploy the new secret and restart** so every process picks it up.
+4. **Re-issue keys** to your legitimate integrations and hand off the new secrets through a channel you control (see [Getting Started](/docs/getting-started#hand-off-the-key-once)).
+5. **Review audit logs** (`ENABLE_AUDIT_LOGGING`) for authentication activity in the window before you rotated, looking for entity IDs or IP addresses you don't recognize.
+
+## Responding to a single leaked API key
+
+If only one integration's key leaked (not the Fernet secret itself), you don't need to touch the secret at all — revoke that one row:
+
+```python
+from drf_simple_apikey.models import APIKey
+
+APIKey.objects.revoke_api_key(pk)
+```
+
+Issue a replacement key to that integration and confirm the old one now fails with `"This API Key has been revoked."`.
+
+## API keys are not a substitute for user authentication
+
+API keys, as implemented here, are a **long-lived, static bearer credential** tied to a single entity — well suited to server-to-server and machine-to-machine integrations where the caller is a system you provision directly. They are not a substitute for:
+
+- **User login** — no password, MFA, or session semantics; anyone holding the key acts as the entity indefinitely (until expiry/revocation).
+- **OAuth2** — no consent flow, no third-party delegation, no per-client secrets.
+- **Short-lived delegated access** (e.g. signed URLs, JWTs with minute-scale expiry) — the default `API_KEY_LIFETIME` is a year, and even a short expiry doesn't give you the ability to constrain *what* the token can do beyond [scopes](/docs/permissions#scopes) and IP restrictions.
+
+If you need interactive user login, use Django's own authentication or a package built for it. Use this package for the machine-identity half of your system.
+
+## Minimum supported version
+
+Only run a version listed as supported in [SECURITY.md](https://github.com/koladev32/drf-simple-apikey/blob/main/SECURITY.md). Security fixes are released against the latest minor version line; if you're several minor versions behind, upgrade before filing a report to confirm the issue still reproduces.
