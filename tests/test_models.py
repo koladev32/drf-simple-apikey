@@ -39,3 +39,35 @@ class TestApiKeyModel:
         api_key.refresh_from_db()
 
         assert api_key.revoked
+
+
+@pytest.mark.django_db
+class TestApiKeyModelScopes:
+    pytestmark = pytest.mark.django_db
+
+    def test_has_scopes_with_no_scopes_configured_is_unrestricted(self, active_api_key):
+        api_key, _ = active_api_key
+
+        assert api_key.has_scopes(["fruits:read"])
+
+    def test_has_scopes_with_no_required_scopes_is_always_true(self, active_api_key):
+        api_key, _ = active_api_key
+        api_key.scopes = ["fruits:read"]
+
+        assert api_key.has_scopes([])
+
+    def test_has_scopes_returns_true_when_all_required_scopes_are_granted(
+        self, active_api_key
+    ):
+        api_key, _ = active_api_key
+        api_key.scopes = ["fruits:read", "fruits:write"]
+
+        assert api_key.has_scopes(["fruits:read"])
+
+    def test_has_scopes_returns_false_when_a_required_scope_is_missing(
+        self, active_api_key
+    ):
+        api_key, _ = active_api_key
+        api_key.scopes = ["fruits:read"]
+
+        assert not api_key.has_scopes(["fruits:write"])

@@ -4,6 +4,11 @@ Changelog
 [Unreleased]
 ------------
 
+- Added: Per-key scopes. `APIKey` now has a `scopes` field, and a new `HasAPIKeyScopes`
+  permission class enforces a view's `required_scopes` against the authenticated key.
+  Keys without scopes remain unrestricted (backward compatible).
+- Changed: `request.auth` set by `APIKeyAuthentication` is now the `APIKey` instance
+  instead of the raw key string, matching DRF's convention (e.g. `TokenAuthentication`).
 - Changed: Documentation theme updated to shadcn for a modern, professional appearance
 
 [v2.4.1] - 2026-01-03

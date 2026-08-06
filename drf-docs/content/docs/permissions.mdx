@@ -38,3 +38,31 @@ class YourViewSet(viewsets.ViewSet):
 
 Feel free to read the code of the permission class at https://github.com/koladev32/drf-simple-apikey/blob/main/drf_simple_apikey/permissions.py.
 
+## Scopes
+
+An `APIKey` can be restricted to a set of scopes using the `scopes` field on the model. A key created without any scope is unrestricted and can be used for any action. Scopes are just strings, so you're free to design your own scheme (`"read"`/`"write"`, `"fruits:read"`, `"orders:refund"`, ...).
+
+```python
+api_key, key = APIKey.objects.create_api_key(
+    entity=user,
+    scopes=["fruits:read"],
+)
+```
+
+To enforce scopes on a view, declare a `required_scopes` attribute on it and add the `HasAPIKeyScopes` permission class:
+
+```python
+from rest_framework import viewsets
+
+from drf_simple_apikey.backends import APIKeyAuthentication
+from drf_simple_apikey.permissions import HasAPIKeyScopes
+
+
+class FruitViewSets(viewsets.ViewSet):
+    authentication_classes = (APIKeyAuthentication,)
+    permission_classes = (HasAPIKeyScopes,)
+    required_scopes = ["fruits:read"]
+```
+
+A request authenticated with a key that doesn't carry every scope listed in `required_scopes` gets a `403 Forbidden` response. Keys created without a `scopes` value (`None` or an empty list) always satisfy this check, so the feature is fully opt-in and backward compatible with existing keys.
+

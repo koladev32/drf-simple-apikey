@@ -83,7 +83,31 @@ class AbstractAPIKey(models.Model):
         help_text="List of denied IP addresses for this API key.",
     )
 
+    scopes = models.JSONField(
+        blank=True,
+        null=True,
+        help_text=(
+            "List of scopes granted to this API key (e.g. ['read', 'write']). "
+            "Leave empty for unrestricted access."
+        ),
+    )
+
     objects = APIKeyManager()
+
+    def has_scopes(self, required_scopes: typing.Sequence[str]) -> bool:
+        """
+        Returns True if this API key is allowed to act with all the given
+        `required_scopes`. A key with no scopes configured is unrestricted
+        and satisfies any requirement.
+        """
+        if not required_scopes:
+            return True
+
+        if not self.scopes:
+            return True
+
+        granted_scopes = set(self.scopes)
+        return all(scope in granted_scopes for scope in required_scopes)
 
     def _has_expired(self) -> bool:
         from django.utils import timezone

@@ -7,14 +7,16 @@ from rest_framework.decorators import (
 )
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from rest_framework.test import APIRequestFactory
 
 from drf_simple_apikey.backends import APIKeyAuthentication
-from drf_simple_apikey.permissions import IsActiveEntity
+from drf_simple_apikey.models import APIKey
+from drf_simple_apikey.permissions import IsActiveEntity, HasAPIKeyScopes
 from drf_simple_apikey.settings import package_settings
 
-from .fixtures.api_key import inactive_entity_api_key, active_api_key
+from .fixtures.api_key import inactive_entity_api_key, active_api_key, scoped_api_key
 from .fixtures.user import inactive_user, user
 
 pytestmark = pytest.mark.django_db
@@ -62,5 +64,69 @@ class TestApiKeyPermissions:
 
     def test_if_active_user_does_have_permissions(self, request_with_active_entity):
         response = view(request_with_active_entity)
+
+        assert response.status_code == 200
+
+
+class FruitsReadView(APIView):
+    authentication_classes = [APIKeyAuthentication]
+    permission_classes = [HasAPIKeyScopes]
+    required_scopes = ["fruits:read"]
+
+    def get(self, request: Request) -> Response:
+        return Response()
+
+
+@pytest.fixture
+def request_with_unscoped_key(user, active_api_key):
+    factory = APIRequestFactory()
+
+    _, key = active_api_key
+    return factory.get(
+        "/test-request/",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.fixture
+def request_with_insufficient_scope(user, scoped_api_key):
+    factory = APIRequestFactory()
+
+    _, key = scoped_api_key
+    return factory.get(
+        "/test-request/",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.mark.django_db
+class TestHasAPIKeyScopesPermission:
+    pytestmark = pytest.mark.django_db
+
+    def test_key_with_no_scopes_configured_is_unrestricted(
+        self, request_with_unscoped_key
+    ):
+        response = FruitsReadView.as_view()(request_with_unscoped_key)
+
+        assert response.status_code == 200
+
+    def test_key_missing_required_scope_is_denied(
+        self, request_with_insufficient_scope
+    ):
+        response = FruitsReadView.as_view()(request_with_insufficient_scope)
+
+        assert response.status_code == 403
+
+    def test_key_with_required_scope_is_allowed(self, user):
+        _, key = APIKey.objects.create_api_key(
+            entity=user, scopes=["fruits:read", "fruits:write"]
+        )
+        factory = APIRequestFactory()
+        request = factory.get(
+            "/test-request/",
+            HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+        )
+
+        response = FruitsReadView.as_view()(request)
 
         assert response.status_code == 200

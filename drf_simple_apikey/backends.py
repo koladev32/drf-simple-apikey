@@ -104,7 +104,7 @@ class APIKeyAuthentication(BaseBackend):
 
     def authenticate(
         self, request: HttpRequest, **kwargs: typing.Any
-    ) -> tuple[typing.Any, str] | None:
+    ) -> tuple[typing.Any, APIKey] | None:
         """
         The `authenticate` method is called on every request regardless of
         whether the endpoint requires api key authentication.
@@ -137,7 +137,7 @@ class APIKeyAuthentication(BaseBackend):
 
     def _authenticate_credentials(
         self, request: HttpRequest, key: str | None
-    ) -> tuple[typing.Any, str]:
+    ) -> tuple[typing.Any, APIKey]:
         """
         Authenticate credentials with timing attack protection.
         All code paths take similar time to prevent timing-based information leakage.
@@ -222,7 +222,7 @@ class APIKeyAuthentication(BaseBackend):
                     extra={"ip": client_ip, "api_key_id": api_key.pk, "entity_id": api_key.entity.pk},
                 )
 
-            return api_key.entity, key
+            return api_key.entity, api_key
 
         except exceptions.AuthenticationFailed:
             # Re-raise authentication failures
