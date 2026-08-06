@@ -11,11 +11,11 @@ Django REST Framework Simple API Key is a fast and secure API Key authentication
   </a>
 </div>
 
-For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+For the full documentation, visit [https://drf-api-key.koladev.xyz](https://drf-api-key.koladev.xyz).
 
 ## Package Renaming Notice
 
-**Notice:** The `djangorestframework-simple-apikey` package is being renamed to `drf-simple-apikey` to improve usability and align with common naming conventions. Please update your installations:
+**Notice:** The `djangorestframework-simple-apikey` package was renamed to `drf-simple-apikey` to improve usability and align with common naming conventions. If you still have the old package installed, update it:
 
 1. Replace the old package:
    ```bash
@@ -23,7 +23,7 @@ For the full documentation, visit [https://djangorestframework-simple-apikey.rea
    pip install drf-simple-apikey
    ```
 
-For the full documentation, visit [https://djangorestframework-simple-apikey.readthedocs.io/en/latest/](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/).
+See the [migration guide](https://drf-api-key.koladev.xyz/docs/migrating) for details.
 
 ## Introduction
 
@@ -113,7 +113,7 @@ python manage.py generate_fernet_key
 
 ## Rotation
 
-We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://djangorestframework-simple-apikey.readthedocs.io/en/latest/rotation.html.
+We implement an API key rotation strategy for this package. To learn more about it, refer to the documentation at https://drf-api-key.koladev.xyz/docs/rotation.
 
 ## Demo
 
