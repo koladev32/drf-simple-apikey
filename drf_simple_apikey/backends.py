@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import hmac
 import logging
 import secrets
 import time
@@ -185,6 +187,30 @@ class APIKeyAuthentication(BaseBackend):
                         extra={"ip": client_ip, "api_key_id": payload.get("_pk")},
                     )
                 raise exceptions.AuthenticationFailed("No entity matching this api key.")
+
+            # Verify the per-key secret, if this row has one. Keys issued
+            # before this check existed have no hashed_secret and are
+            # grandfathered in (see AbstractAPIKeyManager.assign_api_key).
+            # This is the check that stops a leaked FERNET_SECRET alone from
+            # being enough to forge a working key for an existing entity:
+            # the attacker would also need this per-key secret, which is
+            # only ever stored hashed.
+            if api_key.hashed_secret:
+                presented_secret = payload.get("_secret")
+                presented_hash = (
+                    hashlib.sha256(presented_secret.encode()).hexdigest()
+                    if presented_secret
+                    else ""
+                )
+                if not presented_secret or not hmac.compare_digest(
+                    presented_hash, api_key.hashed_secret
+                ):
+                    if package_settings.ENABLE_AUDIT_LOGGING:
+                        logger.warning(
+                            "API key authentication failed: secret mismatch",
+                            extra={"ip": client_ip, "api_key_id": api_key.pk},
+                        )
+                    raise exceptions.AuthenticationFailed("Invalid API Key.")
 
             # Check if revoked
             if api_key.revoked:

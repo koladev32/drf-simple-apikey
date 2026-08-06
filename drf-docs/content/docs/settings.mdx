@@ -152,6 +152,25 @@ DRF_API_KEY = {
 }
 ```
 
+## `ENABLE_PER_KEY_SECRET`
+
+Opt-in defense-in-depth: when enabled, every newly created API key gets a random per-key secret embedded in it, and its SHA-256 hash is stored on the `APIKey` row. Authentication then requires both a valid Fernet decryption *and* a matching per-key secret, so a leaked `FERNET_SECRET` alone is no longer enough to forge a working key for an existing entity — see the [Threat Model](/docs/threat-model#what-a-leaked-fernet-secret-lets-an-attacker-do) for the full rationale.
+
+**Default:** `False`
+
+**Example:**
+
+```python
+DRF_API_KEY = {
+    "ENABLE_PER_KEY_SECRET": True,
+}
+```
+
+**Notes:**
+
+- This only affects keys created *after* you enable it. Existing keys have no per-key secret and keep working exactly as before (they're checked with Fernet decryption alone) — enabling this setting doesn't retroactively secure them. To fully benefit, reissue existing keys once it's on.
+- The secret is verified with a plain SHA-256 digest and a constant-time comparison, not a password hasher (PBKDF2/bcrypt/Argon2). Those are deliberately slow to resist brute-forcing low-entropy human passwords — a risk that doesn't apply here, since the secret is a 256-bit random token. In benchmarks, a password-hasher check took ~80ms per call versus ~0.0004ms for SHA-256; using one would have undone the whole reason this package uses Fernet instead of a traditional hash-and-check design.
+
 ## `IP_ADDRESS_HEADER`
 
 Specifies which HTTP header to use for extracting the client IP address. This is useful when your application is behind a proxy or load balancer.

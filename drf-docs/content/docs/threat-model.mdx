@@ -24,6 +24,7 @@ If `FERNET_SECRET` leaks, an attacker does not need to steal any individual API 
 What a leaked secret does **not** immediately do:
 
 - It does not bypass the `revoked` flag, IP allow/deny lists, or `scopes` — those are enforced from the database row after decryption succeeds, not from the token itself. A forged token for a real, non-revoked entity still works; a forged token pointing at an id that doesn't exist, or at a row you've since revoked, still fails.
+- If you've enabled [`ENABLE_PER_KEY_SECRET`](/docs/settings#enable_per_key_secret), it also doesn't forge a *working* key at all: each key created with that setting on carries its own random secret, and only its SHA-256 hash is ever stored. `FERNET_SECRET` alone lets an attacker produce a token that decrypts successfully, but without the matching per-key secret it's still rejected. This is opt-in and only protects keys created after you enable it — it doesn't retroactively secure keys issued before that point.
 
 This is why revocation matters even when the secret hasn't leaked, and why it becomes essential — not optional — once you suspect it has.
 
