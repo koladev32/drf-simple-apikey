@@ -4,6 +4,11 @@ Changelog
 [Unreleased]
 ------------
 
+- Fixed: `get_rotation_status()` cached a "no active rotation" result forever
+  (`timeout=None`), so starting a rotation afterwards had no effect until the
+  cache was cleared manually. Starting/stopping a rotation via the management
+  command or the admin now invalidates the cache immediately, and the negative
+  result is now bounded to 60s as a safety net
 - Added: Per-key scopes. `APIKey` now has a `scopes` field, and a new `HasAPIKeyScopes`
   permission class enforces a view's `required_scopes` against the authenticated key.
   Keys without scopes remain unrestricted (backward compatible).
