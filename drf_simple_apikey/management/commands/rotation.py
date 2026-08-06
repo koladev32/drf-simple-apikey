@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from drf_simple_apikey.rotation.models import Rotation
+from drf_simple_apikey.rotation.utils import invalidate_rotation_status_cache
 from drf_simple_apikey.settings import package_settings
 
 
@@ -27,6 +28,7 @@ class Command(BaseCommand):
                 rotation.is_rotation_enabled = False
                 rotation.ended = timezone.now()
                 rotation.save()
+                invalidate_rotation_status_cache()
                 self.stdout.write(self.style.SUCCESS("Successfully stopped rotation"))
             except Rotation.DoesNotExist:
                 raise CommandError("No active rotation found to stop")
@@ -36,6 +38,7 @@ class Command(BaseCommand):
             obj.is_rotation_enabled = True
             obj.ended = timezone.now() + package_settings.ROTATION_PERIOD
             obj.save()
+            invalidate_rotation_status_cache()
             self.stdout.write(
                 self.style.SUCCESS(
                     f"Successfully started rotation ending at {obj.ended}"

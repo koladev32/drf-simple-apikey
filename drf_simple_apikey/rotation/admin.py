@@ -7,6 +7,7 @@ from django.http.request import HttpRequest
 from django.utils import timezone
 
 from .models import Rotation
+from .utils import invalidate_rotation_status_cache
 from ..settings import package_settings
 
 
@@ -53,6 +54,8 @@ class RotationAdmin(admin.ModelAdmin):
             messages.add_message(request, messages.WARNING, message)
         else:
             obj.save()
+
+        invalidate_rotation_status_cache()
 
 
 admin.site.register(Rotation, RotationAdmin)

@@ -6,9 +6,28 @@ from django.utils import timezone
 
 from drf_simple_apikey.settings import package_settings
 
+ROTATION_STATUS_CACHE_KEY = "rotation_status"
+
+# How long a "no active rotation" result stays cached. This is deliberately
+# short and bounded (unlike the "rotation is active" case, which is cached
+# for the full ROTATION_PERIOD): it's a self-healing safety net in case some
+# code path starts or stops a Rotation without calling
+# invalidate_rotation_status_cache() below, so the package doesn't get stuck
+# believing rotation is disabled indefinitely.
+_NEGATIVE_CACHE_TIMEOUT = 60
+
+
+def invalidate_rotation_status_cache() -> None:
+    """
+    Call this whenever a `Rotation` row is created, started, or stopped, so
+    `get_rotation_status()` recomputes its value on the next call instead of
+    returning a stale cached result.
+    """
+    cache.delete(ROTATION_STATUS_CACHE_KEY)
+
 
 def get_rotation_status() -> bool:
-    rotation_status = cache.get("rotation_status")
+    rotation_status = cache.get(ROTATION_STATUS_CACHE_KEY)
 
     if (
         rotation_status is None
@@ -35,13 +54,13 @@ def get_rotation_status() -> bool:
 
         # Cache the rotation status
         cache.set(
-            "rotation_status",
+            ROTATION_STATUS_CACHE_KEY,
             rotation_status,
             (
                 package_settings.ROTATION_PERIOD.total_seconds()
                 if rotation_status
-                else None
+                else _NEGATIVE_CACHE_TIMEOUT
             ),
-        )  # Cache for the rotation period if true
+        )  # Cache for the rotation period if true, briefly otherwise
 
     return rotation_status
