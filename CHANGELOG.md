@@ -3,7 +3,6 @@ Changelog
 
 [Unreleased]
 ------------
-
 - Added: Opt-in `ENABLE_PER_KEY_SECRET` setting (default `False`). When enabled,
   new API keys carry a random per-key secret (SHA-256 hash stored, verified with
   a constant-time comparison), checked in addition to Fernet decryption
@@ -19,6 +18,15 @@ Changelog
   `override_settings` in a host project's own tests) were silently ignored
   everywhere except the settings module itself. Now reloads in place via
   `package_settings.reload()`, matching how DRF's own settings object works.
+- **Changed (potentially breaking)**: `APIKeyAuthentication` now returns `None`
+  instead of raising `NotAuthenticated`/`AuthenticationFailed` when the request
+  has no `Authorization` header or uses a different scheme's keyword, matching
+  DRF's authenticator contract. This lets it be combined with other
+  authentication classes (previously it always hard-rejected the request
+  first). **If `APIKeyAuthentication` is your only authentication class and
+  you relied on a missing key being rejected automatically, add a permission
+  class (e.g. `IsActiveEntity`) to your view** — authentication alone no
+  longer enforces that a key was provided; see [Getting Started](https://drf-api-key.koladev.xyz/docs/getting-started#protect-a-view).
 - Fixed: `get_rotation_status()` cached a "no active rotation" result forever
   (`timeout=None`), so starting a rotation afterwards had no effect until the
   cache was cleared manually. Starting/stopping a rotation via the management

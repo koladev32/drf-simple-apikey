@@ -29,6 +29,22 @@ DRF_API_KEY = {
 }
 ```
 
+## Combining with other authenticators
+
+`APIKeyAuthentication` follows Django REST Framework's authenticator contract: if the request has no `Authorization` header, or the header uses a different scheme (e.g. `Bearer ...` or `Basic ...`), it returns `None` instead of raising — signaling "not my request to handle" so DRF moves on to the next authenticator in `authentication_classes`. It only raises `AuthenticationFailed` once it's confirmed the request *is* attempting `Api-Key` auth but the value itself is malformed, expired, revoked, or otherwise invalid.
+
+This makes it safe to combine with other authentication classes on the same view:
+
+```python
+from rest_framework.authentication import SessionAuthentication
+
+class YourViewSet(viewsets.ViewSet):
+    authentication_classes = (APIKeyAuthentication, SessionAuthentication)
+    ...
+```
+
+A request with a valid session but no `Api-Key` header authenticates via `SessionAuthentication` instead of being rejected outright. Conversely, if none of your authenticators match, `request.user` is `AnonymousUser` — add a permission class (see [Permissions](/docs/permissions)) if anonymous access should be rejected rather than silently allowed.
+
 ## Security Features
 
 The authentication backend includes several security features to protect your API:
