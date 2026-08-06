@@ -1,0 +1,69 @@
+---
+title: Comparison with Other Packages
+description: How drf-simple-apikey compares to djangorestframework-api-key, OAuth2, and JWT
+---
+
+If you're evaluating API-key authentication for Django REST Framework, you've probably already come across [djangorestframework-api-key](https://github.com/florimondmanca/djangorestframework-api-key) — it's the most established package in this space. This page explains where the two differ so you can pick the right one, rather than repeating marketing claims.
+
+## At a glance
+
+| | drf-simple-apikey | djangorestframework-api-key |
+| --- | --- | --- |
+| Key storage | Encrypted (Fernet) — reversible with the right secret | Hashed — irreversible, like a password |
+| Entity/user relation | Built in: every key has an `entity` FK (`AUTH_USER_MODEL` by default); `request.user` is populated on success | Not built in: the base model has no user relation; you subclass it yourself if you need one |
+| Auth mechanism | A DRF **authentication class** (`APIKeyAuthentication`) — participates in `request.user`/`request.auth` like any other authenticator | A DRF **permission class** (`HasAPIKey`) — checks the key but doesn't populate `request.user` |
+| Expiry | Built in: `expiry_date` embedded in the key payload and checked on every request | Not built in — add your own field/check if you need it |
+| Revocation | `revoked` flag, checked against the DB on every request | Built in via `.is_active`-style checks (see their docs) |
+| Key rotation | Built-in `drf_simple_apikey.rotation` app: overlapping-secret rotation for the encryption key itself | Not applicable — there's no shared secret to rotate; rotating means reissuing individual keys |
+| Scopes | Built in: `scopes` field + `HasAPIKeyScopes` permission class | Not built in — extend the model/permission class yourself |
+| IP allow/deny lists | Built in: `whitelisted_ips`/`blacklisted_ips` per key | Not built in |
+| Analytics / audit logging | Built-in optional `analytics` app (per-endpoint access counts) and structured audit log events | Not built in |
+
+## The real trade-off: encrypted vs. hashed
+
+This is the one difference worth understanding deeply before you choose, because it's a security property, not a feature checklist item.
+
+- **djangorestframework-api-key hashes keys**, the same way Django hashes passwords. The database never holds anything that can be turned back into a valid key. A stolen database dump alone is not enough to forge new keys.
+- **drf-simple-apikey encrypts keys** with Fernet. This is reversible by design: it's what lets a key carry its own expiry and entity reference without a database round trip to look up a hash, and it's what powers built-in rotation. The cost is that the single `FERNET_SECRET` protecting all of this becomes a high-value target — see the [Threat Model](/docs/threat-model) for exactly what a leaked secret exposes and how to respond.
+
+Neither approach is "more secure" in the abstract; they fail differently. Hashed storage degrades gracefully if your database leaks (attacker gets nothing usable) but has no way to embed self-describing metadata in the key. Encrypted storage lets the key carry its own expiry/identity and enables secret rotation, but a leaked encryption secret is a bigger single point of failure than a leaked hash salt.
+
+## Minimal example: drf-simple-apikey
+
+```python
+from rest_framework import viewsets
+from drf_simple_apikey.backends import APIKeyAuthentication
+from drf_simple_apikey.permissions import IsActiveEntity
+
+class FruitViewSet(viewsets.ViewSet):
+    authentication_classes = (APIKeyAuthentication,)
+    permission_classes = (IsActiveEntity,)
+
+    def list(self, request):
+        # request.user is the entity the key belongs to.
+        return Response([...])
+```
+
+## Minimal example: djangorestframework-api-key
+
+```python
+from rest_framework import viewsets
+from rest_framework_api_key.permissions import HasAPIKey
+
+class FruitViewSet(viewsets.ViewSet):
+    permission_classes = (HasAPIKey,)
+
+    def list(self, request):
+        # request.user is unaffected — HasAPIKey only validates the key.
+        return Response([...])
+```
+
+## When to choose which
+
+**Choose drf-simple-apikey** if each key should represent a specific entity (a customer, a tenant, a service account) and you want `request.user` populated automatically, you want expiry/revocation/IP restrictions/scopes without building them yourself, or you expect to need to rotate the underlying signing secret on a schedule.
+
+**Choose djangorestframework-api-key** if you want the smallest possible trust surface (hashed, non-recoverable storage) and don't need keys tied to a user model — e.g. machine-to-machine access where "the key" is the identity, not a stand-in for a user.
+
+**Choose OAuth2** (e.g. [django-oauth-toolkit](https://github.com/jazzband/django-oauth-toolkit)) if you need third-party clients, user consent, or delegated access on behalf of a user — API keys, in either package, assume you provision the credential directly to a system you trust.
+
+**Choose JWT** (e.g. [SimpleJWT](https://github.com/jazzband/djangorestframework-simplejwt)) if you need short-lived, stateless tokens for interactive user sessions rather than a long-lived credential for a server-to-server integration.

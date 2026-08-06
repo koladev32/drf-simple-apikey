@@ -11,7 +11,7 @@ Django REST Framework Simple API Key is a fast and secure API Key authentication
   </a>
 </div>
 
-For the full documentation, visit [https://drf-api-key.koladev.xyz](https://drf-api-key.koladev.xyz).
+For the full documentation, visit [https://drf-api-key.koladev.xyz](https://drf-api-key.koladev.xyz). Deciding between this and another package? See the [comparison with djangorestframework-api-key, OAuth2, and JWT](https://drf-api-key.koladev.xyz/docs/comparison).
 
 ## Package Renaming Notice
 

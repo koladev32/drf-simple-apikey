@@ -2,6 +2,7 @@
   "pages": [
     "index",
     "getting-started",
+    "comparison",
     "settings",
     "authentication",
     "permissions",
