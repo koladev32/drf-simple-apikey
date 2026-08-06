@@ -73,7 +73,7 @@ python manage.py migrate
 
 ### Protect a view
 
-Combine an authentication class with a permission class — authentication alone only identifies *who* is calling; a permission class decides whether they're allowed to proceed.
+Combine an authentication class with a permission class — authentication alone only identifies *who* is calling; a permission class decides whether they're allowed to proceed. This matters concretely here: a request with no `Authorization` header at all, or one using a different scheme, isn't treated as an error by `APIKeyAuthentication` — it's simply not this authenticator's request to handle, so DRF falls through to `request.user` being `AnonymousUser`. Without a permission class, that request would proceed *unauthenticated*. `IsActiveEntity` below closes that gap: `AnonymousUser.is_active` is `False`, so an anonymous request is still rejected.
 
 ```python
 from rest_framework import viewsets
@@ -141,12 +141,13 @@ Revoking is per-key. To change the `FERNET_SECRET` itself — on a schedule, as 
 
 ## Common failure responses
 
-Every rejection from this package — a failed authentication *and* a failed permission check — comes back as **`403 Forbidden`**, not `401 Unauthorized`. DRF only returns 401 when an authenticator supplies a `WWW-Authenticate` header, and this backend deliberately doesn't (`authenticate_header()` returns `None`), so don't special-case 401 in client code that talks to this API.
+Every rejection from this package — a failed authentication *and* a failed permission check — comes back as **`403 Forbidden`**, not `401 Unauthorized`, as long as `APIKeyAuthentication` is the first authentication class on the view. DRF only returns 401 when the *first* listed authenticator supplies a `WWW-Authenticate` header, and this backend deliberately doesn't (`authenticate_header()` returns `None`), so don't special-case 401 in client code that talks to this API.
+
+A missing `Authorization` header, or one using a different scheme (e.g. `Bearer ...`), doesn't produce a `detail` message from this backend at all — `APIKeyAuthentication` simply returns `None` and defers to whatever's next: another authentication class, if you've configured one (see [Authentication](/docs/authentication#combining-with-other-authenticators)), or otherwise an anonymous `request.user` that your permission classes are responsible for rejecting.
 
 | `detail` message | Cause |
 | --- | --- |
-| `No API key provided.` | No `Authorization` header was sent at all. |
-| `Incorrect API KEY format.` | The header is present but doesn't match `<AUTHENTICATION_KEYWORD_HEADER> <key>` (e.g. missing the `Api-Key ` prefix). |
+| `Incorrect API KEY format.` | The header uses the configured keyword (`Api-Key` by default) but doesn't match `<AUTHENTICATION_KEYWORD_HEADER> <key>` — e.g. the key itself is missing, or contains a stray space. |
 | `Invalid API Key.` | The value isn't a valid Fernet token for the configured `FERNET_SECRET` — wrong secret, corrupted value, or a key issued under a different secret. |
 | `API Key has already expired.` | The key's `expiry_date` is in the past. |
 | `This API Key has been revoked.` | The key's `revoked` flag is `True`. |
