@@ -67,11 +67,18 @@ INSTALLED_APPS = [
 ]
 ```
 
-3- Add the `FERNET_KEY` setting in your `DRF_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
+3 - Generate a Fernet key and put it in an environment variable — **never hardcode it in `settings.py` or commit it to version control.** Treat it exactly like your Django `SECRET_KEY`.
+
+```bash
+python manage.py generate_fernet_key
+```
 
 ```python
+# settings.py
+import os
+
 DRF_API_KEY = {
-    "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
+    "FERNET_SECRET": os.environ["DRF_API_KEY_FERNET_SECRET"],
 }
 ```
 
@@ -89,27 +96,20 @@ In your view then, you can add the authentication class and the permission class
 from rest_framework import viewsets
 
 from drf_simple_apikey.backends import APIKeyAuthentication
+from drf_simple_apikey.permissions import IsActiveEntity
 from rest_framework.response import Response
 
 
 class FruitViewSets(viewsets.ViewSet):
   http_method_names = ["get"]
   authentication_classes = (APIKeyAuthentication,)
+  permission_classes = (IsActiveEntity,)
 
   def list(self, request):
     return Response([{"detail": True}], 200)
 ```
 
-## Generate a Fernet Key
-We've made it easier for you by creating a custom Django command to quickly generate a fernet key, which is a **crucial component** in the authentication system. Make sure to keep the key secure and store it somewhere safely (ie: environment variable). 
-
-**Important ⛔️** : You should treat the `FERNET_KEY` security at the same level as the Django `SECRET_KEY`. 🫡
-
-To generate the fernet key use the following command:
-
-```python
-python manage.py generate_fernet_key
-```
+For the full walkthrough — creating and handing off a key, calling the API with `curl`, revoking a key, and the common 401/403 failure cases — see [Getting Started](https://drf-api-key.koladev.xyz/docs/getting-started).
 
 ## Rotation
 

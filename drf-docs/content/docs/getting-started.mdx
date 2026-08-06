@@ -21,79 +21,149 @@ Why should you use this package for your API Key authentication?
 
 ## Quickstart
 
-1 - Install with `pip`:
+This walks through everything needed to go from a fresh Django project to a protected endpoint that a real client can call: installing the package, generating and storing the Fernet secret safely, creating a key, calling the API with it, and revoking it.
+
+### Install
 
 ```bash
 pip install drf-simple-apikey
 ```
 
-2 - Register the app in the `INSTALLED_APPS` in the `settings.py` file:
+### Register the apps
 
 ```python
 # settings.py
 
 INSTALLED_APPS = [
-  # ...
-  "rest_framework",
-  "drf_simple_apikey",
+    # ...
+    "rest_framework",
+    "drf_simple_apikey",
 ]
 ```
 
-3- Add the `FERNET_KEY` setting in your `DRF_API_KEY` configuration dictionary. You can easily generate a fernet key using the `python manage.py generate_fernet_key` command. Keep in mind that the fernet key plays a huge role in the api key authentication system.
-
-```python
-DRF_API_KEY = {
-    "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA="
-}
-```
-
-4 - Run migrations:
-
-```bash
-python manage.py migrate
-```
-
-In your view then, you can add the authentication class and the permission class.
-
-> ⚠️ **Important Note**: By default, the Django User class (django.contrib.auth.User) is used for authentication.
-
-```python
-from rest_framework import viewsets
-
-from drf_simple_apikey.backends import APIKeyAuthentication
-from rest_framework.response import Response
-
-class FruitViewSets(viewsets.ViewSet):
-    http_method_names = ["get"]
-    authentication_classes = (APIKeyAuthentication, )
-
-    def list(self, request):
-        return Response([{"detail": True}], 200 )
-```
-
-## Generate a Fernet Key
-
-We've made it easier for you by creating a custom Django command to quickly generate a fernet key, which is a **crucial component** in the authentication system. Make sure to keep the key secure and store it somewhere safely (ie: environment variable).
-
-**Important ⛔️** : You should treat the `FERNET_KEY` security at the same level as the Django `SECRET_KEY`. 🫡
-
-To generate the fernet key use the following command:
+### Generate the Fernet secret — and keep it out of your codebase
 
 ```bash
 python manage.py generate_fernet_key
 ```
 
+This prints a key such as `sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=`. **Treat it exactly like your Django `SECRET_KEY`**: put it in an environment variable, never commit it to version control, and never log it. See the [Threat Model](/docs/threat-model) for why this specific value matters so much.
+
+```bash
+# .env  (make sure .env is in your .gitignore)
+DRF_API_KEY_FERNET_SECRET=sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=
+```
+
+```python
+# settings.py
+import os
+
+DRF_API_KEY = {
+    "FERNET_SECRET": os.environ["DRF_API_KEY_FERNET_SECRET"],
+}
+```
+
+Using `os.environ[...]` (not `.get(...)`) means your app fails to start with a clear `KeyError` if the secret isn't set, instead of silently running unauthenticated.
+
+### Run migrations
+
+```bash
+python manage.py migrate
+```
+
+### Protect a view
+
+Combine an authentication class with a permission class — authentication alone only identifies *who* is calling; a permission class decides whether they're allowed to proceed.
+
+```python
+from rest_framework import viewsets
+from rest_framework.response import Response
+
+from drf_simple_apikey.backends import APIKeyAuthentication
+from drf_simple_apikey.permissions import IsActiveEntity
+
+
+class FruitViewSets(viewsets.ViewSet):
+    http_method_names = ["get"]
+    authentication_classes = (APIKeyAuthentication,)
+    permission_classes = (IsActiveEntity,)
+
+    def list(self, request):
+        return Response([{"detail": True}], 200)
+```
+
+> ⚠️ By default, the Django user model (`AUTH_USER_MODEL`) is the entity an API key belongs to.
+
+### Hand off the key once
+
+The encrypted key is only ever shown at creation time — the database never stores it, so it can't be retrieved later (see [Threat Model](/docs/threat-model#encrypted-at-rest-not-hashed-at-rest) for why). Create it from a shell, a management command, or your own admin tooling:
+
+```python
+from drf_simple_apikey.models import APIKey
+
+api_key, key = APIKey.objects.create_api_key(entity=user)
+
+print(key)
+# gAAAAABn...  — send this to the integration now, over a channel you
+# control (a secrets manager, a one-time-view link, etc). It will
+# never be shown again; if it's lost, revoke it and issue a new one.
+```
+
+If you create the key through the Django admin instead, the same one-time key is shown as a warning message on the change page right after saving.
+
+### Call the API
+
+Send the key in the `Authorization` header, prefixed with the configured keyword (`Api-Key` by default — see [`AUTHENTICATION_KEYWORD_HEADER`](/docs/settings)):
+
+```bash
+curl https://your-api.example.com/fruits/ \
+  -H "Authorization: Api-Key gAAAAABn..."
+```
+
+### `request.user` and `request.auth`
+
+Once authentication succeeds, both are populated for the rest of the request:
+
+- **`request.user`** is the entity the key belongs to — a Django user by default.
+- **`request.auth`** is the `APIKey` model instance used to authenticate (not the raw key string), so a view or permission class can read `request.auth.scopes`, `request.auth.expiry_date`, `request.auth.name`, etc.
+
+### Revoke a key
+
+```python
+APIKey.objects.revoke_api_key(api_key.pk)
+```
+
+A revoked key immediately fails authentication with `"This API Key has been revoked."`, regardless of its expiry date.
+
+### Rotate the Fernet secret
+
+Revoking is per-key. To change the `FERNET_SECRET` itself — on a schedule, as a precaution, not as incident response for a suspected leak — see [Rotation](/docs/rotation). If you suspect the secret itself has already leaked, follow the [incident response steps](/docs/threat-model#incident-response-the-fernet-secret-is-confirmed-or-suspected-leaked) instead: rotation intentionally keeps the old secret trusted during its transition window, which is the wrong behavior when that old secret is the one that's compromised.
+
+## Common failure responses
+
+Every rejection from this package — a failed authentication *and* a failed permission check — comes back as **`403 Forbidden`**, not `401 Unauthorized`. DRF only returns 401 when an authenticator supplies a `WWW-Authenticate` header, and this backend deliberately doesn't (`authenticate_header()` returns `None`), so don't special-case 401 in client code that talks to this API.
+
+| `detail` message | Cause |
+| --- | --- |
+| `No API key provided.` | No `Authorization` header was sent at all. |
+| `Incorrect API KEY format.` | The header is present but doesn't match `<AUTHENTICATION_KEYWORD_HEADER> <key>` (e.g. missing the `Api-Key ` prefix). |
+| `Invalid API Key.` | The value isn't a valid Fernet token for the configured `FERNET_SECRET` — wrong secret, corrupted value, or a key issued under a different secret. |
+| `API Key has already expired.` | The key's `expiry_date` is in the past. |
+| `This API Key has been revoked.` | The key's `revoked` flag is `True`. |
+| `No entity matching this api key.` | The underlying `APIKey` row was deleted after the key was issued. |
+| `Access denied from blacklisted IP.` / `Access restricted to specific IP addresses.` | The caller's IP is blocked by `blacklisted_ips`/`whitelisted_ips`. |
+| `API key authentication requires HTTPS...` | `ENFORCE_HTTPS` is on and the request arrived over plain HTTP. |
+| A permission class's own `message` (e.g. `IsActiveEntity`'s `"Entity is not active."`) | Authentication succeeded, but a permission class rejected the request — check `permission_classes` on the view. |
+
 ## Security Considerations
 
-Before deploying to production, here are a few security tips to keep in mind:
+Before deploying to production:
 
-- **Treat your Fernet key like your Django SECRET_KEY**: Store it in environment variables, never commit it to version control, and rotate it periodically.
+- **Treat your Fernet key like your Django `SECRET_KEY`**: environment variables only, never in version control, never in logs.
+- **Always use HTTPS in production**: the package can enforce this automatically. See [Security](/docs/security) for details.
+- **Review your audit logs**: the package logs authentication and revocation events — make sure something is actually watching them.
 
-- **Always use HTTPS in production**: The package can enforce HTTPS connections to prevent API keys from being transmitted over unencrypted HTTP. See [Security](/docs/security) for details.
-
-- **Review your audit logs**: The package logs important security events. Make sure you're monitoring these logs to catch any suspicious activity.
-
-For more detailed security information, check out the [Security](/docs/security) documentation.
+For the full picture of what this design protects against, read the [Threat Model](/docs/threat-model). For feature-by-feature details, see [Security](/docs/security).
 
 ## Changelog
 
@@ -102,4 +172,3 @@ See [CHANGELOG.md](https://github.com/koladev32/drf-simple-apikey/blob/main/CHAN
 ## Contributing
 
 See [CONTRIBUTING.md](https://github.com/koladev32/drf-simple-apikey/blob/main/CONTRIBUTING.md).
-
