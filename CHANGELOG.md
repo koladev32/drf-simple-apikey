@@ -4,6 +4,15 @@ Changelog
 [Unreleased]
 ------------
 
+- **Changed (potentially breaking)**: `APIKeyAuthentication` now returns `None`
+  instead of raising `NotAuthenticated`/`AuthenticationFailed` when the request
+  has no `Authorization` header or uses a different scheme's keyword, matching
+  DRF's authenticator contract. This lets it be combined with other
+  authentication classes (previously it always hard-rejected the request
+  first). **If `APIKeyAuthentication` is your only authentication class and
+  you relied on a missing key being rejected automatically, add a permission
+  class (e.g. `IsActiveEntity`) to your view** — authentication alone no
+  longer enforces that a key was provided; see [Getting Started](https://drf-api-key.koladev.xyz/docs/getting-started#protect-a-view).
 - Fixed: `get_rotation_status()` cached a "no active rotation" result forever
   (`timeout=None`), so starting a rotation afterwards had no effect until the
   cache was cleared manually. Starting/stopping a rotation via the management
