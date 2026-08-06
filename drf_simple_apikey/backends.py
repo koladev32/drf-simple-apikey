@@ -8,12 +8,12 @@ import time
 import typing
 
 from django.conf import settings
-from django.contrib.auth.backends import BaseBackend
 from django.http import HttpRequest
 from django.utils.timezone import now
 from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
 
 
 from drf_simple_apikey.crypto import get_crypto
@@ -24,7 +24,7 @@ from drf_simple_apikey.settings import package_settings
 logger = logging.getLogger(__name__)
 
 
-class APIKeyAuthentication(BaseBackend):
+class APIKeyAuthentication(BaseAuthentication):
     model = APIKey
     key_parser = APIKeyParser()
 
