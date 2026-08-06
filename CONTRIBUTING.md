@@ -32,7 +32,7 @@ numbers are updated consistently in all the right places.
    ```
 3. Push both commits and tags: `git push && git push --tags`
 
-For more details, see the [Development and Contributing documentation](https://djangorestframework-simple-apikey.readthedocs.io/en/latest/development_and_contributing.html#version-management).
+For more details, see the [Development and Contributing documentation](https://drf-api-key.koladev.xyz/docs/development-and-contributing#version-management).
 
 ## Code of Conduct
 

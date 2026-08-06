@@ -7,4 +7,4 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "drf-simple-apikey"
 version = "2.4.1"
-dynamic = ["description", "readme", "optional-dependencies", "dependencies", "classifiers", "authors", "license"]
+dynamic = ["description", "readme", "optional-dependencies", "dependencies", "classifiers", "authors", "license", "keywords", "requires-python", "urls"]

@@ -5,6 +5,8 @@ description: Security features and best practices for API key authentication
 
 Keeping your API keys secure is crucial, and we've built several security features into the package to help protect your API. This page explains how these features work and why they matter.
 
+For a deeper look at what a leaked `FERNET_SECRET` actually exposes and how to respond to it, see the [Threat Model](/docs/threat-model).
+
 ## Why Security Matters
 
 API keys are like passwords: if someone gets hold of them, they can access your API as if they were the legitimate user. That's why we've implemented multiple layers of security to keep your API keys safe from common attacks.

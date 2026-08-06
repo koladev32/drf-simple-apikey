@@ -34,7 +34,7 @@ class PackageSettings(_APISettings):
         return self._user_settings
 
     def __check_user_settings(self, user_settings):
-        SETTINGS_DOC = "https://djangorestframework-simple-apikey.readthedocs.io/en/latest/settings.html"
+        SETTINGS_DOC = "https://drf-api-key.koladev.xyz/docs/settings"
 
         for setting in REMOVED_SETTINGS:
             if setting in user_settings:

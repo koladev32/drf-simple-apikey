@@ -2,11 +2,13 @@
   "pages": [
     "index",
     "getting-started",
+    "comparison",
     "settings",
     "authentication",
     "permissions",
     "customizing-api-key-model",
     "security",
+    "threat-model",
     "rotation",
     "analytics",
     "migrating",
