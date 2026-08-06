@@ -49,3 +49,11 @@ def revoked_api_key(user):
     return APIKey.objects.create_api_key(
         **data
     )  # This will return api_key:object, key:string
+
+
+@pytest.fixture
+def scoped_api_key(user):
+    data = {"entity": user, "scopes": ["fruits:write"]}
+    return APIKey.objects.create_api_key(
+        **data
+    )  # This will return api_key:object, key:string
