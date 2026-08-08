@@ -108,3 +108,84 @@ class TestApiKeyAuthenticationWithIPManagement:
 
         entity, _ = api_key_authentication.authenticate(request)
         assert isinstance(entity, User)
+
+    def test_get_client_ip_ipv6(self, api_key_authentication, settings):
+        """Tests that IPv6 addresses are extracted and validated correctly."""
+        factory = APIRequestFactory()
+
+        # Direct REMOTE_ADDR IPv6
+        req1 = factory.get("/", REMOTE_ADDR="2001:db8::1")
+        assert api_key_authentication._get_client_ip(req1) == "2001:db8::1"
+
+        # Compressed loopback IPv6
+        req2 = factory.get("/", REMOTE_ADDR="::1")
+        assert api_key_authentication._get_client_ip(req2) == "::1"
+
+        # Proxy X-Forwarded-For with IPv6
+        old_header = package_settings.IP_ADDRESS_HEADER
+        package_settings.IP_ADDRESS_HEADER = "HTTP_X_FORWARDED_FOR"
+        try:
+            req3 = factory.get("/", HTTP_X_FORWARDED_FOR="2001:db8::1, 10.0.0.1", REMOTE_ADDR="127.0.0.1")
+            assert api_key_authentication._get_client_ip(req3) == "2001:db8::1"
+        finally:
+            package_settings.IP_ADDRESS_HEADER = old_header
+
+    def test_authenticate_valid_request_with_whitelisted_ipv6(
+        self, user, active_api_key, api_key_authentication
+    ):
+        """Tests that a request from a whitelisted IPv6 address is authenticated successfully."""
+        factory = APIRequestFactory()
+        api_key, key = active_api_key
+        api_key.whitelisted_ips = ["2001:db8::1"]
+        api_key.save()
+
+        request = factory.get(
+            "/test-request/",
+            REMOTE_ADDR="2001:db8::1",
+            HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+        )
+
+        entity, _ = api_key_authentication.authenticate(request)
+        assert isinstance(entity, User)
+
+    def test_authenticate_denied_for_blacklisted_ipv6(
+        self, user, active_api_key, api_key_authentication
+    ):
+        """Tests that a request from a blacklisted IPv6 address is denied."""
+        factory = APIRequestFactory()
+        api_key, key = active_api_key
+        api_key.blacklisted_ips = ["2001:db8::1"]
+        api_key.save()
+
+        request = factory.get(
+            "/test-request/",
+            REMOTE_ADDR="2001:db8::1",
+            HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+        )
+
+        with pytest.raises(
+            exceptions.AuthenticationFailed, match=r"Access denied from blacklisted IP."
+        ):
+            api_key_authentication.authenticate(request)
+
+    def test_authenticate_denied_for_unlisted_ipv6_with_existing_whitelist(
+        self, user, active_api_key, api_key_authentication
+    ):
+        """Tests that an unlisted IPv6 request is denied when a whitelist is active."""
+        factory = APIRequestFactory()
+        api_key, key = active_api_key
+        api_key.whitelisted_ips = ["2001:db8::1"]
+        api_key.save()
+
+        request = factory.get(
+            "/test-request/",
+            REMOTE_ADDR="2001:db8::999",
+            HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+        )
+
+        with pytest.raises(
+            exceptions.AuthenticationFailed,
+            match=r"Access restricted to specific IP addresses.",
+        ):
+            api_key_authentication.authenticate(request)
+
