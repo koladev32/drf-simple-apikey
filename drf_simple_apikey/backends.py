@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import ipaddress
 import logging
 import secrets
 import time
@@ -37,7 +38,7 @@ class APIKeyAuthentication(BaseBackend):
     def _get_client_ip(self, request: HttpRequest) -> str | None:
         """
         Safely extract client IP address, handling proxy headers securely.
-        Validates IP format and falls back to REMOTE_ADDR.
+        Validates IP format (supports IPv4 and IPv6) and falls back to REMOTE_ADDR.
         """
         # First try the configured header
         ip_header = package_settings.IP_ADDRESS_HEADER
@@ -50,17 +51,13 @@ class APIKeyAuthentication(BaseBackend):
                 forwarded_ips = client_ip.split(",") if client_ip else []
                 client_ip = forwarded_ips[0].strip() if forwarded_ips else None
 
-        # Validate IP format (basic validation)
+        # Validate IP format (supports IPv4 and IPv6)
         if client_ip:
-            # Basic IP validation - check if it looks like an IP
-            parts = client_ip.split(".")
-            if len(parts) == 4:
-                try:
-                    # Validate each part is 0-255
-                    if all(0 <= int(part) <= 255 for part in parts):
-                        return client_ip
-                except (ValueError, AttributeError):
-                    pass
+            try:
+                ipaddress.ip_address(client_ip)
+                return client_ip
+            except (ValueError, TypeError):
+                pass
 
         # Fallback to REMOTE_ADDR
         return request.META.get("REMOTE_ADDR")
