@@ -25,6 +25,16 @@ from drf_simple_apikey.settings import package_settings
 logger = logging.getLogger(__name__)
 
 
+def _normalize_ip(ip_str: str | None) -> str | None:
+    """Normalize IPv4 and IPv6 addresses into standard canonical form."""
+    if not ip_str:
+        return None
+    try:
+        return str(ipaddress.ip_address(ip_str.strip()))
+    except (ValueError, TypeError):
+        return ip_str.strip()
+
+
 class APIKeyAuthentication(BaseBackend):
     model = APIKey
     key_parser = APIKeyParser()
@@ -42,11 +52,10 @@ class APIKeyAuthentication(BaseBackend):
         """
         # First try the configured header
         ip_header = package_settings.IP_ADDRESS_HEADER
-        client_ip = request.META.get(ip_header)
+        client_ip = None
 
-        # If using proxy headers, validate and handle safely
-        if ip_header != "REMOTE_ADDR":
-            # For X-Forwarded-For, take the first IP (original client)
+        if ip_header:
+            client_ip = request.META.get(ip_header)
             if ip_header == "HTTP_X_FORWARDED_FOR":
                 forwarded_ips = client_ip.split(",") if client_ip else []
                 client_ip = forwarded_ips[0].strip() if forwarded_ips else None
@@ -59,8 +68,16 @@ class APIKeyAuthentication(BaseBackend):
             except (ValueError, TypeError):
                 pass
 
-        # Fallback to REMOTE_ADDR
-        return request.META.get("REMOTE_ADDR")
+        # Fallback to REMOTE_ADDR with validation
+        remote_addr = request.META.get("REMOTE_ADDR")
+        if remote_addr:
+            try:
+                ipaddress.ip_address(remote_addr)
+                return remote_addr
+            except (ValueError, TypeError):
+                pass
+
+        return None
 
     def _check_https_enforcement(self, request: HttpRequest) -> None:
         """Check if HTTPS is enforced and request is secure."""
@@ -217,25 +234,35 @@ class APIKeyAuthentication(BaseBackend):
                         extra={"ip": client_ip, "api_key_id": api_key.pk},
                     )
                 raise exceptions.AuthenticationFailed("This API Key has been revoked.")
+            # IP address validation with safe IP extraction and IPv4/IPv6 normalization
+            if client_ip:
+                normalized_client_ip = _normalize_ip(client_ip)
 
-            # IP address validation with safe IP extraction
-            if api_key.blacklisted_ips and client_ip in api_key.blacklisted_ips:
-                if package_settings.ENABLE_AUDIT_LOGGING:
-                    logger.warning(
-                        "API key authentication failed: blacklisted IP",
-                        extra={"ip": client_ip, "api_key_id": api_key.pk},
-                    )
-                raise exceptions.AuthenticationFailed("Access denied from blacklisted IP.")
+                if api_key.blacklisted_ips:
+                    normalized_blacklisted = [
+                        _normalize_ip(ip) for ip in api_key.blacklisted_ips if ip
+                    ]
+                    if normalized_client_ip in normalized_blacklisted:
+                        if package_settings.ENABLE_AUDIT_LOGGING:
+                            logger.warning(
+                                "API key authentication failed: blacklisted IP",
+                                extra={"ip": client_ip, "api_key_id": api_key.pk},
+                            )
+                        raise exceptions.AuthenticationFailed("Access denied from blacklisted IP.")
 
-            if api_key.whitelisted_ips and client_ip not in api_key.whitelisted_ips:
-                if package_settings.ENABLE_AUDIT_LOGGING:
-                    logger.warning(
-                        "API key authentication failed: IP not whitelisted",
-                        extra={"ip": client_ip, "api_key_id": api_key.pk},
-                    )
-                raise exceptions.AuthenticationFailed(
-                    "Access restricted to specific IP addresses."
-                )
+                if api_key.whitelisted_ips:
+                    normalized_whitelisted = [
+                        _normalize_ip(ip) for ip in api_key.whitelisted_ips if ip
+                    ]
+                    if normalized_client_ip not in normalized_whitelisted:
+                        if package_settings.ENABLE_AUDIT_LOGGING:
+                            logger.warning(
+                                "API key authentication failed: IP not whitelisted",
+                                extra={"ip": client_ip, "api_key_id": api_key.pk},
+                            )
+                        raise exceptions.AuthenticationFailed(
+                            "Access restricted to specific IP addresses."
+                        )
 
             # Authentication successful
             auth_successful = True

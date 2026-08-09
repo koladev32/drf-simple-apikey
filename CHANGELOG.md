@@ -3,6 +3,7 @@ Changelog
 
 [Unreleased]
 ------------
+- Fixed: Support IPv6 address extraction, validation, and canonical representation matching in IP allow/deny lists for `APIKeyAuthentication` (#105, #128).
 - Added: Opt-in `ENABLE_PER_KEY_SECRET` setting (default `False`). When enabled,
   new API keys carry a random per-key secret (SHA-256 hash stored, verified with
   a constant-time comparison), checked in addition to Fernet decryption
