@@ -3,6 +3,15 @@ Changelog
 
 [Unreleased]
 ------------
+- Fixed: A malformed API key (not valid Fernet input) raised
+  `cryptography.fernet.InvalidToken` from `_authenticate_credentials`, which
+  wasn't caught by the narrow `except (ValueError, TypeError)` around the
+  decrypt call. It fell through to the outer catch-all and was logged at
+  `ERROR` with a full stack trace as "API key authentication error", even
+  though the request correctly resulted in `AuthenticationFailed`. Any client
+  typo, expired integration, or scanner probing the endpoint triggered this.
+  `InvalidToken` is now caught alongside `ValueError`/`TypeError` so malformed
+  keys are classified as routine auth failures. (#122)
 - **Changed:** `APIKeyAuthentication` now inherits from DRF's
   `BaseAuthentication` instead of Django's `BaseBackend`, aligning the
   authentication backend with Django REST Framework's authentication API and
