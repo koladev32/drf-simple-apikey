@@ -4,7 +4,7 @@ import pytest
 
 from django.contrib.auth.models import User
 from rest_framework import exceptions
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import BaseAuthentication, BasicAuthentication
 from rest_framework.decorators import (
     api_view,
     authentication_classes,
@@ -68,6 +68,10 @@ def api_key_authentication():
     from drf_simple_apikey.backends import APIKeyAuthentication
 
     return APIKeyAuthentication()
+
+
+def test_api_key_authentication_is_a_drf_auth_class():
+    assert issubclass(APIKeyAuthentication, BaseAuthentication)
 
 
 @pytest.mark.django_db

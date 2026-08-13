@@ -3,6 +3,10 @@ Changelog
 
 [Unreleased]
 ------------
+- **Changed:** `APIKeyAuthentication` now inherits from DRF's
+  `BaseAuthentication` instead of Django's `BaseBackend`, aligning the
+  authentication backend with Django REST Framework's authentication API and
+  ensuring compatibility with DRF authentication behavior. (#127)
 - Added: Opt-in `ENABLE_PER_KEY_SECRET` setting (default `False`). When enabled,
   new API keys carry a random per-key secret (SHA-256 hash stored, verified with
   a constant-time comparison), checked in addition to Fernet decryption
