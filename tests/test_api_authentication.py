@@ -116,6 +116,24 @@ class TestApiKeyAuthentication:
         ):
             api_key_authentication().authenticate(request)
 
+    def test_authenticate_request_with_malformed_key_is_classified_as_auth_failure(
+        self, user, caplog
+    ):
+        # A garbage token is not valid Fernet input, so decrypt() raises
+        # cryptography.fernet.InvalidToken. This must be treated as a routine
+        # auth failure (matching ValueError/TypeError), not logged as an
+        # unexpected error with a stack trace.
+        factory = APIRequestFactory()
+        request = factory.get(
+            "/test-request/",
+            HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} not-a-real-key",
+        )
+
+        with pytest.raises(exceptions.AuthenticationFailed, match=r"Invalid API Key."):
+            api_key_authentication().authenticate(request)
+
+        assert not any(record.levelname == "ERROR" for record in caplog.records)
+
     def test_authenticate_invalid_request_with_expired_key(
         self, invalid_request_with_expired_api_key
     ):
