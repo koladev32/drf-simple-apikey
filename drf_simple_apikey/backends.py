@@ -8,6 +8,7 @@ import secrets
 import time
 import typing
 
+from cryptography.fernet import InvalidToken
 from django.conf import settings
 from django.http import HttpRequest
 from django.utils.timezone import now
@@ -150,7 +151,7 @@ class APIKeyAuthentication(BaseAuthentication):
             # Attempt decryption
             try:
                 payload = key_crypto.decrypt(key)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError, InvalidToken):
                 # Invalid key format - use constant-time comparison
                 # Create a dummy payload to maintain timing
                 payload = {}
