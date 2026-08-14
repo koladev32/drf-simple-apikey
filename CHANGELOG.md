@@ -3,6 +3,10 @@ Changelog
 
 [Unreleased]
 ------------
+- Added: `whitelisted_ips`/`blacklisted_ips` now accept CIDR ranges (e.g.
+  `10.0.0.0/24`) in addition to exact IP strings. A CIDR entry is matched by
+  network membership via `ipaddress.ip_network()`; plain entries keep the
+  existing exact-match behavior. (#106)
 - Fixed: `_get_client_ip` validated the extracted client IP by splitting on
   `.` and checking for 4 octets in 0-255, so any IPv6 address failed
   validation and silently fell back to `REMOTE_ADDR`. On dual-stack or

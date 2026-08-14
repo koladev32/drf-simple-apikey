@@ -63,6 +63,30 @@ class APIKeyAuthentication(BaseAuthentication):
         # Fallback to REMOTE_ADDR
         return request.META.get("REMOTE_ADDR")
 
+    def _ip_in_list(self, client_ip: str | None, entries: list[str]) -> bool:
+        """
+        Check client_ip against an allow/deny list. Entries containing a
+        `/` are treated as CIDR ranges (network membership); everything
+        else is matched by exact string equality, same as before CIDR
+        support was added.
+        """
+        if not client_ip:
+            return False
+
+        for entry in entries:
+            if "/" in entry:
+                try:
+                    if ipaddress.ip_address(client_ip) in ipaddress.ip_network(
+                        entry, strict=False
+                    ):
+                        return True
+                except ValueError:
+                    continue
+            elif client_ip == entry:
+                return True
+
+        return False
+
     def _check_https_enforcement(self, request: HttpRequest) -> None:
         """Check if HTTPS is enforced and request is secure."""
         enforce_https = package_settings.ENFORCE_HTTPS
@@ -220,7 +244,9 @@ class APIKeyAuthentication(BaseAuthentication):
                 raise exceptions.AuthenticationFailed("This API Key has been revoked.")
 
             # IP address validation with safe IP extraction
-            if api_key.blacklisted_ips and client_ip in api_key.blacklisted_ips:
+            if api_key.blacklisted_ips and self._ip_in_list(
+                client_ip, api_key.blacklisted_ips
+            ):
                 if package_settings.ENABLE_AUDIT_LOGGING:
                     logger.warning(
                         "API key authentication failed: blacklisted IP",
@@ -228,7 +254,9 @@ class APIKeyAuthentication(BaseAuthentication):
                     )
                 raise exceptions.AuthenticationFailed("Access denied from blacklisted IP.")
 
-            if api_key.whitelisted_ips and client_ip not in api_key.whitelisted_ips:
+            if api_key.whitelisted_ips and not self._ip_in_list(
+                client_ip, api_key.whitelisted_ips
+            ):
                 if package_settings.ENABLE_AUDIT_LOGGING:
                     logger.warning(
                         "API key authentication failed: IP not whitelisted",

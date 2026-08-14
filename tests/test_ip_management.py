@@ -87,6 +87,51 @@ def valid_request_with_blacklisted_ipv6(user, active_api_key):
 
 
 @pytest.fixture
+def valid_request_with_whitelisted_cidr(user, active_api_key):
+    """Creates a valid request from an IP inside a whitelisted CIDR range."""
+    factory = APIRequestFactory()
+    api_key, key = active_api_key
+    api_key.whitelisted_ips = ["10.0.0.0/24"]
+    api_key.save()
+
+    return factory.get(
+        "/test-request/",
+        REMOTE_ADDR="10.0.0.42",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.fixture
+def request_with_ip_outside_whitelisted_cidr(user, active_api_key):
+    """Creates a request from an IP outside a whitelisted CIDR range."""
+    factory = APIRequestFactory()
+    api_key, key = active_api_key
+    api_key.whitelisted_ips = ["10.0.0.0/24"]
+    api_key.save()
+
+    return factory.get(
+        "/test-request/",
+        REMOTE_ADDR="10.0.1.42",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.fixture
+def valid_request_with_blacklisted_cidr(user, active_api_key):
+    """Creates a request from an IP inside a blacklisted CIDR range."""
+    factory = APIRequestFactory()
+    api_key, key = active_api_key
+    api_key.blacklisted_ips = ["10.0.0.0/24"]
+    api_key.save()
+
+    return factory.get(
+        "/test-request/",
+        REMOTE_ADDR="10.0.0.42",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.fixture
 def api_key_authentication():
     return APIKeyAuthentication()
 
@@ -140,6 +185,34 @@ class TestApiKeyAuthenticationWithIPManagement:
             exceptions.AuthenticationFailed, match=r"Access denied from blacklisted IP."
         ):
             api_key_authentication.authenticate(valid_request_with_blacklisted_ipv6)
+
+    def test_authenticate_valid_request_with_whitelisted_cidr(
+        self, valid_request_with_whitelisted_cidr, api_key_authentication
+    ):
+        """Tests that a request from an IP inside a whitelisted CIDR range is authenticated successfully."""
+        entity, _ = api_key_authentication.authenticate(
+            valid_request_with_whitelisted_cidr
+        )
+        assert isinstance(entity, User)
+
+    def test_authenticate_denied_for_ip_outside_whitelisted_cidr(
+        self, request_with_ip_outside_whitelisted_cidr, api_key_authentication
+    ):
+        """Tests that a request from an IP outside a whitelisted CIDR range is denied."""
+        with pytest.raises(
+            exceptions.AuthenticationFailed,
+            match=r"Access restricted to specific IP addresses.",
+        ):
+            api_key_authentication.authenticate(request_with_ip_outside_whitelisted_cidr)
+
+    def test_authenticate_denied_for_blacklisted_cidr(
+        self, valid_request_with_blacklisted_cidr, api_key_authentication
+    ):
+        """Tests that a request from an IP inside a blacklisted CIDR range is denied."""
+        with pytest.raises(
+            exceptions.AuthenticationFailed, match=r"Access denied from blacklisted IP."
+        ):
+            api_key_authentication.authenticate(valid_request_with_blacklisted_cidr)
 
     def test_authenticate_allowed_for_request_with_no_ip_restrictions(
         self, user, active_api_key, api_key_authentication
