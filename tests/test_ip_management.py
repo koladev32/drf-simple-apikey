@@ -57,6 +57,36 @@ def request_with_unlisted_ip(user, active_api_key):
 
 
 @pytest.fixture
+def valid_request_with_whitelisted_ipv6(user, active_api_key):
+    """Creates a valid request from a whitelisted IPv6 address."""
+    factory = APIRequestFactory()
+    api_key, key = active_api_key
+    api_key.whitelisted_ips = ["::1"]
+    api_key.save()
+
+    return factory.get(
+        "/test-request/",
+        REMOTE_ADDR="::1",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.fixture
+def valid_request_with_blacklisted_ipv6(user, active_api_key):
+    """Creates a request from a blacklisted IPv6 address."""
+    factory = APIRequestFactory()
+    api_key, key = active_api_key
+    api_key.blacklisted_ips = ["::1"]
+    api_key.save()
+
+    return factory.get(
+        "/test-request/",
+        REMOTE_ADDR="::1",
+        HTTP_AUTHORIZATION=f"{package_settings.AUTHENTICATION_KEYWORD_HEADER} {key}",
+    )
+
+
+@pytest.fixture
 def api_key_authentication():
     return APIKeyAuthentication()
 
@@ -92,6 +122,24 @@ class TestApiKeyAuthenticationWithIPManagement:
             match=r"Access restricted to specific IP addresses.",
         ):
             api_key_authentication.authenticate(request_with_unlisted_ip)
+
+    def test_authenticate_valid_request_with_whitelisted_ipv6(
+        self, valid_request_with_whitelisted_ipv6, api_key_authentication
+    ):
+        """Tests that a request from a whitelisted IPv6 address is authenticated successfully."""
+        entity, _ = api_key_authentication.authenticate(
+            valid_request_with_whitelisted_ipv6
+        )
+        assert isinstance(entity, User)
+
+    def test_authenticate_denied_for_blacklisted_ipv6(
+        self, valid_request_with_blacklisted_ipv6, api_key_authentication
+    ):
+        """Tests that a request from a blacklisted IPv6 address is denied."""
+        with pytest.raises(
+            exceptions.AuthenticationFailed, match=r"Access denied from blacklisted IP."
+        ):
+            api_key_authentication.authenticate(valid_request_with_blacklisted_ipv6)
 
     def test_authenticate_allowed_for_request_with_no_ip_restrictions(
         self, user, active_api_key, api_key_authentication

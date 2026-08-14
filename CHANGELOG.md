@@ -3,6 +3,12 @@ Changelog
 
 [Unreleased]
 ------------
+- Fixed: `_get_client_ip` validated the extracted client IP by splitting on
+  `.` and checking for 4 octets in 0-255, so any IPv6 address failed
+  validation and silently fell back to `REMOTE_ADDR`. On dual-stack or
+  IPv6-only deployments this could silently bypass or break
+  `whitelisted_ips`/`blacklisted_ips` enforcement. Now validates with
+  `ipaddress.ip_address()`, which accepts both IPv4 and IPv6. (#105)
 - Fixed: A malformed API key (not valid Fernet input) raised
   `cryptography.fernet.InvalidToken` from `_authenticate_credentials`, which
   wasn't caught by the narrow `except (ValueError, TypeError)` around the
