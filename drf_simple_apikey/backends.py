@@ -91,19 +91,14 @@ class APIKeyAuthentication(BaseAuthentication):
         """Check if HTTPS is enforced and request is secure."""
         enforce_https = package_settings.ENFORCE_HTTPS
 
-        # Auto-detect based on DEBUG if not explicitly set
-        # Default to not DEBUG (enforce HTTPS in production, allow HTTP in development)
-        # But also check if we're in a test environment
+        # Auto-detect based on DEBUG if not explicitly set: enforce HTTPS in
+        # production, allow HTTP in development. Test environments must opt
+        # out explicitly via DRF_API_KEY["ENFORCE_HTTPS"] = False rather than
+        # being auto-detected, since introspecting the test runner from
+        # library code is fragile (e.g. pytest merely being importable in a
+        # production environment would silently disable this control).
         if enforce_https is None:
-            # Don't enforce HTTPS in test environments (pytest, unittest, etc.)
-            import sys
-            is_test = (
-                "pytest" in sys.modules
-                or "unittest" in sys.modules
-                or "test" in sys.argv
-                or hasattr(settings, "TESTING")
-            )
-            enforce_https = not settings.DEBUG and not is_test
+            enforce_https = not settings.DEBUG
 
         if enforce_https:
             # Check if request is secure

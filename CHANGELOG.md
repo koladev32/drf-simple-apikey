@@ -3,6 +3,14 @@ Changelog
 
 [Unreleased]
 ------------
+- **Changed (potentially breaking)**: `_check_https_enforcement` no longer auto-detects test
+  environments by checking `sys.modules`/`sys.argv` for pytest/unittest.
+  Introspecting the test runner from library code was fragile (e.g. pytest
+  merely being importable in a production process would silently disable
+  `ENFORCE_HTTPS`). When `ENFORCE_HTTPS` is unset, it now follows `DEBUG`
+  only. **If you relied on the implicit test-environment detection, set
+  `DRF_API_KEY["ENFORCE_HTTPS"] = False` explicitly in your test settings.**
+  (#108)
 - Added: `whitelisted_ips`/`blacklisted_ips` now accept CIDR ranges (e.g.
   `10.0.0.0/24`) in addition to exact IP strings. A CIDR entry is matched by
   network membership via `ipaddress.ip_network()`; plain entries keep the
