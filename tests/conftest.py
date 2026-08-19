@@ -53,6 +53,11 @@ def pytest_configure():
         DRF_API_KEY={
             "FERNET_SECRET": "sVjomf7FFy351xRxDeJWFJAZaE2tG3MTuUv92TLFfOA=",
             "ROTATION_FERNET_SECRET": "EqkeOOgvV8bt70vUJiVXloNycn5bt_z1VqyoAi9K6f4=",
+            # DEBUG isn't set above, so it defaults to False, which would
+            # auto-enforce HTTPS; the test client makes plain HTTP requests,
+            # so opt out explicitly instead of relying on runtime detection
+            # of the test framework (see #108).
+            "ENFORCE_HTTPS": False,
         },
     )
 

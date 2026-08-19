@@ -18,13 +18,16 @@ ROTATION_FERNET_SECRET = "EqkeOOgvV8bt70vUJiVXloNycn5bt_z1VqyoAi9K6f4="
 
 
 def enable_per_key_secret(settings):
-    # Keep ROTATION_FERNET_SECRET around too: overriding DRF_API_KEY
-    # wholesale would otherwise drop it, breaking get_crypto() under
-    # TEST_WITH_ROTATION=1 (MultiApiCrypto requires both secrets).
+    # Keep ROTATION_FERNET_SECRET and ENFORCE_HTTPS around too: overriding
+    # DRF_API_KEY wholesale would otherwise drop them. Dropping
+    # ROTATION_FERNET_SECRET breaks get_crypto() under TEST_WITH_ROTATION=1
+    # (MultiApiCrypto requires both secrets); dropping ENFORCE_HTTPS reverts
+    # to auto-detect, which enforces HTTPS here since DEBUG isn't set.
     settings.DRF_API_KEY = {
         "FERNET_SECRET": FERNET_SECRET,
         "ROTATION_FERNET_SECRET": ROTATION_FERNET_SECRET,
         "ENABLE_PER_KEY_SECRET": True,
+        "ENFORCE_HTTPS": False,
     }
 
 
