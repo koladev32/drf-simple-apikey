@@ -9,6 +9,7 @@
     "customizing-api-key-model",
     "security",
     "threat-model",
+    "throttling",
     "rotation",
     "analytics",
     "migrating",
