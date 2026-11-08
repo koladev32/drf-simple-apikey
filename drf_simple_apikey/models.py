@@ -1,19 +1,35 @@
 from __future__ import annotations
 
 import hashlib
+import re
 import secrets
 import typing
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from drf_simple_apikey.crypto import get_crypto
 from drf_simple_apikey.settings import package_settings
 
+# The format DRF's SimpleRateThrottle.parse_rate() accepts: "<count>/<period>",
+# where only the first letter of the period counts (s, m, h or d).
+_THROTTLE_RATE_RE = re.compile(r"^\d+/[smhd]\w*$")
+
+
+def validate_throttle_rate(value: str | None) -> None:
+    "Reject values that APIKeyRateThrottle could not parse."
+    if value and not _THROTTLE_RATE_RE.match(value):
+        raise ValidationError(
+            "%(value)s is not a valid rate. Use '<count>/<period>', e.g. '100/hour'.",
+            params={"value": value},
+        )
+
 
 def _expiry_date() -> datetime:
     from django.utils import timezone
+
     return timezone.now() + timedelta(days=package_settings.API_KEY_LIFETIME)
 
 
@@ -132,6 +148,18 @@ class AbstractAPIKey(models.Model):
         ),
     )
 
+    throttle_rate = models.CharField(
+        max_length=50,
+        blank=True,
+        default="",
+        validators=[validate_throttle_rate],
+        help_text=(
+            "Maximum request rate for this API key, e.g. '100/hour' "
+            "(s, m, h or d). Leave empty to use the 'api_key' rate from "
+            "DEFAULT_THROTTLE_RATES. Only enforced by APIKeyRateThrottle."
+        ),
+    )
+
     objects = APIKeyManager()
 
     def has_scopes(self, required_scopes: typing.Sequence[str]) -> bool:
@@ -151,6 +179,7 @@ class AbstractAPIKey(models.Model):
 
     def _has_expired(self) -> bool:
         from django.utils import timezone
+
         if self.expiry_date is None:
             return False
         return self.expiry_date < timezone.now()
